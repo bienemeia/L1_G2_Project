@@ -8,8 +8,7 @@ ___
 
 2. **Give rough breakdown of hours spent on 1-3 of the following:***
    (meetings, information gathering, design, research, brainstorming, evaluating options, prototyping options, writing/documenting, refactoring, testing, software implementation, hardware implementation)
-   1. Top item: activity, hours
-   2. 2nd item: activity, hours
+   1. Top item: Met with team to discuss high level breakdown of project, 2 hours
 3. ***What did you accomplish this week?*** _(Be specific)_
   - Determined essential tasks, considerations and stretch goals for project at a high level
   - Planned who would do what parts of the proposal
