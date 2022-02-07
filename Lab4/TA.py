@@ -1,4 +1,4 @@
-from A import * 
+from A import *
 
 def function_TA():
 	print("TA")
