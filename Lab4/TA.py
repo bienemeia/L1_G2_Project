@@ -1,2 +1,2 @@
-def functio_TA():
+def function_TA():
 	print("TA")
