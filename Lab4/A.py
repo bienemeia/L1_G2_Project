@@ -1,2 +1,2 @@
 def function_A():
-	print(“Graham C. Bell”)
+	print("Graham C. Bell")
