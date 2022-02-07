@@ -2,4 +2,4 @@ Team members
 
 Student A: 
 Student B: Meia Copeland
-Student C:
+Student C: Boshen Zhang
