@@ -1,0 +1,14 @@
+{% extends "baseLayout.html" %}
+{% block title %}Bees?{% endblock %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+{% endblock %}
+{% block content %}
+  <h1>Save the bees!</h1>
+  <h2>Project by {{ names }}</h2>
+  <p class="important">
+    Welcome to the beehive.
+{% endblock %}
