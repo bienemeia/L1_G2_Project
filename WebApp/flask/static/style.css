@@ -1,4 +1,6 @@
 body {
-	background: #FBEEC9;
+	margin: 0;
+	background: white;
 	color: black;
+	font-family: 'Open Sans';
 }

@@ -1,5 +1,5 @@
 {% extends "baseLayout.html" %}
-{% block title %}Bees?{% endblock %}
+{% block title %}Save the bees!{% endblock %}
 {% block head %}
   {{ super() }}
   <style type="text/css">
@@ -14,5 +14,6 @@
     Hello
   </p>
   
-  <input type="button" onclick="href = 'http://graham.nolanbell.ca/bees';"> Click for more bees.</input>
+  <button type="button" onclick="window.location.href='{{ url_for( 'bees' ) }}';"> Click for more bees. </button>
+  <p></p>
 {% endblock %}

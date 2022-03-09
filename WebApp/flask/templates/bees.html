@@ -1,9 +1,9 @@
-<html>
-	<head>
-		<link rel="stylesheet" href='/static/style.css' />
-	</head>
-	
-	<body>
-		<h1>Bees are neat</h1>
-	</body>
-</html>
+{% block title %}Save the bees!{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+  <h1>Bees are neat</h1>
+
+{% endblock %}
