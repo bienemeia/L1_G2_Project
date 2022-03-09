@@ -13,4 +13,5 @@ def bees():
   return render_template('bees.html')
   
 if __name__ == "__main__":
+  initializing_network()
   app.run(debug=True, host='0.0.0.0')
