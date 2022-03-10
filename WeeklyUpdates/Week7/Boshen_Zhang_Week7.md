@@ -1,24 +1,24 @@
 ## Weekly Individual Project Update Report
 ### Group number: L1-G2
-### Student name: Meia Copeland
-### Week: 7, Feb 21 - March 4 (Include reading week)
+### Student name: Boshen Zhang
+### Week: 7, Feb 28 - March 6
 ___
 1. **How many hours did you spend on the project this week? (0-10)**
-6.5
-
+   I spend 3 hours this week on project.
 2. **Give rough breakdown of hours spent on 1-3 of the following:***
    (meetings, information gathering, design, research, brainstorming, evaluating options, prototyping options, writing/documenting, refactoring, testing, software implementation, hardware implementation)
-   1. Web server setup - 3 hour
-   2. Web framework (Flask) setup - 2 hour
-   3. Detailed Design Document - 1.5 hours
+   1. Learning relvent information for the GUI - 1 hour
+   2. Learning how to build and set up a website  - 1 hour
+   3. Start to do the detailed design document and make a draft for my part- 1 hours
 3. ***What did you accomplish this week?*** _(Be specific)_
-  - Got the webserver running locally
-  - Setup the folders and files for web development, using the Flask framework. Set up in a way that team members don't have to do the development on the RPi.
-  - Planned with team how to approach the Detailed Design document.
+  - Hand drawn how the GUI will looks like in web.
+  - Start to build the website
+  - Communicate with teammates to figure out how to do the detailed design project.
 4. ***How do you feel about your progress?*** _(brief, free-form reflection)_
-  - Was able to get a lot of work for the GUI done this week.
+  - I am so happy I can grab help from Meia and Graham, the things are harder than I thought. But everything still seems good so far.
 5. ***What are you planning to do next week***? _(give specific goals)_
-  - Start logic and code for the sensors, and a skeleton for how to interface with physical heaters
-  - Research camera feed solution
+  - Finish the detailed design document.
+  - Learn about testing such as unit test
+  - Try to grab some useful information about css and HTML
 6. ***Is anything blocking you that you need from others?*** _(What do you need from whom)_
-  - No blockers at the moment.
+  - Nothing blocking so far.
