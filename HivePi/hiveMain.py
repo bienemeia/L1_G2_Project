@@ -1,7 +1,8 @@
 import pyrebase
 import random
 import time
-from datetime import time, date
+import json
+from datetime import date, datetime
 
 meia_config = {
 	"apiKey": "AIzaSyBVpD3QAJ7NQsmobIABC95vOX8-e-aZQX0",
@@ -20,31 +21,32 @@ meia_config = {
 hive_firebase = pyrebase.initialize_app(meia_config)
 hive_db = hive_firebase.database()
 
-today = date.today()
-now = date.datetime.now().time();
+today = str(date.today())
+now = str(datetime.now().time())
 
 # Sample data
-data = {
+data_json = """{
 	"001" : { # device id, can have multiple hives.
 		"name" : "Big Bertha", # optional, if giving each hive a nickname
-		"values" : { # making this a subset, as there will be lots of datetimes. Access will be easier.
-			now : # will have 1 of these for every minute of the day -> 1440
-			{
-				"date" : today,
-				"temperature" : {
-					"inside" : 1.5,
-					"outside" : -2,
-					"base" : 0
-				},
-				"humidity" : {
-					"inside" : 75,
-					"outside" : 40,
-					"base" : 63
-				},
-				"pressure" : 101.2, #kPa
-				"co2" : 320 #PPM
-			}
-		},
+		"values" : [ # making this a subset, as there will be lots of datetimes. Access will be easier.
+			{ now : # will have 1 of these for every minute of the day -> 1440
+				{
+					"date" : today,
+					"temperature" : {
+						"inside" : 1.5,
+						"outside" : -2,
+						"base" : 0
+					},
+					"humidity" : {
+						"inside" : 75,
+						"outside" : 40,
+						"base" : 63
+					},
+					"pressure" : 101.2, #kPa
+					"co2" : 320 #PPM
+				}
+			},
+		],
 		# checking whethere there is ice or snow
 		"iceStatus" : False,
 		# checking status of different mechanisms
@@ -54,9 +56,12 @@ data = {
 		"testLED1" : False,
 		"testLED2" : False
 	}
-}
+}"""
 
-hive_db.child("hives").push(data)
+data =  json.dumps(data_json)
+
+#hive_db.child("hives").set(data)
+hive_db.child("hives").set(data)
 
 # graham_firebase = pyrebase.initialize_app(graham_config)
 # graham_db = graham_firebase.database()
