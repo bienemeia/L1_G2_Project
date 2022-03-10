@@ -9,7 +9,7 @@ body {
 .header {
   overflow: hidden;
   background-color: none;
-  padding: 10px 40px;
+  padding: 0px 40px;
 }
 
 /* Style the header links */
@@ -29,7 +29,6 @@ body {
 .header a.logo {
   font-size: 25px;
   font-weight: bold;
-  margin:  auto;
 }
 
 /* Change the background color on mouse-over */
@@ -40,11 +39,15 @@ body {
 
 /* Float the link section to the right */
 .header-right {
-  float: right;
+  padding-top: 20px;
+  padding-left: 300px;
 }
 
 .login {
   background-color: #323231;
+  float: right;
+  line-height: 25px;
+  border-radius: 5px;
 }
 
 .login:hover {
