@@ -1,6 +1,6 @@
 ## Weekly Individual Project Update Report
 ### Group number: L1_G2
-### Student name: Graham C. Bell
+### Student name: Boshen Zhang
 ### Week: 6 Feb 14th - Feb 20th
 ___
 1. **How many hours did you spend on the project this week? (0-10)**
