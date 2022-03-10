@@ -11,6 +11,17 @@ def index():
 @app.route("/bees")
 def bees():
   return render_template('bees.html')
+
+@app.route("/login")
+def login():
+  # Login logic here
+  return render_template('login.html')
+
+@app.route("/video")
+def video():
+  # video logic here
+  return render_template('video.html')
   
 if __name__ == "__main__":
+  initializing_network()
   app.run(debug=True, host='0.0.0.0')
