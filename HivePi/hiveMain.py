@@ -18,6 +18,9 @@ meia_config = {
 # 	"storageBucket": "sandbox-99e4a.appspot.com"
 # }
 
+# graham_firebase = pyrebase.initialize_app(graham_config)
+# graham_db = graham_firebase.database()
+
 hive_firebase = pyrebase.initialize_app(meia_config)
 hive_db = hive_firebase.database()
 
@@ -25,7 +28,7 @@ today = str(date.today())
 now = str(datetime.now().time())
 
 # Sample data
-data_json = """{
+data_json = {
 	"001" : { # device id, can have multiple hives.
 		"name" : "Big Bertha", # optional, if giving each hive a nickname
 		"values" : [ # making this a subset, as there will be lots of datetimes. Access will be easier.
@@ -56,19 +59,34 @@ data_json = """{
 		"testLED1" : False,
 		"testLED2" : False
 	}
-}"""
+}
 
-data =  json.dumps(data_json)
+# Initial set up of DB
+hive_db.child("hives").child(1).child("name").set("Big Bertha")
+hive_db.child("hives").child(1).child("values").child(now).child("date").set(today)
 
-#hive_db.child("hives").set(data)
-hive_db.child("hives").set(data)
+hive_db.child("hives").child(1).child("values").child(now).child("temperature").child("outside").set(25)
+hive_db.child("hives").child(1).child("values").child(now).child("temperature").child("inside").set(20)
+hive_db.child("hives").child(1).child("values").child(now).child("temperature").child("base").set(24.3)
 
-# graham_firebase = pyrebase.initialize_app(graham_config)
-# graham_db = graham_firebase.database()
+hive_db.child("hives").child(1).child("values").child(now).child("humidity").child("outside").set(75)
+hive_db.child("hives").child(1).child("values").child(now).child("humidity").child("inside").set(80)
+hive_db.child("hives").child(1).child("values").child(now).child("humidity").child("base").set(76)
+
+hive_db.child("hives").child(1).child("values").child(now).child("co2").set(332)
+hive_db.child("hives").child(1).child("values").child(now).child("pressure").set(101.5)
+
+hive_db.child("hives").child(1).child("iceStatus").set(False)
+hive_db.child("hives").child(1).child("heaterStatus").set(False)
+hive_db.child("hives").child(1).child("flapperStatus").set(False)
+hive_db.child("hives").child(1).child("fanStatus").set(False)
 
 def writeData():
 	
 	hive_db.child("hives").push(data)
+
+	t = sense.get_temperature()
+		meia_db.child(dataset_t).child(key).set(t)
 
 def readData(name, db):
 
