@@ -1,3 +1,4 @@
+from helper_functions import firebase
 import pyrebase
 import random
 import time
@@ -26,52 +27,21 @@ hive_db = hive_firebase.database()
 
 today = str(date.today())
 now = str(datetime.now().time())
-
-# Sample data
-data_json = {
-	"001" : { # device id, can have multiple hives.
-		"name" : "Big Bertha", # optional, if giving each hive a nickname
-		"values" : [ # making this a subset, as there will be lots of datetimes. Access will be easier.
-			{ now : # will have 1 of these for every minute of the day -> 1440
-				{
-					"date" : today,
-					"temperature" : {
-						"inside" : 1.5,
-						"outside" : -2,
-						"base" : 0
-					},
-					"humidity" : {
-						"inside" : 75,
-						"outside" : 40,
-						"base" : 63
-					},
-					"pressure" : 101.2, #kPa
-					"co2" : 320 #PPM
-				}
-			},
-		],
-		# checking whethere there is ice or snow
-		"iceStatus" : False,
-		# checking status of different mechanisms
-		"heaterStatus" : False,
-		"flapperStatus" : False,
-		"fanStatus" : False,
-		"testLED1" : False,
-		"testLED2" : False
-	}
-}
+now = now.split(":", 2)
+now = now[0] + ":" + now[1]
+print(type(now))
+print(now)
 
 # Initial set up of DB
 hive_db.child("hives").child(1).child("name").set("Big Bertha")
 hive_db.child("hives").child(1).child("values").child(now).child("date").set(today)
 
-hive_db.child("hives").child(1).child("values").child(now).child("temperature").child("outside").set(25)
-hive_db.child("hives").child(1).child("values").child(now).child("temperature").child("inside").set(20)
-hive_db.child("hives").child(1).child("values").child(now).child("temperature").child("base").set(24.3)
+pushTemps(hive_db, 20, 251, 24.3)
+pushHumidity(hive_db, 30, 50, 45)
 
-hive_db.child("hives").child(1).child("values").child(now).child("humidity").child("outside").set(75)
-hive_db.child("hives").child(1).child("values").child(now).child("humidity").child("inside").set(80)
-hive_db.child("hives").child(1).child("values").child(now).child("humidity").child("base").set(76)
+
+
+
 
 hive_db.child("hives").child(1).child("values").child(now).child("co2").set(332)
 hive_db.child("hives").child(1).child("values").child(now).child("pressure").set(101.5)
@@ -86,7 +56,7 @@ def writeData():
 	hive_db.child("hives").push(data)
 
 	t = sense.get_temperature()
-		meia_db.child(dataset_t).child(key).set(t)
+	meia_db.child(dataset_t).child(key).set(t)
 
 def readData(name, db):
 
