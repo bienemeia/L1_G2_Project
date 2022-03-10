@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from helper_functions import Firebase
 app = Flask(__name__)
 
 @app.route("/")
