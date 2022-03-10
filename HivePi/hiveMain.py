@@ -1,5 +1,5 @@
 from helper_functions import firebase
-from helper_functions import arduinoInteface as arduino
+from helper_functions import arduinoInterface as arduino
 import pyrebase
 import random
 import time
