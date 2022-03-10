@@ -2,18 +2,14 @@
 {% block title %}Save the bees!{% endblock %}
 {% block head %}
   {{ super() }}
-  <style type="text/css">
-    .important { color: #336699; }
-  </style>
 {% endblock %}
 {% block content %}
   <h1>Save the bees!</h1>
   <h2>Project by {{ names }}</h2>
   <p class="important">
     Welcome to the beehive.
-    Hello
   </p>
   
-  <button type="button" onclick="window.location.href='{{ url_for( 'bees' ) }}';"> Click for more bees. </button>
+  <button class="button" type="button" onclick="window.location.href='{{ url_for( 'bees' ) }}';"> Click for more bees. </button>
   <p></p>
 {% endblock %}
