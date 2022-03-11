@@ -37,6 +37,7 @@ def main():
 		firebase.pushPressure(hive_db, 1, pressure)
 		firebase.pushCo2(hive_db, 1, co2)
 		firebase.pushTest(hive_db, 1, test)
+		firebase.pushDate(hive_db, 1)
 		
 		# Get instructions from Firebase DB and send to Arduino
 		if firebase.getHeaterStatus(hive_db, 1):
@@ -63,7 +64,7 @@ def main():
 			
 		# Waits 45 seconds to guarantee having values every minute of the day
 		# If data is already present, it is overwritten rather than duplicated
-		time.sleep(45)
+		time.sleep(10)
 	
 if __name__ == "__main__":
 	main()
