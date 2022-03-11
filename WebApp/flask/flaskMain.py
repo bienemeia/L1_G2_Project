@@ -1,6 +1,20 @@
 from flask import Flask, render_template
-from helper_functions import Firebase
+from helper_functions import firebase
+import pyrebase
 app = Flask(__name__)
+
+# Set up Firebase authentication
+meia_config = {
+"apiKey": "AIzaSyBVpD3QAJ7NQsmobIABC95vOX8-e-aZQX0",
+"authDomain":"testhive-2bca5.firebaseapp.com",
+"databaseURL":"https://testhive-2bca5-default-rtdb.firebaseio.com/",
+"storageBucket":"testhive-2bca5.appspot.com"
+}
+
+# Initialize Firebase DB
+hive_firebase = pyrebase.initialize_app(meia_config)
+hive_db = hive_firebase.database()
+
 
 @app.route("/")
 def index():
@@ -22,6 +36,11 @@ def login():
 def video():
   # video logic here
   return render_template('video.html')
+
+@app.route("/background_test")
+def test():
+  pushTestLed1Status(hive_db, 1, True)
+  return("nothing")
   
 if __name__ == "__main__":
   initializing_network()
