@@ -8,7 +8,30 @@ def pushHiveName(db, hiveId, name):
 def getTime():
 	now = str(datetime.now().time())
 	now = now.split(":", 2)
+	hr = int(now[0])
+	mn = int(now[1])
+	if hr < 10:
+		now[0] = "0" + str(hr)
+	if mn < 10:
+		now[1] = "0" + str(mn)
 	return(now[0] + ":" + now[1])
+	
+def getTimeMinus1():
+	now = str(datetime.now().time())
+	now = now.split(":", 2)
+	hr = int(now[0])
+	mn = int(now[1])
+	if mn == 0:
+		mn = 59
+		hr = hr-1
+	else:
+		mn = mn-1
+	if hr < 10:
+		now[0] = "0" + str(hr)
+	if mn < 10:
+		now[1] = "0" + str(mn)
+	return(now[0] + ":" + now[1])
+	
 	
 # Set date as today in Firebase
 def pushDate(db, hiveId):
@@ -87,3 +110,6 @@ def getTestLed2Status(db, hiveId):
 # Gets a day's worth of environmental data
 def getValues(db, hiveId):
 	return db.child("hives").child(hiveId).child("values").get().val()
+
+
+getTimeMinus1()

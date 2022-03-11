@@ -30,14 +30,14 @@ def main():
 			pressure = process.getPressure(values)
 			co2 = process.getCo2(values)
 			test = process.getTest(values)
-			print(test)
+			#print(test)
 			
 			cursor.execute('''insert into testDB values (?,?,?,?,?,?,?,?,?,?)''',
 			(key, temperature[0], temperature[1], temperature[2], humidity[0], humidity[1], humidity[2], pressure, co2, test))
 		db.commit()
 		db.close()
 		
-		time.sleep(10)
+		time.sleep(20)
 		
 if __name__ == "__main__":
 	main()

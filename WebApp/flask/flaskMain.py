@@ -21,11 +21,11 @@ def index():
   # We can grab the values from firebase using python, and insert them into the html pretty easily
   # Still need to decide how to update regularly
   names = "Meia, Graham and Boshen"
-  time = "8:45"
-  # time = firebase.getTime()
-  #data = firebase.getValues(hive_db, 1)
-  #test = process.getTest(data[time])
-  test = 46
+  #time = "8:45"
+  time = firebase.getTimeMinus1()
+  data = firebase.getValues(hive_db, 1)
+  test = process.getTest(data[time])
+  #test = 46
   return render_template('index.html', names=names, test=test, time=time)
   
 @app.route("/bees")
@@ -45,10 +45,10 @@ def video():
 @app.route("/background_test")
 def test():
   print("Hello")
-  # if firebase.getTestLed1Status(hive_db, 1):
-    # firebase.pushTestLed1Status(hive_db, 1, False)
-  # else:
-    # firebase.pushTestLed1Status(hive_db, 1, True)
+  if firebase.getTestLed1Status(hive_db, 1):
+    firebase.pushTestLed1Status(hive_db, 1, False)
+  else:
+    firebase.pushTestLed1Status(hive_db, 1, True)
   return("nothing")
   
 if __name__ == "__main__":
