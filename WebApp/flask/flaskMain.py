@@ -22,8 +22,9 @@ def index():
   # Still need to decide how to update regularly
   names = "Meia, Graham and Boshen"
   time = firebase.getTime()
-  data = firebase.getValues(hive_db, 1)
-  test = process.getTest(data[time])
+  #data = firebase.getValues(hive_db, 1)
+  #test = process.getTest(data[time])
+  test = 46
   return render_template('index.html', names=names, test=test, time=time)
   
 @app.route("/bees")
