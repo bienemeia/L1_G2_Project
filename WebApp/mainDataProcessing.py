@@ -34,8 +34,6 @@ def main():
 		(key, temperature[0], temperature[1], temperature[2], humidity[0], humidity[1], humidity[2], pressure, co2, test))
 	db.commit()
 	db.close()
-		
-
 
 if __name__ == "__main__":
 	main()
