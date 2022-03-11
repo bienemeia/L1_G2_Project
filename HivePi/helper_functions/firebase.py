@@ -43,7 +43,7 @@ def pushCo2(db, hiveId, co2):
 # Set test value in firebase for current time
 def pushTest(db, hiveId, test):
 	now = getTime()
-	db.child("hives").child(hiveId).child("values").child(now).child("value").set(test)
+	db.child("hives").child(hiveId).child("values").child(now).child("test").set(test)
 	
 # Set ice status
 def pushIceStatus(db, hiveId, status):
