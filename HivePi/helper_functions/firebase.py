@@ -3,11 +3,34 @@ from datetime import date, datetime
 # Set the hive name
 def pushHiveName(db, hiveId, name):
 	db.child("hives").child(hiveId).child("name").set(name)
-
+	
 # Get current time in form HH:MM (24 hour)
 def getTime():
 	now = str(datetime.now().time())
 	now = now.split(":", 2)
+	hr = int(now[0])
+	mn = int(now[1])
+	if hr < 10:
+		now[0] = "0" + str(hr)
+	if mn < 10:
+		now[1] = "0" + str(mn)
+	return(now[0] + ":" + now[1])
+
+# Get current time minus 1 minute
+def getTimeMinus1():
+	now = str(datetime.now().time())
+	now = now.split(":", 2)
+	hr = int(now[0])
+	mn = int(now[1])
+	if mn == 0:
+		mn = 59
+		hr = hr-1
+	else:
+		mn = mn-1
+	if hr < 10:
+		now[0] = "0" + str(hr)
+	if mn < 10:
+		now[1] = "0" + str(mn)
 	return(now[0] + ":" + now[1])
 	
 # Set date as today in Firebase

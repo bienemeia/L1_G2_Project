@@ -15,7 +15,8 @@ def getTime():
 	if mn < 10:
 		now[1] = "0" + str(mn)
 	return(now[0] + ":" + now[1])
-	
+
+# Get current time minus 1 minute
 def getTimeMinus1():
 	now = str(datetime.now().time())
 	now = now.split(":", 2)
@@ -31,7 +32,6 @@ def getTimeMinus1():
 	if mn < 10:
 		now[1] = "0" + str(mn)
 	return(now[0] + ":" + now[1])
-	
 	
 # Set date as today in Firebase
 def pushDate(db, hiveId):
