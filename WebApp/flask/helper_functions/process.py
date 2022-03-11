@@ -27,5 +27,3 @@ def getCo2(data):
 def getTest(data):
 	return data['test']
 	
-def getTimeLessOne(time):
-	
