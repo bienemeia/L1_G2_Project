@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from helper_functions import firebase
+from helper_functions import firebase, process
 import pyrebase
 app = Flask(__name__)
 
@@ -21,7 +21,10 @@ def index():
   # We can grab the values from firebase using python, and insert them into the html pretty easily
   # Still need to decide how to update regularly
   names = "Meia, Graham and Boshen"
-  return render_template('index.html', names=names)
+  time = firebase.getTime()
+  data = firebase.getValues(hive_db, 1)
+  test = process.getTest(data[time])
+  return render_template('index.html', names=names, test=test, time=time)
   
 @app.route("/bees")
 def bees():
@@ -39,7 +42,10 @@ def video():
 
 @app.route("/background_test")
 def test():
-  pushTestLed1Status(hive_db, 1, True)
+  if firebase.getTestLed1Status(hive_db, 1):
+    firebase.pushTestLed1Status(hive_db, 1, False)
+  else:
+    firebase.pushTestLed1Status(hive_db, 1, True)
   return("nothing")
   
 if __name__ == "__main__":
