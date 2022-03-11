@@ -25,6 +25,7 @@ def main():
 		cursor=db.cursor()
 		
 		for key, values in data.items():
+			print(key)
 			temperature = process.getTemperatures(values)
 			humidity = process.getHumidity(values)
 			pressure = process.getPressure(values)
@@ -37,7 +38,7 @@ def main():
 		db.commit()
 		db.close()
 		
-		time.sleep(20)
+		time.sleep(30)
 		
 if __name__ == "__main__":
 	main()
