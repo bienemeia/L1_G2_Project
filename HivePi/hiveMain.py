@@ -1,4 +1,5 @@
 from helper_functions import firebase
+from helper_functions import arduinoInterface as arduino
 import pyrebase
 import random
 import time
@@ -24,28 +25,38 @@ def main():
 		# placeholder values
 		temp = [round(random.uniform(-30, 30), 1), round(random.uniform(-30, 30), 1), round(random.uniform(-30, 30), 1)]
 		humidity = [random.randrange(0,100), random.randrange(0,100), random.randrange(0,100)]
-		pressure = [round(random.uniform(100, 101.5), 2)]
-		co2 = [random.randrange(2500,3000)]
+		pressure = round(random.uniform(100, 101.5), 2)
+		co2 = random.randrange(2500,3000)
+		
+		# Get test value from arduino
+		test = arduino.read()
 		
 		# Push values to Firebase DB
 		firebase.pushTemperature(hive_db, 1, temp[0], temp[1], temp[2])
 		firebase.pushHumidity(hive_db, 1, humidity[0], humidity[1], humidity[2])
 		firebase.pushPressure(hive_db, 1, pressure)
 		firebase.pushCo2(hive_db, 1, co2)
+		firebase.pushTest(hive_db, 1, test)
 		
 		# Get instructions from Firebase DB and send to Arduino
 		if firebase.getHeaterStatus(hive_db, 1):
 			print("heater activated")
 			# activate heater
+			
 		if firebase.getFlapperStatus(hive_db, 1):
 			print("flapper activated")
 			# activate flapper
+			
 		if firebase.getFanStatus(hive_db, 1):
 			print("fan activated")
 			# activate fan
+			
 		if firebase.getTestLed1Status(hive_db, 1):
 			print("LED1 activated")
-			# activate test LED1
+			arduino.ledON()
+		else:
+			arduino.ledOFF()
+			
 		if firebase.getTestLed2Status(hive_db, 1):
 			print("LED2 activated")
 			# activate test LED2

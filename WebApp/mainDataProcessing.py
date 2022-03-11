@@ -3,6 +3,7 @@ import pyrebase
 import json
 import sqlite3
 import datetime
+import time
 
 def main():
 	# Set up Firebase authentication
@@ -16,21 +17,27 @@ def main():
 	# Initialize Firebase DB
 	hive_firebase = pyrebase.initialize_app(meia_config)
 	hive_db = hive_firebase.database()
-	
-	data = firebase.getValues(hive_db, 1)
-	
-	db = sqlite3.connect("hiveDB.db")
-	db.row_factory = sqlite3.Row
-	cursor=db.cursor()
-	
-	for key, values in data.items():
-		print(key)
+
+	while True:
+		data = firebase.getValues(hive_db, 1)
+		db = sqlite3.connect("hiveDB.db")
+		db.row_factory = sqlite3.Row
+		cursor=db.cursor()
 		
-	
-	# for time in data, get values.
-	
-	# test table is called testdata
-
-
+		for key, values in data.items():
+			temperature = process.getTemperatures(values)
+			humidity = process.getHumidity(values)
+			pressure = process.getPressure(values)
+			co2 = process.getCo2(values)
+			test = process.getTest(values)
+			print(test)
+			
+			cursor.execute('''insert into testDB values (?,?,?,?,?,?,?,?,?,?)''',
+			(key, temperature[0], temperature[1], temperature[2], humidity[0], humidity[1], humidity[2], pressure, co2, test))
+		db.commit()
+		db.close()
+		
+		time.sleep(10)
+		
 if __name__ == "__main__":
 	main()
