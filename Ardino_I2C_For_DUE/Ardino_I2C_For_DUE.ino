@@ -1,5 +1,7 @@
 #include <Wire.h>
 
+int outPut = 0;
+
 void setup() {
   Wire.begin(0x3C);
 
@@ -25,10 +27,16 @@ void receiveEvent(int howMany) {
 
 void loop() {
   delay(100);
+  if (Serial.available() > 1 ) {
+    outPut = Serial.parseInt();
+    Serial.println("Out Put set to");
+    Serial.println(outPut);
+  }
+ 
 }
 
 void requestEvent() {
   
-  Wire.write((byte)1);
+  Wire.write((byte)outPut);
   Serial.println("Request event");
 }
