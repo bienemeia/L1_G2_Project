@@ -1,5 +1,7 @@
 #include <Wire.h>
 
+int outPut = 0;
+
 void setup() {
   Wire.begin(0x3C);
 
@@ -13,31 +15,28 @@ void setup() {
 
 }
 
-void receiveEvent(int y) {
-
-  byte x;
-
-  // Read while data received
-  while (0 < Wire.available()) {
-    x = Wire.read();
+void receiveEvent(int howMany) {
+  while (Wire.available()) { // loop through all but the last
+    char c = Wire.read(); // receive byte as a character
+    digitalWrite(LED_BUILTIN, c);
   }
-  
-  if(x = 0x1){
-      digitalWrite(LED_BUILTIN, HIGH);
-  }else{
-      digitalWrite(LED_BUILTIN, LOW);
+
+  Serial.println("Receive Event");
+}
+
+
+void loop() {
+  delay(100);
+  if (Serial.available() > 1 ) {
+    outPut = Serial.parseInt();
+    Serial.println("Out Put set to");
+    Serial.println(outPut);
   }
-  
-  Serial.println("Receive event");
+ 
 }
 
 void requestEvent() {
   
-  Wire.write((byte)1);
+  Wire.write((byte)outPut);
   Serial.println("Request event");
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-
 }
