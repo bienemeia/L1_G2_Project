@@ -17,7 +17,7 @@ def main():
 	# Initialize Firebase DB
 	hive_firebase = pyrebase.initialize_app(meia_config)
 	hive_db = hive_firebase.database()
-		
+
 	while True:
 		now = firebase.getTime()
 		db = sqlite3.connect("hiveDB.db")
@@ -58,6 +58,6 @@ def getFormattedTime(num):
 	if mn < 10:
 		time[1] = "0" + str(mn)
 	return(str(time[0]) + ":" + str(time[1]))
-	
+
 if __name__ == "__main__":
 	main()
