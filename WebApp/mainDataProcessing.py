@@ -4,7 +4,6 @@ import json
 import sqlite3
 from datetime import datetime
 import time
-import random
 
 def main():
 	# Set up Firebase authentication
@@ -18,47 +17,37 @@ def main():
 	# Initialize Firebase DB
 	hive_firebase = pyrebase.initialize_app(meia_config)
 	hive_db = hive_firebase.database()
-	
-	data = firebase.getValues(hive_db, 1)
-	db = sqlite3.connect("hiveDB.db")
-	db.row_factory = sqlite3.Row
-	cursor=db.cursor()
-	date = datetime.today().strftime('%Y-%m-%d')
-	test = 1
-	
-	# Loop for testing and initially populating SQLite table
-	for i in range(1440):
-		time = getFormattedTime(i)
-		print(time)
-		temp = [round(random.uniform(-30, 30), 1), round(random.uniform(-30, 30), 1), round(random.uniform(-30, 30), 1)]
-		humidity = [random.randrange(0,100), random.randrange(0,100), random.randrange(0,100)]
-		pressure = round(random.uniform(100, 101.5), 2)
-		co2 = random.randrange(2500,3000)
-		#cursor.execute('''insert into testDB values (?,?,?,?,?,?,?,?,?,?)''',
-		#	(time, date, temperature[0], temperature[1], temperature[2], humidity[0], humidity[1], humidity[2], pressure, co2, test))
+		
+	while True:
+		now = firebase.getTime()
+		db = sqlite3.connect("hiveDB.db")
+		db.row_factory = sqlite3.Row
+		cursor=db.cursor()
+		
+		date = firebase.getDate(hive_db, 1, now)
+		tempDict = firebase.getTemperature(hive_db, 1, now)
+		temperature = [tempDict['base'], tempDict['inside'], tempDict['outside']]
+		humidityDict = firebase.getHumidity(hive_db, 1, now)
+		humidity = [humidityDict['base'], humidityDict['inside'], humidityDict['outside']]
+		pressure = firebase.getPressure(hive_db, 1, now)
+		co2 = firebase.getCo2(hive_db, 1, now)
+		
+		cursor.execute('''INSERT OR REPLACE INTO dailyDB values (?,?,?,?,?,?,?,?,?,?)''',
+			(now, date, temperature[0], temperature[1], temperature[2], humidity[0], humidity[1], humidity[2], pressure, co2))	
 
-	# while True:
-		# data = firebase.getValues(hive_db, 1)
-		# db = sqlite3.connect("hiveDB.db")
-		# db.row_factory = sqlite3.Row
-		# cursor=db.cursor()
+		db.commit()
+		db.close()
 		
-		# for key, values in data.items():
-			# print(key)
-			# temperature = process.getTemperatures(values)
-			# humidity = process.getHumidity(values)
-			# pressure = process.getPressure(values)
-			# co2 = process.getCo2(values)
-			# test = process.getTest(values)
-			# #print(test)
-			
-			# cursor.execute('''insert into testDB values (?,?,?,?,?,?,?,?,?,?)''',
-			# (key, temperature[0], temperature[1], temperature[2], humidity[0], humidity[1], humidity[2], pressure, co2, test))
-		# db.commit()
-		# db.close()
+		time.sleep(30)
 		
-		# time.sleep(30)
-		
+# Method for setting up DB only
+def createDB(cursor):
+	cursor.execute('''CREATE TABLE dailyDB 
+		(time TEXT, date TEXT, 
+		tempBase REAL, tempInside REAL, tempOutside REAL, 
+		humidityBase REAL, humidityInside REAL, humidityOutside REAL,
+		pressure REAL, co2 REAL,
+		UNIQUE(time))''')
 		
 def getFormattedTime(num):
 	hr = num//60
