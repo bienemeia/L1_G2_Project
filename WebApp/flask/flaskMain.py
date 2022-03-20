@@ -5,8 +5,6 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-  # We can grab the values from firebase using python, and insert them into the html pretty easily
-  # Still need to decide how to update regularly
   names = "Meia, Graham and Boshen"
   return render_template('index.html', names=names)
   
