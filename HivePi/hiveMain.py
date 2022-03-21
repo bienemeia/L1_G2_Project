@@ -21,8 +21,10 @@ def main():
 	hive_db = hive_firebase.database()
 	
 	while True:
+			
 		# Get values from Arduino
-		# placeholder values
+		# Random placeholder values
+		# Remember, order is base, inside, outside
 		temp = [round(random.uniform(-30, 30), 1), round(random.uniform(-30, 30), 1), round(random.uniform(-30, 30), 1)]
 		humidity = [random.randrange(0,100), random.randrange(0,100), random.randrange(0,100)]
 		pressure = round(random.uniform(100, 101.5), 2)
@@ -31,12 +33,15 @@ def main():
 		# Get test value from arduino
 		test = arduino.read()
 		
+		# Get current time
+		time = firebase.getTimeMinus()
+		
 		# Push values to Firebase DB
-		firebase.pushTemperature(hive_db, 1, temp[0], temp[1], temp[2])
-		firebase.pushHumidity(hive_db, 1, humidity[0], humidity[1], humidity[2])
-		firebase.pushPressure(hive_db, 1, pressure)
-		firebase.pushCo2(hive_db, 1, co2)
-		firebase.pushTest(hive_db, 1, test)
+		firebase.pushTemperature(hive_db, 1, time, temp[0], temp[1], temp[2])
+		firebase.pushHumidity(hive_db, 1, time, humidity[0], humidity[1], humidity[2])
+		firebase.pushPressure(hive_db, 1, time, pressure)
+		firebase.pushCo2(hive_db, 1, time, co2)
+		firebase.pushDate(hive_db, 1, time)
 		
 		# Get instructions from Firebase DB and send to Arduino
 		if firebase.getHeaterStatus(hive_db, 1):

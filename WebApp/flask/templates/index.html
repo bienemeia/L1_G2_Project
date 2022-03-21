@@ -4,13 +4,32 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type=text/javascript>
+          $(function() {
+            $('a#test').bind('click', function() {
+              $.getJSON('/background_test',
+                  function(data) {
+                //do nothing
+              });
+              return false;
+            });
+          });
+  </script>
+  
   <h1>Honey, </h1>
   <h1>I'm a Smart Home!</h1>
   <h3>Project by {{ names }}</h3>
   <p class="important">
-    Welcome to the beehive.
+    Test value at {{ time }} is <strong>{{ test }}</strong>
   </p>
   
+  <form>
+        <a href=# id=test><button class='button'>Test</button></a>
+  </form>
+
+<p></p>
   <button class="button" type="button" onclick="window.location.href='{{ url_for( 'bees' ) }}';"> Click for more bees. </button>
   <p></p>
 {% endblock %}

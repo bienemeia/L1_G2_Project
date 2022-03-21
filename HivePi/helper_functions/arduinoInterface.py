@@ -11,4 +11,4 @@ def ledOFF():
     bus.write_byte(address,0)
 
 def read():
-    return bus.read_byte_data(address, 2)
+    return bus.read_byte(address)

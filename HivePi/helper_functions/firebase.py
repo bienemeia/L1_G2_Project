@@ -3,47 +3,64 @@ from datetime import date, datetime
 # Set the hive name
 def pushHiveName(db, hiveId, name):
 	db.child("hives").child(hiveId).child("name").set(name)
-
+	
 # Get current time in form HH:MM (24 hour)
 def getTime():
 	now = str(datetime.now().time())
 	now = now.split(":", 2)
+	hr = int(now[0])
+	mn = int(now[1])
+	if hr < 10:
+		now[0] = "0" + str(hr)
+	if mn < 10:
+		now[1] = "0" + str(mn)
+	return(now[0] + ":" + now[1])
+
+# Get current time minus 1 minute
+def getTimeMinus1():
+	now = str(datetime.now().time())
+	now = now.split(":", 2)
+	hr = int(now[0])
+	mn = int(now[1])
+	if mn == 0:
+		mn = 59
+		hr = hr-1
+	else:
+		mn = mn-1
+	if hr < 10:
+		now[0] = "0" + str(hr)
+	if mn < 10:
+		now[1] = "0" + str(mn)
 	return(now[0] + ":" + now[1])
 	
 # Set date as today in Firebase
-def pushDate(db, hiveId):
+def pushDate(db, hiveId, time):
 	today = str(date.today())
-	now = getTime()
-	db.child("hives").child(hiveId).child("values").child(now).child("date").set(today)
+	db.child("hives").child(hiveId).child("values").child(time).child("date").set(today)
 	
 # Set temps in Firebase for current time
-def pushTemperature(db, hiveId, outside, inside, base):
-	now = getTime()
-	db.child("hives").child(hiveId).child("values").child(now).child("temperature").child("outside").set(outside)
-	db.child("hives").child(hiveId).child("values").child(now).child("temperature").child("inside").set(inside)
-	db.child("hives").child(hiveId).child("values").child(now).child("temperature").child("base").set(base)
+def pushTemperature(db, hiveId, time, base, inside, outside):
+	db.child("hives").child(hiveId).child("values").child(time).child("temperature").child("outside").set(outside)
+	db.child("hives").child(hiveId).child("values").child(time).child("temperature").child("inside").set(inside)
+	db.child("hives").child(hiveId).child("values").child(time).child("temperature").child("base").set(base)
 
 # Set humidity in firebase for current time
-def pushHumidity(db, hiveId, outside, inside, base):
-	now = getTime()
-	db.child("hives").child(hiveId).child("values").child(now).child("humidity").child("outside").set(outside)
-	db.child("hives").child(hiveId).child("values").child(now).child("humidity").child("inside").set(inside)
-	db.child("hives").child(hiveId).child("values").child(now).child("humidity").child("base").set(base)
+def pushHumidity(db, hiveId, time, base, inside, outside):
+	db.child("hives").child(hiveId).child("values").child(time).child("humidity").child("outside").set(outside)
+	db.child("hives").child(hiveId).child("values").child(time).child("humidity").child("inside").set(inside)
+	db.child("hives").child(hiveId).child("values").child(time).child("humidity").child("base").set(base)
 	
 # Set pressue in firebase for current time
-def pushPressure(db, hiveId, pressure):
-	now = getTime()
-	db.child("hives").child(hiveId).child("values").child(now).child("pressure").set(pressure)
+def pushPressure(db, hiveId, time, pressure):
+	db.child("hives").child(hiveId).child("values").child(time).child("pressure").set(pressure)
 	
 # Set CO2 in firebase for current time
-def pushCo2(db, hiveId, co2):
-	now = getTime()
-	db.child("hives").child(hiveId).child("values").child(now).child("co2").set(co2)
+def pushCo2(db, hiveId, time, co2):
+	db.child("hives").child(hiveId).child("values").child(time).child("co2").set(co2)
 	
 # Set test value in firebase for current time
-def pushTest(db, hiveId, test):
-	now = getTime()
-	db.child("hives").child(hiveId).child("values").child(now).child("value").set(test)
+def pushTest(db, hiveId, time, test):
+	db.child("hives").child(hiveId).child("values").child(time).child("test").set(test)
 	
 # Set ice status
 def pushIceStatus(db, hiveId, status):
@@ -68,6 +85,34 @@ def pushTestLed1Status(db, hiveId, status):
 # Set test LED status on Arduino 2
 def pushTestLed2Status(db, hiveId, status):
 	return db.child("hives").child(hiveId).child("testLed2").set(status)
+	
+# Get the hive name
+def getHiveName(db, hiveId):
+	return db.child("hives").child(hiveId).child("name").get().val()
+	
+# Get date for specified time slot
+def getDate(db, hiveId, time):
+	return db.child("hives").child(hiveId).child("values").child(time).child("date").get().val()
+
+# Get temperatures for specified time slot
+def getTemperature(db, hiveId, time):
+	return db.child("hives").child(hiveId).child("values").child(time).child("temperature").get().val()
+	
+# Get humidities for specified time slot
+def getHumidity(db, hiveId, time):
+	return db.child("hives").child(hiveId).child("values").child(time).child("humidity").get().val()
+
+# Get pressure for specifiec time slot	
+def getPressure(db, hiveId, time):
+	return db.child("hives").child(hiveId).child("values").child(time).child("pressure").get().val()
+	
+# Get pressure for specifiec time slot	
+def getCo2(db, hiveId, time):
+	return db.child("hives").child(hiveId).child("values").child(time).child("co2").get().val()
+
+# Get the ice status
+def getIceStatus(db, hiveId):
+	return db.child("hives").child(hiveId).child("iceStatus").get().val()
 	
 # Get the heater status
 def getHeaterStatus(db, hiveId):

@@ -29,6 +29,8 @@
 			"heaterStatus" : bool,
 			"flapperStatus" : bool,
 			"fanStatus" : bool
+			"testLed1Status" : bool,
+			"testLed2Status" : bool
 		}
 	}
 }
