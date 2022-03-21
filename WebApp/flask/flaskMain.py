@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from helper_functions import firebase, process
+#rom helper_functions import firebase, process
 import time
 app = Flask(__name__)
 
@@ -22,9 +22,9 @@ def video():
   # video logic here
   return render_template('video.html')
 
-@app.route("/background_test")
-def test():
-  print("Hello")
+# @app.route("/background_test")
+# def test():
+  # print("Hello")
   
 if __name__ == "__main__":
   initializing_network()
