@@ -34,13 +34,13 @@ Soft_DFRobot_SHT3x tempSensor( &sw,/*address=*/0x45,/*RST=*/4);
 
 //state vars
 int currTemp = 0;
-int currHumidty = 0;
+uint16_t currHumidty = 0;
 int iceStatus[4] = {0,0,0,0};
 bool heatStatus = false;
 
-int regRequest = 0;
+byte regRequest = 0;
 
-const byte systemNumber = 2;
+const byte systemNumber = 0x02;
 
 void setup() {
 
@@ -107,8 +107,8 @@ void setup() {
 void loop() {
 
   //update States
-  currTemp = (int)(tempSensor.getTemperatureC() * 10.00);
-  currHumidty = (int)(tempSensor.getHumidityRH() * 10.00);
+  currTemp = (uint16_t)(tempSensor.getTemperatureC() * 10.00);
+  currHumidty = (uint16_t)(tempSensor.getHumidityRH() * 10.00);
 
   iceStatus[0] = analogRead(DETECTOR1);
   iceStatus[1] = analogRead(DETECTOR2);
@@ -193,24 +193,16 @@ bool testHeater(){
 }
 
 void receiveEvent(int howMany) {
-  while (Wire.available()) { 
-    regRequest = Serial.parseInt();
+  while (0 < Wire.available()) { 
+    regRequest = Wire.read();
   }
   Serial.print("Reg Request: ");
   Serial.println(regRequest);
 
   if(regRequest == 4){
     heatStatus = true;
-    Wire.write(0xF);
-    regRequest = 6;
-    Serial.println("Heater Turned On");
-
   }else if(regRequest == 5){
     heatStatus = false;
-    Wire.write(0xF);
-    regRequest = 6;
-    Serial.println("Heater Turned Off");
-
   }
   
 }
@@ -218,29 +210,93 @@ void receiveEvent(int howMany) {
 void requestEvent() {
 
   if(regRequest == 0){
-    Wire.write((byte)systemNumber);
+    Wire.write((uint8_t)systemNumber &0x0F);
     Serial.println("Sent System Number");
 
   }else if(regRequest == 1){
-    Wire.write(currTemp);
+
+    byte sendArray[2];
+    sendArray[1] = ((currTemp&0xFF00) >>8);
+    sendArray[0] = (currTemp & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+
+    Wire.write(sendArray,2);
     Serial.println("Sent Tempature");
 
-  }
-  
-  else if(regRequest == 2){
-    Wire.write(currHumidty);
+  }else if(regRequest == 2){
+    byte sendArray[2];
+    sendArray[1] = ((currHumidty&0xFF00) >>8);
+    sendArray[0] = (currHumidty & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+
+    Wire.write(sendArray,2);
+
     Serial.println("Sent Humidty");
 
   }else if(regRequest == 3){
-    Wire.write(iceStatus[0]);
-    Wire.write(iceStatus[1]);
-    Wire.write(iceStatus[2]);
-    Wire.write(iceStatus[3]);
-    Serial.println("Sent Ice Status");
+    Wire.write(heatStatus&0xFF);
+    Serial.println("Sent Heat Status");
+
+  }else if(regRequest == 4){
+    Wire.write(0xF);
+    regRequest = 6;
+    Serial.println("Heater Turned On");
+
+  }else if(regRequest == 5){
+    Wire.write(0xF);
+    regRequest = 6;
+    Serial.println("Heater Turned Off");
 
   }else if(regRequest == 6){
-    Wire.write(heatStatus);
-    Serial.println("Sent Heat Status");
+    byte sendArray[2];
+    sendArray[1] = ((iceStatus[0]&0xFF00) >>8);
+    sendArray[0] = (iceStatus[0] & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+
+    Wire.write(sendArray,2);
+    
+    Serial.println("Sent Ice Status");
+
+  }else if(regRequest == 7){
+    byte sendArray[2];
+    sendArray[1] = ((iceStatus[1]&0xFF00) >>8);
+    sendArray[0] = (iceStatus[1] & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+
+    Wire.write(sendArray,2);
+    
+    Serial.println("Sent Ice Status");
+
+  }else if(regRequest == 8){
+    byte sendArray[2];
+    sendArray[1] = ((iceStatus[2]&0xFF00) >>8);
+    sendArray[0] = (iceStatus[2] & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+
+    Wire.write(sendArray,2);
+    
+    Serial.println("Sent Ice Status");
+  } else if(regRequest == 9){
+    byte sendArray[2];
+    sendArray[1] = ((iceStatus[3]&0xFF00) >>8);
+    sendArray[0] = (iceStatus[3] & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+
+    Wire.write(sendArray,2);
+    
+    Serial.println("Sent Ice Status");
   }
   
 }

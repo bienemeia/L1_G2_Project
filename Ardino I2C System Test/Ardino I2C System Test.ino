@@ -22,7 +22,7 @@ void receiveEvent(int y) {
     x = Wire.read();
   }
   
-  if(x = 0x1){
+  if(x = 0x0){
       digitalWrite(LED_BUILTIN, HIGH);
   }else{
       digitalWrite(LED_BUILTIN, LOW);

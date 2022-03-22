@@ -33,7 +33,7 @@ bool flapperState = false;
 
 int regRequest = 0;
 
-const byte systemNumber = 1;
+const byte systemNumber = 0x01;
 
 //time info
 unsigned int sensorWarmUpTime = 0;//36001 minumum
@@ -161,7 +161,7 @@ void takeMesurments(){
 		Serial.print("C, RH=");
 		Serial.print((float)(currHumidtyClimate/10));
 		Serial.print("%, P=");
-		Serial.print((float)(currPressureClimate/10));
+		Serial.print((float)(currPressureClimate));
 		Serial.print("hPa");
 
 
@@ -187,23 +187,20 @@ ClosedCube_BME680_Status readAndPrintStatus() {
 }
 
 void receiveEvent(int howMany) {
-  while (Wire.available()) { 
-    regRequest = Serial.parseInt();
+  while (0 < Wire.available()) { 
+    regRequest = Wire.read();
   }
   Serial.print("Reg Request: ");
   Serial.println(regRequest);
 
   if(regRequest == 7){
     flapperState = true;
-    Wire.write(0xF);
-    regRequest = 9;
-    Serial.println("Heater Turned On");
+    
+    Serial.println("Opened flapper");
 
   }else if(regRequest == 8){
     flapperState = false;
-    Wire.write(0xF);
-    regRequest = 9;
-    Serial.println("Heater Turned Off");
+    Serial.println("Closed flapper");
 
   }
   
@@ -212,38 +209,86 @@ void receiveEvent(int howMany) {
 void requestEvent() {
 
   if(regRequest == 0){
-    Wire.write((byte)systemNumber);
+    Wire.write((uint8_t)systemNumber & 0x0F);
     Serial.println("Sent System Number");
 
   }else if(regRequest == 1){
-    Wire.write(currTempClimate);
+    byte sendArray[2];
+    sendArray[1] = ((currTempClimate&0xFF00) >>8);
+    sendArray[0] = (currTempClimate & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+
+    Wire.write(sendArray,2);
     Serial.println("Sent Tempature inturnal");
 
   }else if(regRequest == 2){
-    Wire.write(currHumidtyClimate);
+
+    byte sendArray[2];
+    sendArray[1] = ((currHumidtyClimate&0xFF00) >>8);
+    sendArray[0] = (currHumidtyClimate & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+
+    Wire.write(sendArray,2);
+    
     Serial.println("Sent Humidty inturnal");
 
   }else if(regRequest == 3){
-    Wire.write(currPressureClimate);
+    byte sendArray[2];
+    sendArray[1] = ((currPressureClimate&0xFF00) >>8);
+    sendArray[0] = (currPressureClimate & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+
+    Wire.write(sendArray,2);
     Serial.println("Sent Humidty inturnal");
 
   }else if(regRequest == 4){
-    Wire.write(currCO2Climate);
+    byte sendArray[2];
+    sendArray[1] = ((currCO2Climate&0xFF00) >>8);
+    sendArray[0] = (currCO2Climate & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+    Wire.write(sendArray,2);
     Serial.println("Sent Pressure inturnal");
 
   }else if(regRequest == 5){
-    Wire.write(currTempTemp);
+
+    byte sendArray[2];
+    sendArray[1] = ((currTempTemp&0xFF00) >>8);
+    sendArray[0] = (currTempTemp & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+    Wire.write(sendArray,2);
     Serial.println("Sent Tempature external");
 
   }else if(regRequest == 6){
-    Wire.write(currHumidtyTemp);
+    byte sendArray[2];
+    sendArray[1] = ((currHumidtyTemp&0xFF00) >>8);
+    sendArray[0] = (currHumidtyTemp & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+    Wire.write(sendArray,2);
     Serial.println("Sent Humidty external;");
 
+  }else if(regRequest == 7){
+    Wire.write(0xF);
+    regRequest = 9;
+  }else if(regRequest == 8){
+    Wire.write(0xF);
+    regRequest = 9;
   }else if(regRequest == 9){
-    Wire.write(flapperState);
+    Wire.write(flapperState & 0xF);
     Serial.println("Sent flapper Status");
   }else if(regRequest == 10){
-    Wire.write(sensorWarm);
+    Wire.write(sensorWarm & 0xF);
     Serial.println("Sent sensorWarm Status");
   }
   
