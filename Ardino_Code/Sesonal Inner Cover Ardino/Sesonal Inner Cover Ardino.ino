@@ -11,7 +11,7 @@ char swRxBuffer[128];
 int sdaPin = 8;
 int sclPin = 7;
 SoftWire sw(sdaPin, sclPin);
-Soft_DFRobot_SHT3x tempSensor( &sw,/*address=*/0x45,/*RST=*/4);
+Soft_DFRobot_SHT3x tempSensor(&sw, /*address=*/0x45, /*RST=*/4);
 
 //flapper
 Stepper flapper = Stepper(2048, A3, A1, A2, A0);
@@ -36,7 +36,7 @@ int regRequest = 0;
 const byte systemNumber = 0x01;
 
 //time info
-unsigned int sensorWarmUpTime = 0;//36001 minumum
+unsigned int sensorWarmUpTime = 0;  //36001 minumum
 unsigned int mesurmentTime = 0;
 
 void setup() {
@@ -45,34 +45,35 @@ void setup() {
   sw.setRxBuffer(swRxBuffer, sizeof(swRxBuffer));
   sw.begin();
 
-    //I2C
+  //I2C
   Wire.begin(0x3C);
   Wire.onRequest(requestEvent);
   Wire.onReceive(receiveEvent);
 
   //Serial setup
   Serial.begin(9600);
-	Serial.println("Starting!");
+  Serial.println("Starting Hive Arduino!");
+  Serial.println("Enter 'm' for flapper test");
+  Serial.println("Enter 'c' for climate sensor test");
+  Serial.println("Enter 't' for temp sensor test\n\n");
+
 
   //bme680 setup
-  climateSensor.init(0x77,&sw); // I2C address: 0x76 or 0x77
-	climateSensor.reset();
+  climateSensor.init(0x77, &sw);  // I2C address: 0x76 or 0x77
+  climateSensor.reset();
 
-  while(climateSensor.getChipID() != 0x61){
+  while (climateSensor.getChipID() != 0x61) {
     Serial.println("Failed to Initialize the climate sensor, please confirm the wire connection");
     blinkClimateSensorFailure();
-
   }
 
   Serial.print("BME680 Chip ID=0x");
-	Serial.println(climateSensor.getChipID(), HEX);
+  Serial.println(climateSensor.getChipID(), HEX);
   // oversampling: humidity = x16, temperature = x16, pressure = x16
-	climateSensor.setOversampling(BME680_OVERSAMPLING_X1, BME680_OVERSAMPLING_X2, BME680_OVERSAMPLING_X16);
-	climateSensor.setIIRFilter(BME680_FILTER_3);
-  climateSensor.setGasOn(300, 100); // 300 degree Celsius and 100 milliseconds 
-	climateSensor.setForcedMode();
-
-
+  climateSensor.setOversampling(BME680_OVERSAMPLING_X1, BME680_OVERSAMPLING_X2, BME680_OVERSAMPLING_X16);
+  climateSensor.setIIRFilter(BME680_FILTER_3);
+  climateSensor.setGasOn(300, 100);  // 300 degree Celsius and 100 milliseconds
+  climateSensor.setForcedMode();
 
   //SHT31 Setup
   while (tempSensor.begin() != 0) {
@@ -86,225 +87,215 @@ void setup() {
   //setUpflapper
   flapper.setSpeed(1);
   testFlapper();
-  
-  /*
-  pinMode(FLAPPERPIN,OUTPUT);
-  analogWrite(FLAPPERPIN,0);
-  testFlapper();
-*/
 }
 
 
-void loop()
-{
+void loop() {
   //update Flapper
   static int flapperOpening = 0;
-  if(flapperState && flapperOpening <= 512){
+  if (flapperState && flapperOpening <= 512) {
     flapper.step(1);
     flapperOpening++;
-  }else if(!flapperState && flapperOpening >= 0){
+  } else if (!flapperState && flapperOpening >= 0) {
     flapper.step(-1);
     flapperOpening--;
 
-  }else {
-    
+  } else {
   }
 
-  
+
   //update values
-  if(40 == mesurmentTime){
+  if (40 == mesurmentTime) {
     mesurmentTime = 0;
     takeMesurments();
-  }else{
+  } else {
     mesurmentTime++;
   }
 
-  //update time
-  if (sensorWarmUpTime <= 36001 && !sensorWarm){
-      sensorWarmUpTime++;
+  //update sensorWarmUpTime
+  if (sensorWarmUpTime <= 36001 && !sensorWarm) {
+    sensorWarmUpTime++;
   }
-  if(sensorWarmUpTime >= 36000){
+  if (sensorWarmUpTime >= 36000) {
     sensorWarm = true;
+  }
+
+  //get Test commands
+
+  if (Serial.available() > 0) {
+    char command = Serial.read();
+
+    if (command == 'm') {
+      testFlapper();
+      Serial.println("Test Completed");
+
+    } else if (command == 'c') {
+      Serial.println("Starting Climate Sensor Chip test");
+      while (climateSensor.getChipID() != 0x61) {
+        Serial.println("Failed to Initialize the climate sensor, please confirm the wire connection");
+        blinkClimateSensorFailure();
+      }
+      Serial.println("Test Completed");
+
+    } else if (command == 't') {
+      Serial.println("Starting Temp Sensor Chip test");
+      while (tempSensor.begin() != 0) {
+        Serial.println("Failed to Initialize the chip, please confirm the wire connection");
+        blinkTempSensorError();
+      }
+      Serial.println("Test Completed");
+    }
   }
 
   delay(50);
 }
 
-void takeMesurments(){
-  	ClosedCube_BME680_Status status = readAndPrintStatus();
+void takeMesurments() {
+  ClosedCube_BME680_Status status = readBME680Status();
 
-	if (status.newDataFlag) {
+  if (status.newDataFlag) {
 
     double temp = climateSensor.readTemperature();
-		double pres = climateSensor.readPressure();
-		double hum = climateSensor.readHumidity();
+    double pres = climateSensor.readPressure();
+    double hum = climateSensor.readHumidity();
     uint32_t gas = climateSensor.readGasResistance();
 
-    currTempClimate = (int)(temp*10.00);
-    currHumidtyClimate = (int)(hum*10.00) ;
+    currTempClimate = (int)(temp * 10.00);
+    currHumidtyClimate = (int)(hum * 10.00);
     currPressureClimate = (int)(pres);
     currCO2Climate = gas;
 
     currTempTemp = (int)(tempSensor.getTemperatureC() * 10.00);
     currHumidtyTemp = (int)(tempSensor.getHumidityRH() * 10.00);
 
-    Serial.print((float)(currTempTemp/10));
+    Serial.print((float)(currTempTemp / 10));
     Serial.print(" C\n");
 
-    Serial.print((float)(currHumidtyTemp/10));
+    Serial.print((float)(currHumidtyTemp / 10));
     Serial.print(" %H\n");
 
-		Serial.print("result: ");
+    Serial.print("result: ");
 
-		Serial.print("T=");
-		Serial.print((float)(currTempClimate/10));
-		Serial.print("C, RH=");
-		Serial.print((float)(currHumidtyClimate/10));
-		Serial.print("%, P=");
-		Serial.print((float)(currPressureClimate));
-		Serial.print("hPa");
+    Serial.print("T=");
+    Serial.print((float)(currTempClimate / 10));
+    Serial.print("C, RH=");
+    Serial.print((float)(currHumidtyClimate / 10));
+    Serial.print("%, P=");
+    Serial.print((float)(currPressureClimate));
+    Serial.print("hPa");
 
+    Serial.print(", G=");
+    Serial.print(currCO2Climate);
+    Serial.print(" Ohms");
 
+    Serial.println();
 
-		Serial.print(", G=");
-		Serial.print(currCO2Climate);
-		Serial.print(" Ohms");
-
-		Serial.println();
-
-    //update state values
-    
-
-		climateSensor.setForcedMode();
-	} else {
-	}
-
+    climateSensor.setForcedMode();
+  } else {
+  }
 }
 
-ClosedCube_BME680_Status readAndPrintStatus() {
-	ClosedCube_BME680_Status status = climateSensor.readStatus();
+/**
+A function that checks is the climate sensor is redy to be readed. 
+*/
+ClosedCube_BME680_Status readBME680Status() {
+  ClosedCube_BME680_Status status = climateSensor.readStatus();
   return status;
 }
 
+/**
+A interrupt handler for i2c receiveEvent
+*/
 void receiveEvent(int howMany) {
-  while (0 < Wire.available()) { 
+  while (0 < Wire.available()) {
     regRequest = Wire.read();
   }
   Serial.print("Reg Request: ");
   Serial.println(regRequest);
 
-  if(regRequest == 7){
+  if (regRequest == 7) {
     flapperState = true;
-    
+
     Serial.println("Opened flapper");
 
-  }else if(regRequest == 8){
+  } else if (regRequest == 8) {
     flapperState = false;
     Serial.println("Closed flapper");
-
   }
-  
 }
 
+/**
+An interrupt handler for i2c requestEvent
+*/
 void requestEvent() {
-
-  if(regRequest == 0){
-    Wire.write((uint8_t)systemNumber & 0x0F);
+  if (regRequest == 0) {
+    Wire.write((uint8_t)systemNumber & 0xFF);
     Serial.println("Sent System Number");
 
-  }else if(regRequest == 1){
-    byte sendArray[2];
-    sendArray[1] = ((currTempClimate&0xFF00) >>8);
-    sendArray[0] = (currTempClimate & 0xFF);
-
-    Serial.println(sendArray[0],HEX);
-    Serial.println(sendArray[1],HEX);
-
-    Wire.write(sendArray,2);
+  } else if (regRequest == 1) {
+    send16BitNumber(currTempClimate);
     Serial.println("Sent Tempature inturnal");
 
-  }else if(regRequest == 2){
-
-    byte sendArray[2];
-    sendArray[1] = ((currHumidtyClimate&0xFF00) >>8);
-    sendArray[0] = (currHumidtyClimate & 0xFF);
-
-    Serial.println(sendArray[0],HEX);
-    Serial.println(sendArray[1],HEX);
-
-    Wire.write(sendArray,2);
-    
+  } else if (regRequest == 2) {
+    send16BitNumber(currHumidtyClimate);
     Serial.println("Sent Humidty inturnal");
 
-  }else if(regRequest == 3){
-    byte sendArray[2];
-    sendArray[1] = ((currPressureClimate&0xFF00) >>8);
-    sendArray[0] = (currPressureClimate & 0xFF);
-
-    Serial.println(sendArray[0],HEX);
-    Serial.println(sendArray[1],HEX);
-
-    Wire.write(sendArray,2);
+  } else if (regRequest == 3) {
+    send16BitNumber(currPressureClimate);
     Serial.println("Sent Humidty inturnal");
 
-  }else if(regRequest == 4){
-    byte sendArray[2];
-    sendArray[1] = ((currCO2Climate&0xFF00) >>8);
-    sendArray[0] = (currCO2Climate & 0xFF);
-
-    Serial.println(sendArray[0],HEX);
-    Serial.println(sendArray[1],HEX);
-    Wire.write(sendArray,2);
+  } else if (regRequest == 4) {
+    send16BitNumber(currCO2Climate);
     Serial.println("Sent Pressure inturnal");
 
-  }else if(regRequest == 5){
-
-    byte sendArray[2];
-    sendArray[1] = ((currTempTemp&0xFF00) >>8);
-    sendArray[0] = (currTempTemp & 0xFF);
-
-    Serial.println(sendArray[0],HEX);
-    Serial.println(sendArray[1],HEX);
-    Wire.write(sendArray,2);
+  } else if (regRequest == 5) {
+    send16BitNumber(currTempTemp);
     Serial.println("Sent Tempature external");
 
-  }else if(regRequest == 6){
-    byte sendArray[2];
-    sendArray[1] = ((currHumidtyTemp&0xFF00) >>8);
-    sendArray[0] = (currHumidtyTemp & 0xFF);
-
-    Serial.println(sendArray[0],HEX);
-    Serial.println(sendArray[1],HEX);
-    Wire.write(sendArray,2);
+  } else if (regRequest == 6) {
+    send16BitNumber(currHumidtyTemp);
     Serial.println("Sent Humidty external;");
 
-  }else if(regRequest == 7){
+  } else if (regRequest == 7) {
     Wire.write(0xF);
     regRequest = 9;
-  }else if(regRequest == 8){
+  } else if (regRequest == 8) {
     Wire.write(0xF);
     regRequest = 9;
-  }else if(regRequest == 9){
+  } else if (regRequest == 9) {
     Wire.write(flapperState & 0xF);
     Serial.println("Sent flapper Status");
-  }else if(regRequest == 10){
+  } else if (regRequest == 10) {
     Wire.write(sensorWarm & 0xF);
     Serial.println("Sent sensorWarm Status");
   }
-  
 }
 
+/**
+A function that converts a uint16_t to a byte array and send it.
+*/
+void send16BitNumber(uint16_t sendNumber) {
+  byte sendArray[2];
+  sendArray[1] = ((sendNumber & 0xFF00) >> 8);
+  sendArray[0] = (sendNumber & 0xFF);
 
+  Serial.println(sendArray[0], HEX);
+  Serial.println(sendArray[1], HEX);
 
-void testFlapper(){
+  Wire.write(sendArray, 2);
+}
+
+/**
+A function that tests the plapper valve.
+*/
+void testFlapper() {
   Serial.println("Commencing flapper Test");
   delay(1000);
   flapper.step(512);
   Serial.println("Flapper sould now be open");
   delay(1000);
-  flapper.step(0-(512));
+  flapper.step(0 - (512));
   Serial.println("Flapper sould now be closed");
-  
 }
 
 /*
@@ -313,29 +304,28 @@ void testFlapper(){
   temp sensor 3
 */
 
-void blinkClimateSensorFailure(){
-  digitalWrite(BLINKLED,HIGH);
-  delay(250);
-  digitalWrite(BLINKLED,LOW);
-  delay(250);
-  digitalWrite(BLINKLED,HIGH);
-  delay(250);
-  digitalWrite(BLINKLED,LOW);
+/**
+A function that blink a climate sensor error.
+*/
+void blinkClimateSensorFailure() {
+  for (int i = 0; i < 3; i++) {
+    digitalWrite(BLINKLED, HIGH);
+    delay(500);
+    digitalWrite(BLINKLED, LOW);
+    delay(500);
+  }
   delay(1000);
 }
 
-void blinkTempSensorError(){
-  digitalWrite(BLINKLED,HIGH);
-  delay(500);
-  digitalWrite(BLINKLED,LOW);
-  delay(500);
-  digitalWrite(BLINKLED,HIGH);
-  delay(500);
-  digitalWrite(BLINKLED,LOW);
-  delay(500);
-  digitalWrite(BLINKLED,HIGH);
-  delay(500);
-  digitalWrite(BLINKLED,LOW);
+/**
+A function that blink a Temp sensor error.
+*/
+void blinkTempSensorError() {
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(BLINKLED, HIGH);
+    delay(500);
+    digitalWrite(BLINKLED, LOW);
+    delay(500);
+  }
   delay(1000);
 }
-	
