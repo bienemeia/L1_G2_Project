@@ -1,3 +1,5 @@
+import sys
+sys.path.append('..')
 from helper_functions import firebase, process
 import pyrebase
 import json
@@ -6,6 +8,7 @@ from datetime import datetime
 import time
 
 def main():
+	
 	# Set up Firebase authentication
 	meia_config = {
 	"apiKey": "AIzaSyBVpD3QAJ7NQsmobIABC95vOX8-e-aZQX0",
@@ -22,6 +25,7 @@ def main():
 		db = sqlite3.connect("hiveDB.db")
 		db.row_factory = sqlite3.Row
 		cursor=db.cursor()
+		createDB()
 				
 		date = firebase.getDate(hive_db, 1, now)
 		tempDict = firebase.getTemperature(hive_db, 1, now)

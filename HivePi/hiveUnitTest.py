@@ -1,5 +1,6 @@
+import sys
+sys.path.append('..')
 from helper_functions import firebase
-#from helper_functions import arduinoInterface as arduino
 import pyrebase
 import random
 import time
