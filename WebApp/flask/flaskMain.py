@@ -6,7 +6,9 @@ app = Flask(__name__)
 @app.route("/")
 def index():
   names = "Meia, Graham and Boshen"
-  return render_template('index.html', names=names)
+  time = str(time.now())
+  test = 4
+  return render_template('index.html', names=names, time=time, test=test)
   
 @app.route("/bees")
 def bees():
