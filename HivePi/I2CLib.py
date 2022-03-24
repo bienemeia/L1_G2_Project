@@ -284,13 +284,11 @@ This method blinks a LED to show a I2C fult.
 def blinkI2CFaliure():
     for x in range(3):
         blinkLed.on()
-    	  time.sleep(0.5)
-    	  blinkLed.off()
-    	  time.sleep(0.5)
+        time.sleep(0.5)
+        blinkLed.off()
+        time.sleep(0.5)
     time.sleep(2)
     
     
 I2CCheck()
 getAllValues()
-blinkI2CFaliure()
-blinkI2CFaliure()
