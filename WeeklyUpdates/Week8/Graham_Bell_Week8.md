@@ -1,7 +1,7 @@
 ## Weekly Individual Project Update Report
 ### Group number: L1_G2
 ### Student name: Graham C. Bell
-### Week: 7 Feb 28th - March 6th
+### Week: 8 Mar 6th - Mar 13th
 ___
 1. **How many hours did you spend on the project this week? (0-10)**
 

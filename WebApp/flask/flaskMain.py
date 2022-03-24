@@ -1,56 +1,53 @@
-from flask import Flask, render_template
-from helper_functions import firebase, process
-import pyrebase
+# import sys
+# sys.path.append('../..')
+# from helper_functions import
+from flask import Flask, Markup, render_template
+import time
+
 app = Flask(__name__)
 
-# Set up Firebase authentication
-meia_config = {
-"apiKey": "AIzaSyBVpD3QAJ7NQsmobIABC95vOX8-e-aZQX0",
-"authDomain":"testhive-2bca5.firebaseapp.com",
-"databaseURL":"https://testhive-2bca5-default-rtdb.firebaseio.com/",
-"storageBucket":"testhive-2bca5.appspot.com"
-}
+labels = [
+    'JAN', 'FEB', 'MAR', 'APR',
+    'MAY', 'JUN', 'JUL', 'AUG',
+    'SEP', 'OCT', 'NOV', 'DEC'
+]
 
-# Initialize Firebase DB
-hive_firebase = pyrebase.initialize_app(meia_config)
-hive_db = hive_firebase.database()
+values = [
+    967.67, 1190.89, 1079.75, 1349.19,
+    2328.91, 2504.28, 2873.83, 4764.87,
+    4349.29, 6458.30, 9907, 16297
+]
 
+colors = [
+    "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
+    "#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1",
+    "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
 
 @app.route("/")
 def index():
-  # We can grab the values from firebase using python, and insert them into the html pretty easily
-  # Still need to decide how to update regularly
-  names = "Meia, Graham and Boshen"
-  #time = "8:45"
-  time = firebase.getTimeMinus1()
-  data = firebase.getValues(hive_db, 1)
-  test = process.getTest(data[time])
-  #test = 46
-  return render_template('index.html', names=names, test=test, time=time)
+	names = "Meia, Graham and Boshen"
+	return render_template('index.html', names=names)
   
 @app.route("/bees")
 def bees():
-  return render_template('bees.html')
+	line_labels=labels
+	line_values=values
+	return render_template('bees.html', max=17000, labels=line_labels, values=line_values)
 
 @app.route("/login")
 def login():
-  # Login logic here
-  return render_template('login.html')
+	# Login logic here
+	return render_template('login.html')
 
 @app.route("/video")
 def video():
-  # video logic here
-  return render_template('video.html')
+	# video logic here
+	return render_template('video.html')
 
-@app.route("/background_test")
-def test():
-  print("Hello")
-  if firebase.getTestLed1Status(hive_db, 1):
-    firebase.pushTestLed1Status(hive_db, 1, False)
-  else:
-    firebase.pushTestLed1Status(hive_db, 1, True)
-  return("nothing")
+# @app.route("/background_test")
+# def test():
+  # print("Hello")
   
 if __name__ == "__main__":
-  initializing_network()
-  app.run(debug=True, host='0.0.0.0')
+	initializing_network()
+	app.run(debug=True, host='0.0.0.0')

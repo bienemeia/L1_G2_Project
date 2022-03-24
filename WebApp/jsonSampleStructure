@@ -1,0 +1,41 @@
+"hives" : 
+	"1": {
+		"fanStatus" : boolean,
+		"flapperStatus" : boolean,
+		"heaterStatus" : boolean,
+		"iceStatus" : boolean,
+		"name" : string,
+		"values" : [{
+			"09:59" : {
+				"co2" : float,
+				"date" : string,
+				"humidity" : {
+					"base" : float,
+					"inside" : float,
+					"outside" : float,
+				},
+				"pressure" : float,
+				"temperature" : {
+					"base" : float,
+					"inside" : float,
+					"outside" : float,
+				}
+			},
+			"10:00" : {
+				"co2" : float,
+				"date" : string,
+				"humidity" : {
+					"base" : float,
+					"inside" : float,
+					"outside" : float,
+				},
+				"pressure" : float,
+				"temperature" : {
+					"base" : float,
+					"inside" : float,
+					"outside" : float,
+				}
+			},
+		}]
+	}
+}
