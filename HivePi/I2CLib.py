@@ -48,7 +48,7 @@ def getBaseArduinoHeaterStatus():
 
 """
 This method turns on the heater.
-If there was a write error this function returns true.
+If there was a write error this function returns false.
 """     
 def setBaseArduinoHeaterOn():
     try:
@@ -61,7 +61,7 @@ def setBaseArduinoHeaterOn():
 
 """
 This method turns off the heater.
-If there was a write error this function returns true.
+If there was a write error this function returns false.
 """      
 def setBaseArduinoHeaterOff():
     try:
@@ -212,11 +212,15 @@ def setHiveArduinoFlapperClosed():
         print("failed to read i2c")
 
 """
-This method gets if the flapper is open or closed. 1 = open
+This method gets if the flapper is open or closed. This method will return true if the flapper is open.
+This method ueses the 0x3 bit mask to correct for the 128th bit being set.
 """      
 def getHiveArduinoFlapperStatus():
     try:
-        return(bus.read_byte_data(address1,9))
+	if(bus.read_byte_data(address1,9)&0x3 == 1):
+      	return True
+	else:
+		return False
     except OSError:
         print("failed to read i2c")
   
@@ -291,11 +295,13 @@ This method blinks a LED to show a I2C fult.
 def blinkI2CFaliure():
     for x in range(3):
         blinkLed.on()
-        time.sleep(0.5)
-        blinkLed.off()
-        time.sleep(0.5)
+    	  time.sleep(0.5)
+    	  blinkLed.off()
+    	  time.sleep(0.5)
     time.sleep(2)
     
     
 I2CCheck()
 getAllValues()
+blinkI2CFaliure()
+blinkI2CFaliure()
