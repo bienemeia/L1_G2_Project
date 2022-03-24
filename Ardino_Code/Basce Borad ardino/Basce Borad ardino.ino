@@ -4,7 +4,6 @@
 
 
 //Ice Detector
-
 const int LED1 = 3;//D3
 const int DETECTOR1 = A7;//A7
 
@@ -34,19 +33,22 @@ Soft_DFRobot_SHT3x tempSensor( &sw,/*address=*/0x45,/*RST=*/4);
 
 //state vars
 int currTemp = 0;
-int currHumidty = 0;
+uint16_t currHumidty = 0;
 int iceStatus[4] = {0,0,0,0};
 bool heatStatus = false;
 
-int regRequest = 0;
+byte regRequest = 0;
 
-const byte systemNumber = 2;
+const byte systemNumber = 0x02;
 
 void setup() {
 
   //serial
   Serial.begin(9600);
-  Serial.println(" Starting! ");
+  Serial.println("Starting! Base Arduino");
+  Serial.println("Enter 'h' for heater test");
+  Serial.println("Enter 't' for temp sensor test");
+  Serial.println("Enter 'l' for light sensor test\n\n");
 
   //SoftWire
   sw.setTxBuffer(swTxBuffer, sizeof(swTxBuffer));
@@ -107,8 +109,8 @@ void setup() {
 void loop() {
 
   //update States
-  currTemp = (int)(tempSensor.getTemperatureC() * 10.00);
-  currHumidty = (int)(tempSensor.getHumidityRH() * 10.00);
+  currTemp = (uint16_t)(tempSensor.getTemperatureC() * 10.00);
+  currHumidty = (uint16_t)(tempSensor.getHumidityRH() * 10.00);
 
   iceStatus[0] = analogRead(DETECTOR1);
   iceStatus[1] = analogRead(DETECTOR2);
@@ -148,6 +150,29 @@ void loop() {
 
   delay(5000);
 
+  if(Serial.available() > 0){
+    char command = Serial.read();
+
+    if(command == 'h'){
+      Serial.println("Starting Heater Test");
+      testHeater();
+      Serial.println("Test Completed");
+
+    }else if(command == 't'){
+      Serial.println("Starting Temp Sensor Chip Test");
+      while (tempSensor.begin() != 0) {
+        Serial.println("Failed to Initialize the chip, please confirm the wire connection");
+        blinkTempSensorError();
+      }
+      Serial.println("Test Completed");
+
+    }else if(command == 'l'){
+      Serial.println("Starting Ice Sensor Test");
+      testIceSensor();
+      Serial.println("Test Completed");
+    }
+  }
+
 }
 
 /*
@@ -155,32 +180,37 @@ Sensor Blink Code (blink 3 times)
 Ice Sensor Blink Code (blink 2 times)
 */
 
+
+/**
+A function that blink the erreo led for the number of times to reprent a temp sensor erreo
+*/
 void blinkTempSensorError(){
-  digitalWrite(BLINKLED,HIGH);
-  delay(500);
-  digitalWrite(BLINKLED,LOW);
-  delay(500);
-  digitalWrite(BLINKLED,HIGH);
-  delay(500);
-  digitalWrite(BLINKLED,LOW);
-  delay(500);
-  digitalWrite(BLINKLED,HIGH);
-  delay(500);
-  digitalWrite(BLINKLED,LOW);
+
+  for(int i = 0; i < 4; i++){
+    digitalWrite(BLINKLED,HIGH);
+    delay(500);
+    digitalWrite(BLINKLED,LOW);
+    delay(500);
+  }
   delay(1000);
 }
 
+/**
+A function that blink the erreo led for the number of times to reprent a Ice sensor erreo
+*/
 void blinkIceSensorError(){
-  digitalWrite(BLINKLED,HIGH);
-  delay(250);
-  digitalWrite(BLINKLED,LOW);
-  delay(250);
-  digitalWrite(BLINKLED,HIGH);
-  delay(250);
-  digitalWrite(BLINKLED,LOW);
+  for(int i = 0; i < 3; i++){
+    digitalWrite(BLINKLED,HIGH);
+    delay(500);
+    digitalWrite(BLINKLED,LOW);
+    delay(500);
+  }
   delay(1000);
 }
 
+/**
+A function that test the heater relay.
+*/
 bool testHeater(){
   digitalWrite(RELAY,LOW);
   delay(1000);
@@ -192,59 +222,92 @@ bool testHeater(){
   delay(250);
 }
 
+/**
+A interrupt handler for i2c receiveEvent
+*/
 void receiveEvent(int howMany) {
-  while (Wire.available()) { 
-    regRequest = Serial.parseInt();
+  while (0 < Wire.available()) { 
+    regRequest = Wire.read();
   }
   Serial.print("Reg Request: ");
   Serial.println(regRequest);
 
   if(regRequest == 4){
     heatStatus = true;
+  }else if(regRequest == 5){
+    heatStatus = false;
+  }
+  
+}
+
+/**
+An interrupt handler for i2c requestEvent
+*/
+void requestEvent() {
+
+  if(regRequest == 0){
+    Wire.write((uint8_t)systemNumber &0xFF);
+    Serial.println("Sent System Number");
+
+  }else if(regRequest == 1){
+    send16BitNumber(currTemp); 
+    Serial.println("Sent Tempature");
+
+  }else if(regRequest == 2){
+    send16BitNumber(currHumidty); 
+    Serial.println("Sent Humidty");
+
+  }else if(regRequest == 3){
+    Wire.write(heatStatus&0xFF);
+    Serial.println("Sent Heat Status");
+
+  }else if(regRequest == 4){
     Wire.write(0xF);
     regRequest = 6;
     Serial.println("Heater Turned On");
 
   }else if(regRequest == 5){
-    heatStatus = false;
     Wire.write(0xF);
     regRequest = 6;
     Serial.println("Heater Turned Off");
 
-  }
-  
-}
-
-void requestEvent() {
-
-  if(regRequest == 0){
-    Wire.write((byte)systemNumber);
-    Serial.println("Sent System Number");
-
-  }else if(regRequest == 1){
-    Wire.write(currTemp);
-    Serial.println("Sent Tempature");
-
-  }
-  
-  else if(regRequest == 2){
-    Wire.write(currHumidty);
-    Serial.println("Sent Humidty");
-
-  }else if(regRequest == 3){
-    Wire.write(iceStatus[0]);
-    Wire.write(iceStatus[1]);
-    Wire.write(iceStatus[2]);
-    Wire.write(iceStatus[3]);
+  }else if(regRequest == 6){
+    send16BitNumber(iceStatus[0]); 
     Serial.println("Sent Ice Status");
 
-  }else if(regRequest == 6){
-    Wire.write(heatStatus);
-    Serial.println("Sent Heat Status");
+  }else if(regRequest == 7){
+    send16BitNumber(iceStatus[1]); 
+    Serial.println("Sent Ice Status");
+
+  }else if(regRequest == 8){
+    send16BitNumber(iceStatus[2]);  
+    Serial.println("Sent Ice Status");
+
+  } else if(regRequest == 9){
+    send16BitNumber(iceStatus[3]); 
+    Serial.println("Sent Ice Status");
+
   }
   
 }
 
+/**
+A function that converts a uint16_t to a byte array and send it.
+*/
+void send16BitNumber(uint16_t sendNumber){
+    byte sendArray[2];
+    sendArray[1] = ((sendNumber&0xFF00) >>8);
+    sendArray[0] = (sendNumber & 0xFF);
+
+    Serial.println(sendArray[0],HEX);
+    Serial.println(sendArray[1],HEX);
+
+    Wire.write(sendArray,2);
+}
+
+/**
+A method that test the ice sensor.
+*/
 bool testIceSensor(){
   int lightValues1[4];
   int lightValues2[4];
