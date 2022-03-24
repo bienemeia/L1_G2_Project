@@ -8,6 +8,7 @@ address2 = 0x3d
 
 """
 This method gets the Id of the arduino at address 0x3d.
+The last 3 bit of the byte are masked out to correct for the 128 bit being set by the arduino. 
 """
 def getBaseArduinoID():
     try:
@@ -16,43 +17,42 @@ def getBaseArduinoID():
         print("failed to read i2c")
 
 """
-This method gets the temperature at the base board of the hive.
+This method gets the temperature in C at the base board of the hive.
+It is /10.00 to convert the int from the byte array to a float.
 """
 def getBaseArduinoTemp():
     try:
-        temp = bus.read_word_data(address2,1)
-        return(temp/10.0)
+        return((bus.read_word_data(address2,1))/10.0)
     except OSError:
         print("failed to read i2c")
 
 """
-This method get the humidity at the base board of the hive.
+This method get the humidity in r% at the base board of the hive.
+It is /10.00 to convert the int from the byte array to a float.
 """     
 def getBaseArduinoHumidity():
     try:
-        temp = bus.read_word_data(address2,2)
-        return(temp/10.0)
+        return((bus.read_word_data(address2,2))/10.0)
     except OSError:
         print("failed to read i2c")
 
 """
 This method gets the status of the heater.
-"""
-        
+The last 3 bit of the byte are masked out to correct for the 128 bit being set by the arduino. 
+"""      
 def getBaseArduinoHeaterStatus():
     try:
-        temp = bus.read_byte_data(address2,3)&0x03
-        return(temp)
+        return((bus.read_byte_data(address2,3)&0x03))
     except OSError:
         print("failed to read i2c")
 
 """
 This method turns on the heater.
+If there was a write error this function returns true.
 """     
 def setBaseArduinoHeaterOn():
     try:
-        temp = bus.read_byte_data(address2,4)
-        if temp == 0xF:
+        if bus.read_byte_data(address2,4) == 0xF:## all 1s
             return True
         else:
             return False
@@ -61,11 +61,11 @@ def setBaseArduinoHeaterOn():
 
 """
 This method turns off the heater.
+If there was a write error this function returns true.
 """      
 def setBaseArduinoHeaterOff():
     try:
-        temp = bus.read_byte_data(address2,5)
-        if temp == 0xF:
+        if bus.read_byte_data(address2,5) == 0xF:
             return True
         else:
             return False
@@ -74,47 +74,52 @@ def setBaseArduinoHeaterOff():
 
 """
 This method gets the amount of light detected by the first Ice detector.
+Higher means more light.
 """
 def getBaseArduinoIceSensor1():
     try:
-        temp = bus.read_word_data(address2,6)
-        return(temp)
+        return((bus.read_word_data(address2,6)))
     except OSError:
         print("failed to read i2c")
 
 """
 This method gets the amount of light detected by the second Ice detector.
+Higher means more light.
 """    
 def getBaseArduinoIceSensor2():
     try:
-        temp = bus.read_word_data(address2,7)
-        return(temp)
+        return(bus.read_word_data(address2,7))
     except OSError:
         print("failed to read i2c")
 
 """
 This method gets the amount of light detected by the third Ice detector.
+Higher means more light.
 """
 def getBaseArduinoIceSensor3():
     try:
-        temp = bus.read_word_data(address2,8)
-        return(temp)
+        return(bus.read_word_data(address2,8))
     except OSError:
         print("failed to read i2c")
 
 """
 This method gets the amount of light detected by the forth Ice detector.
+Higher means more light.
 """
 def getBaseArduinoIceSensor4():
     try:
-        temp = bus.read_word_data(address2,9)
-        return(temp)
+        return(bus.read_word_data(address2,9))
     except OSError:
         print("failed to read i2c")
 
 
+
+
+##hive arduino below
+
 """
 This method gets the Id of the arduino at address 0x3c.
+The last 3 bit of the byte are masked out to correct for the 128 bit being set by the arduino. 
 """
 def getHiveArduinoID():
     try:
@@ -123,57 +128,57 @@ def getHiveArduinoID():
         print("failed to read i2c")
 
 """
-This method gets the temperature in the seasonal inner cover of the hive.
+This method gets the temperature in C in the seasonal inner cover of the hive.
+It is /10.00 to convert the int from the byte array to a float.
 """
 def getHiveArduinoInsideTemp():
     try:
-        temp = bus.read_word_data(address1,1)
-        return(temp/10.0)
+        return((bus.read_word_data(address1,1))/10.0)
     except OSError:
         print("failed to read i2c")
 
 """
-This method gets the humidty in the seasonal inner cover of the hive.
+This method gets the humidty in r% in the seasonal inner cover of the hive.
+It is /10.00 to convert the int from the byte array to a float.
 """ 
 def getHiveArduinoInsideHumidty():
     try:
-        temp = bus.read_word_data(address1,2)
-        return(temp/10.0)
+        return((bus.read_word_data(address1,2))/10.0)
     except OSError:
         print("failed to read i2c")
 
 """
-This method gets the pressure in the seasonal inner cover of the hive.
+This method gets the pressure in hPa in the seasonal inner cover of the hive.
+It is /1.0 to convert the int from the byte array to a float.
 """ 
 def getHiveArduinoPressure():
     try:
-        temp = bus.read_word_data(address1,3)
-        return(temp)
+        return((bus.read_word_data(address1,3))/1.00)
     except OSError:
         print("failed to read i2c")
         
 """
-This method gets the amount of co2 detected by the hive.
+This method gets the amount of co2 in ohms detected by the hive.
 """
 def getHiveArduinoCo2():
     try:
-        temp = bus.read_word_data(address1,4)
-        return(temp)
+        return(bus.read_word_data(address1,4))
     except OSError:
         print("failed to read i2c")
 
 """
-This method gets the temperature outside the hive.
+This method gets the temperature in C outside the hive.
+It is /10.00 to convert the int from the byte array to a float.
 """ 
 def getHiveArduinoOutsideTemp():
     try:
-        temp = bus.read_word_data(address1,5)
-        return(temp/10.0)
+        return((bus.read_word_data(address1,5))/10.0)
     except OSError:
         print("failed to read i2c")
 
 """
-This method gets the humidty outside the hive.
+This method gets the humidty in r% outside the hive.
+It is /10.00 to convert the int from the byte array to a float.
 """   
 def getHiveArduinoOutsideHumidty():
     try:
@@ -183,12 +188,11 @@ def getHiveArduinoOutsideHumidty():
         print("failed to read i2c")
         
 """
-This method opens the flapper.
+This method opens the flapper. If a write error occurs this function return false.
 """
 def setHiveArduinoFlapperOpen():
     try:
-        temp = bus.read_byte_data(address1,7)
-        if temp == 0xF:
+        if bus.read_byte_data(address1,7) == 0xF:
             return True
         else:
             return False
@@ -196,12 +200,11 @@ def setHiveArduinoFlapperOpen():
         print("failed to read i2c")
 
 """
-This method closes the flapper.
+This method closes the flapper. If a write error occurs this function return false.
 """
 def setHiveArduinoFlapperClosed():
     try:
-        temp = bus.read_byte_data(address1,8)
-        if temp == 0xF:
+        if bus.read_byte_data(address1,8) == 0xF:
             return True
         else:
             return False
@@ -213,15 +216,19 @@ This method gets if the flapper is open or closed. 1 = open
 """      
 def getHiveArduinoFlapperStatus():
     try:
-        temp = bus.read_byte_data(address1,9)
-        return(temp)
+        return(bus.read_byte_data(address1,9))
     except OSError:
         print("failed to read i2c")
-       
+  
+"""
+This method gets if the CO2 is ready to be mesured. True means it is ready to go.
+"""
 def getHiveArduinoCO2Status():##1=redy
     try:
-        temp = bus.read_byte_data(address1,10)
-        return(temp)
+	if(bus.read_byte_data(address1,10)&0x3 == 1):
+      	return True
+	else:
+		return False
     except OSError:
         print("failed to read i2c")
 
