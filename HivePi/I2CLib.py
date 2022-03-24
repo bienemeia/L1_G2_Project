@@ -37,12 +37,15 @@ def getBaseArduinoHumidity():
         print("failed to read i2c")
 
 """
-This method gets the status of the heater.
+This method gets the status of the heater. This function returns True if the heater is on.
 The last 3 bit of the byte are masked out to correct for the 128 bit being set by the arduino. 
 """      
 def getBaseArduinoHeaterStatus():
     try:
-        return((bus.read_byte_data(address2,3)&0x03))
+        if (bus.read_byte_data(address2,3)&0x03) == 1:
+            return(True)
+        else:
+            return(False)
     except OSError:
         print("failed to read i2c")
 
@@ -217,10 +220,10 @@ This method ueses the 0x3 bit mask to correct for the 128th bit being set.
 """      
 def getHiveArduinoFlapperStatus():
     try:
-	if(bus.read_byte_data(address1,9)&0x3 == 1):
-      	return True
-	else:
-		return False
+        if(bus.read_byte_data(address1,9)&0x3 == 1):
+            return True
+        else:
+            return False
     except OSError:
         print("failed to read i2c")
   
@@ -229,10 +232,10 @@ This method gets if the CO2 is ready to be mesured. True means it is ready to go
 """
 def getHiveArduinoCO2Status():##1=redy
     try:
-	if(bus.read_byte_data(address1,10)&0x3 == 1):
-      	return True
-	else:
-		return False
+        if(bus.read_byte_data(address1,10)&0x3 == 1):
+            return True
+        else:
+            return False
     except OSError:
         print("failed to read i2c")
 
@@ -295,9 +298,9 @@ This method blinks a LED to show a I2C fult.
 def blinkI2CFaliure():
     for x in range(3):
         blinkLed.on()
-    	  time.sleep(0.5)
-    	  blinkLed.off()
-    	  time.sleep(0.5)
+        time.sleep(0.5)
+        blinkLed.off()
+        time.sleep(0.5)
     time.sleep(2)
     
     
