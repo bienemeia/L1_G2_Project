@@ -5,7 +5,6 @@ blinkLed = LED(4)
 bus = smbus.SMBus(1)
 address1 = 0x3C
 address2 = 0x3d
-offset = 128 ##for single byte reads
 
 def getBaseArduinoID():
     try:
@@ -29,7 +28,7 @@ def getBaseArduinoHumidity():
         
 def getBaseArduinoHeaterStatus():
     try:
-        temp = bus.read_byte_data(address2,3)
+        temp = bus.read_byte_data(address2,3)&0x03
         return(temp)
     except OSError:
         print("failed to read i2c")
