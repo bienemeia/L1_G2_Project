@@ -109,7 +109,7 @@ void setup() {
 void loop() {
 
   //update States
-  currTemp = (uint16_t)(tempSensor.getTemperatureC() * 10.00);
+  currTemp = (int16_t)(tempSensor.getTemperatureC() * 10.00);
   currHumidty = (uint16_t)(tempSensor.getHumidityRH() * 10.00);
 
   iceStatus[0] = analogRead(DETECTOR1);
