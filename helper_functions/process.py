@@ -5,11 +5,8 @@ import datetime
 import time
 import random
 
-def processWeekly(cursor, dayOfWeek, dayOfMonth):
-	# Want to process the averages of all values over 1 hour
-	return
 	
-# 
+# Process daily data into weekly data, where averages are taken every 3 hours
 def processWeeklyAverages(cursor, dayOfWeek):
 	# Can get time and date from beginning of day, since doing processing at end of day
 	try:

@@ -19,4 +19,4 @@ class TestProcessHelper(MockDB):
 		process.processMonthlyAverages(self.cursor, 1)
 		
 	def testProcessYearly(self):
-		process.processYearlyAverages(self.cursor, 1)
+		process.processYearlyAverages(self.cursor)
