@@ -26,6 +26,7 @@ def main():
 		db = sqlite3.connect("hiveDB.db")
 		cursor = process.getDBCursor(db)
 		now = firebase.getTime()
+		updated = false
 				
 		date = firebase.getDate(hive_db, 1, now)
 		tempDict = firebase.getTemperature(hive_db, 1, now)
@@ -38,11 +39,11 @@ def main():
 		cursor.execute('''INSERT OR REPLACE INTO dailyDB values (?,?,?,?,?,?,?,?,?,?)''',
 			(now, date, temperature[0], temperature[1], temperature[2], humidity[0], humidity[1], humidity[2], pressure, co2))	
 		
-		if now == "23:59": # Process data at the end of every day
+		if now == "23:59" and !updated: # Process data at the end of every day
 			process.processWeeklyAverages(cursor, dayOfWeek)
 			process.processMonthlyAverages(cursor, dayOfMonth)
 			process.processYearlyAverages(cursor)
-			
+			 updated = true
 			if dayOfWeek == 7:
 				dayOfWeek = 1
 			else:
@@ -51,6 +52,8 @@ def main():
 				dayOfMonth = 1
 			else:
 				dayOfMonth += 1
+		if now != "23:59":
+			updated = false
 		
 		db.commit()
 		db.close()
