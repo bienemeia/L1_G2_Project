@@ -1,7 +1,7 @@
 import sys
 sys.path.append('..')
 from helper_functions import firebase
-from helper_functions import arduinoInterface as arduino
+import I2CLib as i2c
 import pyrebase
 import random
 import time
@@ -47,12 +47,26 @@ def main():
 		
 		# Get instructions from Firebase DB and send to Arduino
 		if firebase.getHeaterStatus(hive_db, 1):
+			# Check if heater running. If not, turn on
+			if not i2c.getBaseArduinoHeaterOn():
+				i2c.setBaseArduinoHeaterOn()
 			print("heater activated")
-			# activate heater
+		else: # Heater should be set off
+			# Check if heater is on. If it is, turn it off
+			if i2c.getBaseArduinoHeaterOn():
+				i2c.setBaseArduinoHeaterOff()
+			print("heater deactivated")
 			
 		if firebase.getFlapperStatus(hive_db, 1):
-			print("flapper activated")
-			# activate flapper
+			# Check if flapper is open. If not, open
+			if not i2c.getHiveArduinoFlapperStatus():
+				i2c.setHiveArduinoFlapperOpen()
+			print("flapper open")
+		else: # Flapper should be closed
+			# Check if flapper is open. If it is, close it.
+			if i2c.getHiveArduinoFlapperStatus():
+				i2c.setHiveArduinoFlapperClosed()
+			print("flapper closed")
 			
 		if firebase.getFanStatus(hive_db, 1):
 			print("fan activated")

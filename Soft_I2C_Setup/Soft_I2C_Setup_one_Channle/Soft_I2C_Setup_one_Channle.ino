@@ -10,8 +10,6 @@ char swRxBuffer[16];
 int sdaPin = 8;
 int sclPin = 7;
 
-
-
 SoftWire sw(sdaPin, sclPin);
 
 Soft_DFRobot_SHT3x tempSensor( &sw,/*address=*/0x45,/*RST=*/4);

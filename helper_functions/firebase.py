@@ -3,11 +3,11 @@ from datetime import date, datetime
 # Set the hive name
 def pushHiveName(db, hiveId, name):
 	db.child("hives").child(hiveId).child("name").set(name)
-	
+
 # Get current time in form HH:MM (24 hour)
 def getTime():
 	now = str(datetime.now().time())
-	now = now.split(":", 2)
+	now = now.split(":")
 	hr = int(now[0])
 	mn = int(now[1])
 	if hr < 10:
@@ -61,7 +61,7 @@ def pushCo2(db, hiveId, time, co2):
 # Set test value in firebase for current time
 def pushTest(db, hiveId, time, test):
 	db.child("hives").child(hiveId).child("values").child(time).child("test").set(test)
-	
+
 # Set ice status
 def pushIceStatus(db, hiveId, status):
 	db.child("hives").child(hiveId).child("iceStatus").set(status)
@@ -85,7 +85,7 @@ def pushTestLed1Status(db, hiveId, status):
 # Set test LED status on Arduino 2
 def pushTestLed2Status(db, hiveId, status):
 	return db.child("hives").child(hiveId).child("testLed2").set(status)
-	
+
 # Get the hive name
 def getHiveName(db, hiveId):
 	return db.child("hives").child(hiveId).child("name").get().val()
@@ -113,7 +113,7 @@ def getCo2(db, hiveId, time):
 # Get the ice status
 def getIceStatus(db, hiveId):
 	return db.child("hives").child(hiveId).child("iceStatus").get().val()
-	
+
 # Get the heater status
 def getHeaterStatus(db, hiveId):
 	return db.child("hives").child(hiveId).child("heaterStatus").get().val()

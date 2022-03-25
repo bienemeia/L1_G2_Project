@@ -19,13 +19,14 @@ def main():
 	# Initialize Firebase DB
 	hive_firebase = pyrebase.initialize_app(meia_config)
 	hive_db = hive_firebase.database()
+	dayOfWeek = 1
+	dayOfMonth = 1
 
 	while True:
-		now = firebase.getTime()
 		db = sqlite3.connect("hiveDB.db")
-		db.row_factory = sqlite3.Row
-		cursor=db.cursor()
-		createDB()
+		cursor = process.getDBCursor(db)
+		now = firebase.getTime()
+		updated = False
 				
 		date = firebase.getDate(hive_db, 1, now)
 		tempDict = firebase.getTemperature(hive_db, 1, now)
@@ -37,30 +38,27 @@ def main():
 		
 		cursor.execute('''INSERT OR REPLACE INTO dailyDB values (?,?,?,?,?,?,?,?,?,?)''',
 			(now, date, temperature[0], temperature[1], temperature[2], humidity[0], humidity[1], humidity[2], pressure, co2))	
-
+		
+		if not updated and now == "23:59": # Process data at the end of every day
+			process.processWeeklyAverages(cursor, dayOfWeek)
+			process.processMonthlyAverages(cursor, dayOfMonth)
+			process.processYearlyAverages(cursor)
+			updated = True
+			if dayOfWeek == 7:
+				dayOfWeek = 1
+			else:
+				dayOfWeek += 1
+			if dayOfMonth == 31:
+				dayOfMonth = 1
+			else:
+				dayOfMonth += 1
+		if now != "23:59":
+			updated = False
+		
 		db.commit()
 		db.close()
 		
 		time.sleep(30)
 		
-# Method for setting up DB only
-def createDB(cursor):
-	cursor.execute('''CREATE TABLE dailyDB 
-		(time TEXT, date TEXT, 
-		tempBase REAL, tempInside REAL, tempOutside REAL, 
-		humidityBase REAL, humidityInside REAL, humidityOutside REAL,
-		pressure REAL, co2 REAL,
-		UNIQUE(time))''')
-		
-def getFormattedTime(num):
-	hr = num//60
-	mn = num%60
-	time = [hr, mn]
-	if hr < 10:
-		time[0] = "0" + str(hr)
-	if mn < 10:
-		time[1] = "0" + str(mn)
-	return(str(time[0]) + ":" + str(time[1]))
-
 if __name__ == "__main__":
 	main()

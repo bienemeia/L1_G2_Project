@@ -1,6 +1,4 @@
-import sys
-sys.path.append('..')
-from helper_functions import firebase
+import firebase
 import pyrebase
 import random
 import time
