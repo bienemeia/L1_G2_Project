@@ -1,10 +1,14 @@
-# import sys
-# sys.path.append('../..')
-# from helper_functions import
+import sys
+sys.path.append('../..')
+from helper_functions import process
 from flask import Flask, Markup, render_template
 import time
+import sqlite3
 
 app = Flask(__name__)
+
+db = sqlite3.connect("../hiveDB.db")
+cursor = process.getDBCursor(db)
 
 labels = [
     'JAN', 'FEB', 'MAR', 'APR',
