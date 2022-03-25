@@ -3,14 +3,33 @@ sys.path.append('../..')
 from helper_functions import process, firebase
 from flask import Flask, Markup, render_template
 import time
-from flask import Flask, render_template
-from
+import sqlite3
+
 app = Flask(__name__)
 
-db = sqlite3.connect("hiveDB.db")
+# Open connection to database
+db = sqlite3.connect("../hiveDB.db")
 cursor = process.getDBCursor(db)
 
-now = firebase.get
+# Get current time - 1
+now = firebase.getTimeMinus1()
+
+# Get values from now
+currentValues = cursor.execute(''' SELECT tempBase, tempInside, tempOutside, 
+  humidityBase, humidityInside, humidityOutside,
+  pressure, co2 from dailyDB WHERE time=? ''', (now,)).fetchone()
+
+tempBase = currentValues[0]
+tempInside = currentValues[1]
+tempOutside = currentValues[2]
+humidityBase = currentValues[3]
+humidityInside = currentValues[4]
+humidityOutside = currentValues[5]
+pressure = currentValues[6]
+co2 = currentValues[7]
+
+dailyValues = process.getDailyArray(cursor)
+
 
 @app.route("/")
 def index():
@@ -21,7 +40,7 @@ def index():
   
 @app.route("/bees")
 def bees():
-  return render_template('bees.html')
+  return render_template('bees.html', labels=dailyValues["time"], values=dailyValues["tempBase"])
 
 @app.route("/login")
 def login():
@@ -43,7 +62,7 @@ def permission():
 
 @app.route("/data")
 def data():
-  return render_template('data.html')
+  return render_template('data.html', tempInside=tempInside, humidityInside=humidityInside)
 
 @app.route("/tools")
 def tools():

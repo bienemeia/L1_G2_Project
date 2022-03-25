@@ -6,5 +6,53 @@
 
 {% block content %}
   <h1>Bees are neat</h1>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <center>
+    <canvas id="chart" width="600" height="400"></canvas>
+    <script>
+
+    const data = {
+      labels: [
+          {% for item in labels %}
+            "{{ item }}",
+          {% endfor %}
+        ],
+      datasets: [{
+        label: 'My First dataset',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: [
+            {% for item in values %}
+              {{ item }},
+            {% endfor %}],
+      }]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        plugins: {
+          tooltips: { enabled: false}
+        },
+        scales: {
+          xAxes: {
+            ticks: {
+              minRotation: 90,
+              autoSkip: true,
+              maxTicksLimit: 24
+            }
+          }
+        }
+      }
+    };
+
+    const myChart = new Chart(
+      document.getElementById('chart'),
+      config
+    );
+
+    </script>
+  </center>
 
 {% endblock %}

@@ -185,10 +185,38 @@ def processYearlyAverages(cursor):
 	except:
 		print("Problem inserting values into table")
 
+
+def getDailyArray(cursor):
+	values = {'time':[], 'date':[], 'tempBase':[], 'tempInside':[], 'tempOutside':[],
+		'humidityBase':[], 'humidityInside':[], 'humidityOutside':[],
+		'pressure':[], 'co2':[]}
+	try:
+		tempBase = cursor.execute('''SELECT time, date, tempBase, tempInside, tempOutside, 
+			humidityBase, humidityInside, humidityOutside,
+			pressure, co2 FROM dailyDB ORDER BY date, time''').fetchall()
+	except:
+		print("Problem searching table")
+		
+	for row in tempBase:
+		values["time"].append(row[0])
+		values["date"].append(row[1])
+		values["tempBase"].append(row[2])
+		values["tempInside"].append(row[3])
+		values["tempOutside"].append(row[4])
+		values["humidityBase"].append(row[5])
+		values["humidityInside"].append(row[6])
+		values["humidityOutside"].append(row[7])
+		values["pressure"].append(row[8])
+		values["co2"].append(row[9])
+		
+	return values
+
+
 # Get DB cursor for hiveDB.db
 def getDBCursor(db):
 	db.row_factory = sqlite3.Row
 	return db.cursor()
+	
 
 ### The following methods are for setting up the system with DBs
 
