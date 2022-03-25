@@ -304,7 +304,3 @@ def blinkI2CFaliure():
     time.sleep(2)
     
     
-I2CCheck()
-getAllValues()
-blinkI2CFaliure()
-blinkI2CFaliure()

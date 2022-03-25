@@ -9,6 +9,9 @@ import json
 import random
 from datetime import date, datetime
 
+HUMIDITY_THRESHOLD = 70
+HEATER_THRESHOLD = -5
+
 def main():
 	# Set up Firebase authentication
 	meia_config = {
@@ -21,70 +24,98 @@ def main():
 	# Initialize Firebase DB
 	hive_firebase = pyrebase.initialize_app(meia_config)
 	hive_db = hive_firebase.database()
+	hive_id = 1
+	
+	try:
+		i2c.I2CCheck()
+	except:
+		print("I2C failed on startup")
 	
 	while True:
 			
 		# Get values from Arduino
 		# Random placeholder values
 		# Remember, order is base, inside, outside
-		temp = [round(random.uniform(-30, 30), 1), round(random.uniform(-30, 30), 1), round(random.uniform(-30, 30), 1)]
-		humidity = [random.randrange(0,100), random.randrange(0,100), random.randrange(0,100)]
-		pressure = round(random.uniform(100, 101.5), 2)
-		co2 = random.randrange(2500,3000)
-		
-		# Get test value from arduino
-		test = arduino.read()
+		temp = [i2c.getBaseArduinoTemp(), i2c.getHiveArduinoInsideTemp(), i2c.getHiveArduinoOutsideTemp()]
+		humidity = [i2c.getBaseArduinoHumidity(), i2c.getHiveArduinoInsideHumidty(), i2c.getHiveArduinoOutsideHumidty()]
+		pressure = i2c.getHiveArduinoPressure()
+		if i2c.getHiveArduinoCO2Status():
+			co2 = i2c.getHiveArduinoCo2()
+		else: 
+			co2 = 0 # default Co2 values when Co2 sensor not ready
 		
 		# Get current time
-		time = firebase.getTimeMinus()
+		now = firebase.getTime()
 		
 		# Push values to Firebase DB
-		firebase.pushTemperature(hive_db, 1, time, temp[0], temp[1], temp[2])
-		firebase.pushHumidity(hive_db, 1, time, humidity[0], humidity[1], humidity[2])
-		firebase.pushPressure(hive_db, 1, time, pressure)
-		firebase.pushCo2(hive_db, 1, time, co2)
-		firebase.pushDate(hive_db, 1, time)
+		firebase.pushTemperature(hive_db, hive_id, now, temp[0], temp[1], temp[2])
+		firebase.pushHumidity(hive_db, hive_id, now, humidity[0], humidity[1], humidity[2])
+		firebase.pushPressure(hive_db, hive_id, now, pressure)
+		firebase.pushCo2(hive_db, hive_id, now, co2)
+		firebase.pushDate(hive_db, hive_id, now)
 		
 		# Get instructions from Firebase DB and send to Arduino
-		if firebase.getHeaterStatus(hive_db, 1):
+		if firebase.getHeaterStatus(hive_db, hive_id):
 			# Check if heater running. If not, turn on
-			if not i2c.getBaseArduinoHeaterOn():
+			if not i2c.getBaseArduinoHeaterStatus():
 				i2c.setBaseArduinoHeaterOn()
-			print("heater activated")
 		else: # Heater should be set off
 			# Check if heater is on. If it is, turn it off
-			if i2c.getBaseArduinoHeaterOn():
+			if i2c.getBaseArduinoHeaterStatus():
 				i2c.setBaseArduinoHeaterOff()
-			print("heater deactivated")
 			
-		if firebase.getFlapperStatus(hive_db, 1):
+		if firebase.getFlapperStatus(hive_db, hive_id):
 			# Check if flapper is open. If not, open
 			if not i2c.getHiveArduinoFlapperStatus():
 				i2c.setHiveArduinoFlapperOpen()
-			print("flapper open")
 		else: # Flapper should be closed
 			# Check if flapper is open. If it is, close it.
 			if i2c.getHiveArduinoFlapperStatus():
 				i2c.setHiveArduinoFlapperClosed()
-			print("flapper closed")
 			
-		if firebase.getFanStatus(hive_db, 1):
-			print("fan activated")
-			# activate fan
-			
-		if firebase.getTestLed1Status(hive_db, 1):
-			print("LED1 activated")
-			arduino.ledON()
-		else:
-			arduino.ledOFF()
-			
-		if firebase.getTestLed2Status(hive_db, 1):
-			print("LED2 activated")
-			# activate test LED2
-			
+		iceControl(temp, hive_db, hive_id)
+		humidityControl(humidity, hive_db, hive_id)
+		
 		# Waits 45 seconds to guarantee having values every minute of the day
 		# If data is already present, it is overwritten rather than duplicated
 		time.sleep(45)
+		
+def iceControl(temp, db, hive_id):
+	# Check for ice
+	ice1 = i2c.getBaseArduinoIceSensor1()
+	ice2 = i2c.getBaseArduinoIceSensor2()
+	ice3 = i2c.getBaseArduinoIceSensor3()
+	ice4 = i2c.getBaseArduinoIceSensor4()
+	
+	# Ice buildup will cause issues for humidity
+	# Ice exists if sum of values is over 2000
+	if (ice1 + ice2 + ice3 + ice4) > 2000:
+		# Change status on firebase
+		firebase.pushIceStatus(db, hive_id, True)
+		# Turn on heater if temp in base of hive is not too high
+		if temp[0] < HEATER_THRESHOLD:
+			firebase.pushHeaterStatus(db, hive_id, True)
+			i2c.setBaseArduinoHeaterOn()
+		else: # Turn off heater if temperature is high
+			firebase.pushHeaterStatus(db, hive_id, False)
+			i2c.setBaseArduinoHeaterOff()
+	else: # If there is no more ice detected, turn off heater
+		firebase.pushIceStatus(db, hive_id, False)
+		firebase.pushHeaterStatus(db, hive_id, False)
+		i2c.setBaseArduinoHeaterOff()
+		
+def humidityControl(humidity, db, hive_id):
+	# Only open flap if outside humidity is lower than inside
+	if humidity[0] > HUMIDITY_THRESHOLD:
+		if humidity[2] < humidity[0]:
+			firebase.pushFlapperStatus(db, hive_id, True)
+			i2c.setHiveArduinoFlapperOpen()
+		else: # If humidity outside is greater than inside hive, won't make a difference
+			firebase.pushFlapperStatus(db, hive_id, False)
+			i2c.setHiveArduinoFlapperClosed()
+	else: # If humidity is below threshold, close flapper
+		firebase.pushFlapperStatus(db, hive_id, False)
+		i2c.setHiveArduinoFlapperClosed()	
 	
 if __name__ == "__main__":
 	main()
