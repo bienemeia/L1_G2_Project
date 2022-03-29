@@ -1,9 +1,5 @@
 import firebase
 import pyrebase
-import random
-import time
-import json
-import random
 from datetime import date, datetime
 import unittest
 from collections import OrderedDict
