@@ -1,4 +1,3 @@
-import pyrebase
 import sqlite3
 import datetime
 import random
@@ -131,7 +130,7 @@ def processMonthlyAverages(cursor, dayOfMonth):
             print("SQLite error: " + er)
 
 
-# Process daily data into yearly data, where averages are taken every day	
+# Process daily data into yearly data, where averages are taken every day
 def processYearlyAverages(cursor):
     # Can get time and date from beginning of day, since doing processing at end of day
     try:
@@ -214,6 +213,7 @@ def getDailyArray(cursor):
         values["co2"].append(row[9])
 
     return values
+
 
 # Get DB cursor for given db
 def getDBCursor(db):
