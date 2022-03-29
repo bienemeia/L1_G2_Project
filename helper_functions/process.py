@@ -1,9 +1,10 @@
+import pyrebase
 import sqlite3
 import datetime
 import random
 
 
-# Process daily data into weekly data, where averages are taken every 3 hours
+# Process daily data into weekly data, where averages are taken every 1 hour
 def processWeeklyAverages(cursor, dayOfWeek):
     # Can get time and date from beginning of day,
     # since doing processing at end of day
@@ -67,6 +68,7 @@ def processWeeklyAverages(cursor, dayOfWeek):
             print("SQLite error: " + er)
 
 
+# Process daily data into monthly data, where averages are taken every 3 hours
 def processMonthlyAverages(cursor, dayOfMonth):
     # Can get time and date from beginning of day, since doing processing at end of day
     try:
@@ -129,6 +131,7 @@ def processMonthlyAverages(cursor, dayOfMonth):
             print("SQLite error: " + er)
 
 
+# Process daily data into yearly data, where averages are taken every day	
 def processYearlyAverages(cursor):
     # Can get time and date from beginning of day, since doing processing at end of day
     try:
@@ -186,6 +189,7 @@ def processYearlyAverages(cursor):
         print("SQLite error: " + er)
 
 
+# Get array of daily data
 def getDailyArray(cursor):
     values = {'time': [], 'date': [], 'tempBase': [], 'tempInside': [], 'tempOutside': [],
               'humidityBase': [], 'humidityInside': [], 'humidityOutside': [],
@@ -211,8 +215,7 @@ def getDailyArray(cursor):
 
     return values
 
-
-# Get DB cursor for hiveDB.db
+# Get DB cursor for given db
 def getDBCursor(db):
     db.row_factory = sqlite3.Row
     return db.cursor()
