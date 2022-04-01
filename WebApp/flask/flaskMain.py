@@ -37,36 +37,44 @@ def index():
   # Still need to decide how to update regularly
   names = "Meia, Graham and Boshen"
   return render_template('index.html', names=names)
-  
+
+
 @app.route("/bees")
 def bees():
   return render_template('bees.html', labels=dailyValues["time"], values=dailyValues["tempBase"])
+
 
 @app.route("/login")
 def login():
   # Login logic here
   return render_template('login.html')
 
+
 @app.route("/video")
 def video():
   # video logic here
   return render_template('video.html')
 
+
 @app.route("/more")
 def more():
   return render_template('more.html')
+
 
 @app.route("/permission")
 def permission():
   return render_template('permission.html')
 
+
 @app.route("/data")
 def data():
   return render_template('data.html', tempInside=tempInside, humidityInside=humidityInside)
 
+
 @app.route("/tools")
 def tools():
   return render_template('tools.html')
+
 
 if __name__ == "__main__":
   # initializing_network()
