@@ -1,9 +1,37 @@
+# FLAKE8 output.
+# $ flake8 hiveMain.py
+# hiveMain.py:9:1: E402 module level import not at top of file
+# hiveMain.py:10:1: E402 module level import not at top of file
+# hiveMain.py:11:1: E402 module level import not at top of file
+# hiveMain.py:12:1: E402 module level import not at top of file
+# hiveMain.py:42:80: E501 line too long (106 > 79 characters)
+# hiveMain.py:43:80: E501 line too long (120 > 79 characters)
+# hiveMain.py:45:80: E501 line too long (85 > 79 characters)
+# hiveMain.py:55:80: E501 line too long (82 > 79 characters)
+# hiveMain.py:56:80: E501 line too long (91 > 79 characters)
+# hiveMain.py:89:80: E501 line too long (81 > 79 characters)
+# hiveMain.py:90:80: E501 line too long (81 > 79 characters)
+# hiveMain.py:117:80: E501 line too long (85 > 79 characters)
+# hiveMain.py:118:80: E501 line too long (88 > 79 characters)
+# hiveMain.py:126:80: E501 line too long (89 > 79 characters)
+
+# FLAKE8 did not like that sys.path.append('..') was used before other imports, 
+# but this is required for helper_functions imports to work.
+# Further, the rest of the issues are regarding lines being too long. This happens
+# when pushing values to Firebase, as multiple variables are involved.
+
+# DESCRIPTION
+# This code gets sensor values from 2 Arduinos using a custom library,
+# I2CLib, written by another teammate.
+# The values are then posted to Firebase.
+# In some cases, values are pulled from Firebase to compare,
+# and mechanisms on the Arduino are activated.
+
 import sys
 sys.path.append('..')
 from helper_functions import firebase
 import I2CLib as i2c
 import pyrebase
-import random
 import time
 
 
@@ -33,15 +61,15 @@ def main():
     while True:
 
         # Get values from Arduino
-        # Random placeholder values
-        # Remember, order is base, inside, outside
+        # Order is base, inside, outside
         temp = [i2c.getBaseArduinoTemp(), i2c.getHiveArduinoInsideTemp(), i2c.getHiveArduinoOutsideTemp()]
         humidity = [i2c.getBaseArduinoHumidity(), i2c.getHiveArduinoInsideHumidty(), i2c.getHiveArduinoOutsideHumidty()]
         pressure = i2c.getHiveArduinoPressure()
+        # Must check that CO2 sensor is ready, as it requires 20 minutes to 'warm up'
         if i2c.getHiveArduinoCO2Status():
             co2 = i2c.getHiveArduinoCo2()
         else:
-            co2 = 0  # default Co2 values when Co2 sensor not ready
+            co2 = 0  # default CO2 values when CO2 sensor not ready
 
         # Get current time
         now = firebase.getTime()
@@ -75,11 +103,15 @@ def main():
         iceControl(temp, hive_db, hive_id)
         humidityControl(humidity, hive_db, hive_id)
 
-        # Waits 45 seconds to guarantee having values every minute of the day
-        # If data is already present, it is overwritten rather than duplicated
+        # Waits 45 seconds to guarantee having values every minute of the day.
+        # 45 seconds allows for some overlap in case of delay in execution.
+        # If data is already present, it is overwritten rather than duplicated.
         time.sleep(45)
 
 
+# Checks ice sensors for presence of ice, and activates heater if ice is present.
+# The temperature in the base of the hive needs to be low enough, or the heat may
+# disturb the bees' hibernation.
 def iceControl(temp, db, hive_id):
     # Check for ice
     ice1 = i2c.getBaseArduinoIceSensor1()
@@ -105,6 +137,9 @@ def iceControl(temp, db, hive_id):
         i2c.setBaseArduinoHeaterOff()
 
 
+# Checks humidity inside the hive, and activates the flapper if humidity is too high.
+# The humidity outside of the hive must be lower than inside the hive, otherwise venting
+# the hive may not be effective.
 def humidityControl(humidity, db, hive_id):
     # Only open flap if outside humidity is lower than inside
     if humidity[0] > HUMIDITY_THRESHOLD:
