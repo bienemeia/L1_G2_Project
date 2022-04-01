@@ -1,14 +1,6 @@
 from unittest import TestCase
 import process
 import sqlite3
-import pyrebase
-import random
-import time
-import json
-import random
-from datetime import date, datetime
-from collections import OrderedDict
-
 
 
 class MockDB(TestCase):

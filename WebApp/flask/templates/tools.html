@@ -1,0 +1,61 @@
+{% extends "baseLayout.html" %}
+{% block title %}Save the bees!{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+<div class="tool-box">
+    <div class="left">
+        <div class="onoff">
+            <i class="fas fa-fire"></i>
+            <div>
+                <h3>Heater</h3>
+                <p>Use this space to describe this benefit</p>
+            </div>
+            <i class="fas fa-toggle-on"></i>
+        </div>
+        <div class="onoff">
+            <i class="fas fa-fan"></i>
+            <div>
+                <h3>Fan</h3>
+                <p>Use this space to describe this benefit</p>
+            </div>
+            <i class="fas fa-toggle-on"></i>
+        </div>
+        <div class="onoff">
+            <i class="fas fa-door-closed"></i>
+            <div>
+                <h3>Vent</h3>
+                <p>Use this space to describe this benefit</p>
+            </div>
+            <i class="fas fa-toggle-on"></i>
+        </div>
+        <div class="onoff">
+            <i class="fas fa-fingerprint"></i>
+            <div>
+                <h3>Manual</h3>
+                <p>Use this space to describe this benefit</p>
+            </div>
+            <i class="fas fa-toggle-on"></i>
+        </div>
+
+    </div>
+    <div class="right">
+        <i class="fas fa-user"></i>
+        <div>
+            <h3>BEE HIVE STATUS</h3>
+            <p>Heat Systems: On</p>
+            <p>Fan Systems: On</p>
+            <p>Ventilation Systems: On</p>
+            <p>Controlling Systems: On</p>
+            <p>Video Systems: On</p>
+        </div>
+        <a class="tovideo">GO TO VIDEO</a>
+    </div>
+</div>
+
+{% endblock %}
+{% block footer %}{% endblock %}
+
+

@@ -12,7 +12,11 @@ from collections import OrderedDict
 
 class TestProcessHelper(MockDB):
 	
-	
 	def testProcessWeekly(self):
 		process.processWeeklyAverages(self.cursor, 1)
-		print("Done")
+		
+	def testProcessMonthly(self):
+		process.processMonthlyAverages(self.cursor, 1)
+		
+	def testProcessYearly(self):
+		process.processYearlyAverages(self.cursor)

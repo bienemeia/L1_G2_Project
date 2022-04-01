@@ -4,32 +4,34 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
+    <div class="index-main-left">
+        <h1>Honey, </h1>
+        <h1>I'm a Smart Home!</h1>
+        <h3>Project by {{ names }}</h3>
+        <button type="button">LEARN MORE</button>
+        <img src="static/beehive.png" alt="Beehive">
+    </div>
+    <div class="index-main-right">
+        <div>
+            <img src="static/bee.png" alt="Bee">
+        </div>
+    </div>
+{% endblock %}
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script type=text/javascript>
-          $(function() {
-            $('a#test').bind('click', function() {
-              $.getJSON('/background_test',
-                  function(data) {
-                //do nothing
-              });
-              return false;
-            });
-          });
-  </script>
-  
-  <h1>Honey, </h1>
-  <h1>I'm a Smart Home!</h1>
-  <h3>Project by {{ names }}</h3>
-  <p class="important">
-    Test value at {{ time }} is <strong>{{ test }}</strong>
-  </p>
-  
-  <form>
-        <a href=# id=test><button class='button'>Test</button></a>
-  </form>
-
-<p></p>
-  <button class="button" type="button" onclick="window.location.href='{{ url_for( 'bees' ) }}';"> Click for more bees. </button>
-  <p></p>
+{% block footer %}
+    <div class="left" onclick="location.href='{{ url_for( 'data' ) }}'">
+    <i class="fas fa-chart-bar"></i>
+        <h3>Real Time Data</h3>
+        <p>the internal temperature and</br> humidity of beehives</p>
+    </div>
+    <div class="middle" onclick="location.href='{{ url_for( 'tools' ) }}'">
+        <i class="fas fa-server"></i>
+        <h3>Switch</h3>
+        <p>Control system</br>(Administrator accessed only)</p>
+    </div>
+    <div class="right" onclick="location.href='{{ url_for( 'video' ) }}'">
+        <i class="fas fa-play-circle"></i>
+        <h3>Monitor</h3>
+        <p>Real time camera</p>
+    </div>
 {% endblock %}

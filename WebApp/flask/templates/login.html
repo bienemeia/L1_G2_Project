@@ -3,8 +3,22 @@
 {% block head %}
   {{ super() }}
 {% endblock %}
-
 {% block content %}
-  <h1>Log in here</h1>
+
+<form class="box" action="login.html" method="POST">
+    <h4>Log in:</h4>
+    <input type="text" name="" placeholder="Username">
+    <input type="password" name="" placeholder="password">
+    <a href="/">Witch roles are you?</a>
+    <!-- <input type="submit" name="" value="Login"> -->
+    <select name="">
+        <option>Administrator/Visitor</option>
+        <option>Visitor</option>
+    </select>
+
+    <button class="button" type="button" onclick="window.location.href='{{ url_for( 'permission' ) }}';"> LOGGING </button>
+</form>  
 
 {% endblock %}
+
+{% block footer %}{% endblock %}
