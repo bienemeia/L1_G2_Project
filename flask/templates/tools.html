@@ -13,7 +13,8 @@
                 <h3>Heater</h3>
                 <p>Use this space to describe this benefit</p>
             </div>
-            <i class="fas fa-toggle-on"></i>
+            <i class="out" onclick="change_status(this,'heat_prompt')"><div class="inside"></div></i>
+
         </div>
         <div class="onoff">
             <i class="fas fa-fan"></i>
@@ -21,7 +22,7 @@
                 <h3>Fan</h3>
                 <p>Use this space to describe this benefit</p>
             </div>
-            <i class="fas fa-toggle-on"></i>
+            <i class="out" onclick="change_status(this,'Fan_prompt')"><div class="inside"></div></i>
         </div>
         <div class="onoff">
             <i class="fas fa-door-closed"></i>
@@ -29,7 +30,7 @@
                 <h3>Vent</h3>
                 <p>Use this space to describe this benefit</p>
             </div>
-            <i class="fas fa-toggle-on"></i>
+            <i class="out" onclick="change_status(this,'Ventilation_prompt')"><div class="inside"></div></i>
         </div>
         <div class="onoff">
             <i class="fas fa-fingerprint"></i>
@@ -37,7 +38,7 @@
                 <h3>Manual</h3>
                 <p>Use this space to describe this benefit</p>
             </div>
-            <i class="fas fa-toggle-on"></i>
+            <i class="out" onclick="change_status(this,'Controlling_prompt')"><div class="inside"></div></i>
         </div>
 
     </div>
@@ -45,13 +46,13 @@
         <i class="fas fa-user"></i>
         <div>
             <h3>BEE HIVE STATUS</h3>
-            <p>Heat Systems: On</p>
-            <p>Fan Systems: On</p>
-            <p>Ventilation Systems: On</p>
-            <p>Controlling Systems: On</p>
-            <p>Video Systems: On</p>
+            <p>Heat Systems: <span id="heat_prompt">On</span></p>
+            <p>Fan Systems: <span id="Fan_prompt">On</span></p>
+            <p>Ventilation Systems: <span id="Ventilation_prompt">On</span></p>
+            <p>Controlling Systems: <span id="Controlling_prompt">On</span></p>
+            <p>Video Systems: <span id="Video_prompt">On</span></p>
         </div>
-        <a class="tovideo">GO TO VIDEO</a>
+        <a class="tovideo" href='{{ url_for( 'video' ) }}'>GO TO VIDEO</a>
     </div>
 </div>
 
