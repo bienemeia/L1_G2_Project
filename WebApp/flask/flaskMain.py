@@ -71,13 +71,25 @@ def permission():
 
 @app.route("/data")
 def data():
-  return render_template('data.html', currentTemp=tempBase, 
-                          currentHumidity=humidityBase, dailyLabels=dailyValues["time"], weeklyLabels=weeklyValues["dayHour"],
+  return render_template('data.html', currentTemp=tempBase, currentHumidity=humidityBase, 
+                          dailyLabels=dailyValues["time"], weeklyLabels=weeklyValues["dayHour"],
                           monthlyLabels=monthlyValues["dayHour"], yearlyLabels=yearlyValues["date"],
-                          dailyTempValues=dailyValues["tempBase"], weeklyTempValues=weeklyValues["tempBase"],
-                          monthlyTempValues=monthlyValues["tempBase"], yearlyTempValues=yearlyValues["tempBase"],
-                          dailyHumidityValues=dailyValues["humidityBase"], weeklyHumidityValues=weeklyValues["humidityBase"],
-                          monthlyHumidityValues=monthlyValues["humidityBase"], yearlyHumidityValues=yearlyValues["humidityBase"])
+                          dailyTempBaseValues=dailyValues["tempBase"], weeklyTempBaseValues=weeklyValues["tempBase"],
+                          monthlyTempBaseValues=monthlyValues["tempBase"], yearlyTempBaseValues=yearlyValues["tempBase"],
+                          dailyHumidityBaseValues=dailyValues["humidityBase"], weeklyHumidityBaseValues=weeklyValues["humidityBase"],
+                          monthlyHumidityBaseValues=monthlyValues["humidityBase"], yearlyHumidityBaseValues=yearlyValues["humidityBase"],
+                          dailyTempInsideValues=dailyValues["tempInside"], weeklyTempInsideValues=weeklyValues["tempInside"],
+                          monthlyTempInsideValues=monthlyValues["tempInside"], yearlyTempInsideValues=yearlyValues["tempInside"],
+                          dailyHumidityInsideValues=dailyValues["humidityInside"], weeklyHumidityInsideValues=weeklyValues["humidityBase"],
+                          monthlyHumidityInsideValues=monthlyValues["humidityInside"], yearlyHumidityInsideValues=yearlyValues["humidityInside"],
+                          dailyTempOutsideValues=dailyValues["tempOutside"], weeklyTempOutsideValues=weeklyValues["tempOutside"],
+                          monthlyTempOutsideValues=monthlyValues["tempOutside"], yearlyTempOutsideValues=yearlyValues["tempOutside"],
+                          dailyHumidityOutsideValues=dailyValues["humidityOutside"], weeklyHumidityOutsideValues=weeklyValues["humidityOutside"],
+                          monthlyHumidityOutsideValues=monthlyValues["humidityOutside"], yearlyHumidityOutsideValues=yearlyValues["humidityOutside"],
+                          dailyPressure=dailyValues["pressure"], weeklyPressure=weeklyValues["pressure"],
+                          monthlyPressure=monthlyValues["pressure"], yearlyPressure=yearlyValues["pressure"],
+                          dailyCo2=dailyValues["co2"], weeklyCo2=weeklyValues["co2"],
+                          monthlyCo2=monthlyValues["co2"], yearlyCo2=yearlyValues["co2"])
 
 
 @app.route("/tools")
