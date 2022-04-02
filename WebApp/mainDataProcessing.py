@@ -22,12 +22,12 @@ def main():
     hive_db = hive_firebase.database()
     dayOfWeek = 1
     dayOfMonth = 1
+    updated = False
 
     while True:
         db = sqlite3.connect("hiveDB.db")
         cursor = process.getDBCursor(db)
         now = firebase.getTime()
-        updated = False
 
         date = firebase.getDate(hive_db, 1, now)
         tempDict = firebase.getTemperature(hive_db, 1, now)

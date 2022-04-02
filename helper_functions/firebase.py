@@ -30,10 +30,17 @@ def getTimeMinus1():
         hr = hr - 1
     else:
         mn = mn - 1
+
     if hr < 10:
         now[0] = "0" + str(hr)
+    else:
+        now[0] = str(hr)
+
     if mn < 10:
         now[1] = "0" + str(mn)
+    else:
+        now[1] = str(mn)
+        
     return(now[0] + ":" + now[1])
 
 

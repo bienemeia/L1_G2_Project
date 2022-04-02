@@ -29,6 +29,9 @@ pressure = currentValues[6]
 co2 = currentValues[7]
 
 dailyValues = process.getDailyArray(cursor)
+weeklyValues = process.getWeeklyArray(cursor)
+monthlyValues = process.getMonthlyArray(cursor)
+yearlyValues = process.getYearlyArray(cursor)
 
 
 @app.route("/")
@@ -68,7 +71,13 @@ def permission():
 
 @app.route("/data")
 def data():
-  return render_template('data.html', currentTemp=tempBase, currentHumidity=humidityBase, labels=dailyValues["time"], tempValues=dailyValues["tempBase"], humidityValues=dailyValues["humidityBase"])
+  return render_template('data.html', currentTemp=tempBase, 
+                          currentHumidity=humidityBase, dailyLabels=dailyValues["time"], weeklyLabels=weeklyValues["dayHour"],
+                          monthlyLabels=monthlyValues["dayHour"], yearlyLabels=yearlyValues["date"],
+                          dailyTempValues=dailyValues["tempBase"], weeklyTempValues=weeklyValues["tempBase"],
+                          monthlyTempValues=monthlyValues["tempBase"], yearlyTempValues=yearlyValues["tempBase"],
+                          dailyHumidityValues=dailyValues["humidityBase"], weeklyHumidityValues=weeklyValues["humidityBase"],
+                          monthlyHumidityValues=monthlyValues["humidityBase"], yearlyHumidityValues=yearlyValues["humidityBase"])
 
 
 @app.route("/tools")

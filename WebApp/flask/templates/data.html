@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block content %}
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div class="data-box">
         <div class="header">
             <div>
@@ -24,10 +23,11 @@
         <div class="footer">
             <div class="header">
                 <h2>TEMPERATURE/HUMIDITY CURVE</h2>
-                <select>
-                    <option>Monthly</option>
-                    <option>Years</option>
-                    <option>Day</option>
+                <select id="timelinePicker" selected="day">
+                    <option value="day">Day</option>
+                    <option value="week">Week</option>
+                    <option value="month">Month</option>
+                    <option value="year">Year</option>
                 </select>
                 <time>From Nov 2021 to Apr 2022</time>
             </div>
@@ -40,11 +40,65 @@
                 </div>
             </div>
             <div class="footer">
-                <canvas id="chart" style="position: relative; height: 20vh; width: 60vw"></canvas>
+                <canvas id="chart" style="position: center; height: 20vh; width: 60vw"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
+                	var temperature = [];
+                	var dailyLabels = [
+						  {% for item in dailyLabels %}
+							"{{ item }}",
+						  {% endfor %}];
+					var weeklyLabels = [
+						  {% for item in weeklyLabels %}
+							"{{ item }}",
+						  {% endfor %}];
+					var monthlyLabels = [
+						  {% for item in monthlyLabels %}
+							"{{ item }}",
+						  {% endfor %}];
+					var yearlyLabels = [
+						  {% for item in yearlyLabels %}
+							"{{ item }}",
+						  {% endfor %}];
+
+                	var tempDaily = [
+                		{% for temp in dailyTempValues %}
+							{{ temp }},
+						{% endfor %}];
+					var tempWeekly = [
+                		{% for temp in weeklyTempValues %}
+							{{ temp }},
+						{% endfor %}];
+					var tempMonthly = [
+                		{% for temp in monthlyTempValues %}
+							{{ temp }},
+						{% endfor %}];
+					var tempYearly = [
+                		{% for temp in yearlyTempValues %}
+							{{ temp }},
+						{% endfor %}];
+
+					var humidityDaily = [
+							{% for humidity in dailyHumidityValues %}
+							  {{ humidity }},
+							{% endfor %}];
+					var humidityWeekly = [
+							{% for humidity in weeklyHumidityValues %}
+							  {{ humidity }},
+							{% endfor %}];
+					var humidityMonthly = [
+							{% for humidity in monthlyHumidityValues %}
+							  {{ humidity }},
+							{% endfor %}];
+					var humidityYearly =[
+							{% for humidity in yearlyHumidityValues %}
+							  {{ humidity }},
+							{% endfor %}];
+
+
 					const data = {
 					  labels: [
-						  {% for item in labels %}
+						  {% for item in dailyLabels %}
 							"{{ item }}",
 						  {% endfor %}
 						],
@@ -53,20 +107,20 @@
 						backgroundColor: '#bb7600',
 						borderColor: '#bb7600',
 						data: [
-							{% for temp in tempValues %}
-							  {{ temp }},
-							{% endfor %}],
-						yAxisId: 'temp',
+                		{% for temp in dailyTempValues %}
+							{{ temp }},
+						{% endfor %}],
+						yAxisID: 'temp',
 					  },
 					  {
 						label: 'Humidity',
 						backgroundColor: '#bb9c00',
 						borderColor: '#bb9c00',
 						data: [
-							{% for humidity in humidityValues %}
+							{% for humidity in dailyHumidityValues %}
 							  {{ humidity }},
 							{% endfor %}],
-						yAxisId: 'humidity',
+						yAxisID: 'humidity',
 						  }]
 					};
 					
@@ -102,6 +156,10 @@
 							  },
 						  },
 						  humidity: {
+						  	  title: {
+								  text: "Humidity (%)",
+								  display: true,
+							  },
 							  type: 'linear',
 							  display: true,
 							  position: 'right',
@@ -117,6 +175,41 @@
 					  document.getElementById('chart'),
 					  config
 					);
+
+					const timelineSelect = document.getElementById('timelinePicker');
+					timelineSelect.addEventListener('load', (event) => {});
+					timelineSelect.addEventListener('change', timelineTracker);
+					function timelineTracker()
+					{
+						if (timelineSelect.value == 'day')
+						{
+							myChart.data.labels = dailyLabels;
+							myChart.data.datasets[0].data = tempDaily;
+							myChart.data.datasets[1].data = humidityDaily;
+							myChart.update();
+						}
+						if (timelineSelect.value == 'week')
+						{
+							myChart.data.labels = weeklyLabels;
+							myChart.data.datasets[0].data = tempWeekly;
+							myChart.data.datasets[1].data = humidityWeekly;
+							myChart.update();
+						}
+						if (timelineSelect.value == 'month')
+						{
+							myChart.data.labels = monthlyLabels;
+							myChart.data.datasets[0].data = tempMonthly;
+							myChart.data.datasets[1].data = humidityMonthly;
+							myChart.update();
+						}
+						if (timelineSelect.value == 'year')
+						{
+							myChart.data.labels = yearlyLabels;
+							myChart.data.datasets[0].data = tempYearly;
+							myChart.data.datasets[1].data = humidityYearly;
+							myChart.update();
+						}
+					}
 					
                 </script>
             </div>

@@ -214,6 +214,87 @@ def getDailyArray(cursor):
 
     return values
 
+# Get array of weekly data
+def getWeeklyArray(cursor):
+    values = {'dayHour': [], 'hour': [], 'date': [], 'tempBase': [], 'tempInside': [], 'tempOutside': [],
+              'humidityBase': [], 'humidityInside': [], 'humidityOutside': [],
+              'pressure': [], 'co2': []}
+    try:
+        tempBase = cursor.execute('''SELECT dayHour, hour, date, tempBase, tempInside, tempOutside,
+                                    humidityBase, humidityInside, humidityOutside,
+                                    pressure, co2 FROM weeklyDB ORDER BY date, dayHour''').fetchall()
+    except sqlite3.Error as er:
+        print("SQLite error: " + er)
+
+    for row in tempBase:
+        values["dayHour"].append(row[0])
+        values["hour"].append(row[1])
+        values["date"].append(row[2])
+        values["tempBase"].append(row[3])
+        values["tempInside"].append(row[4])
+        values["tempOutside"].append(row[5])
+        values["humidityBase"].append(row[6])
+        values["humidityInside"].append(row[7])
+        values["humidityOutside"].append(row[8])
+        values["pressure"].append(row[9])
+        values["co2"].append(row[10])
+
+    return values
+
+
+# Get array of monthly data
+def getMonthlyArray(cursor):
+    values = {'dayHour': [], 'hour': [], 'date': [], 'tempBase': [], 'tempInside': [], 'tempOutside': [],
+              'humidityBase': [], 'humidityInside': [], 'humidityOutside': [],
+              'pressure': [], 'co2': []}
+    try:
+        tempBase = cursor.execute('''SELECT dayHour, hour, date, tempBase, tempInside, tempOutside,
+                                    humidityBase, humidityInside, humidityOutside,
+                                    pressure, co2 FROM monthlyDB ORDER BY date, dayHour''').fetchall()
+    except sqlite3.Error as er:
+        print("SQLite error: " + er)
+
+    for row in tempBase:
+        values["dayHour"].append(row[0])
+        values["hour"].append(row[1])
+        values["date"].append(row[2])
+        values["tempBase"].append(row[3])
+        values["tempInside"].append(row[4])
+        values["tempOutside"].append(row[5])
+        values["humidityBase"].append(row[6])
+        values["humidityInside"].append(row[7])
+        values["humidityOutside"].append(row[8])
+        values["pressure"].append(row[9])
+        values["co2"].append(row[10])
+
+    return values
+
+
+# Get array of yearly data
+def getYearlyArray(cursor):
+    values = {'date': [], 'tempBase': [], 'tempInside': [], 'tempOutside': [],
+              'humidityBase': [], 'humidityInside': [], 'humidityOutside': [],
+              'pressure': [], 'co2': []}
+    try:
+        tempBase = cursor.execute('''SELECT date, tempBase, tempInside, tempOutside,
+                                    humidityBase, humidityInside, humidityOutside,
+                                    pressure, co2 FROM yearlyDB ORDER BY date''').fetchall()
+    except sqlite3.Error as er:
+        print("SQLite error: " + er)
+
+    for row in tempBase:
+        values["date"].append(row[0])
+        values["tempBase"].append(row[1])
+        values["tempInside"].append(row[2])
+        values["tempOutside"].append(row[3])
+        values["humidityBase"].append(row[4])
+        values["humidityInside"].append(row[5])
+        values["humidityOutside"].append(row[6])
+        values["pressure"].append(row[7])
+        values["co2"].append(row[8])
+
+    return values
+
 
 # Get DB cursor for given db
 def getDBCursor(db):
