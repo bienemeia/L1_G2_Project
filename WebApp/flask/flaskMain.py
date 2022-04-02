@@ -41,7 +41,7 @@ def index():
 
 @app.route("/bees")
 def bees():
-  return render_template('bees.html', labels=dailyValues["time"], values=dailyValues["tempBase"])
+  return render_template('bees.html')
 
 
 @app.route("/login")
@@ -68,7 +68,7 @@ def permission():
 
 @app.route("/data")
 def data():
-  return render_template('data.html', tempInside=tempInside, humidityInside=humidityInside)
+  return render_template('data.html', currentTemp=tempBase, currentHumidity=humidityBase, labels=dailyValues["time"], tempValues=dailyValues["tempBase"], humidityValues=dailyValues["humidityBase"])
 
 
 @app.route("/tools")
@@ -78,4 +78,4 @@ def tools():
 
 if __name__ == "__main__":
   # initializing_network()
-  app.run(debug=True, host='0.0.0.0',port=8080)
+  app.run(debug=True, host='0.0.0.0',port=8081)

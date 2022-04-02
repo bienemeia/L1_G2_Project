@@ -5,24 +5,25 @@
 {% endblock %}
 
 {% block content %}
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div class="data-box">
         <div class="header">
             <div>
                 <h4>Temperature</h4>
-                    <p>inside hive</p>
-                    <var>{{ tempInside }}<span>℃</span></var>
-                    <a href="/"><i class="fas fa-bars"></i></a>
+                <p>current temperature</p>
+                <var>{{ currentTemp }}<span>℃</span></var>
+                <a href="/"><i class="fas fa-bars"></i></a>
             </div>
             <div>
                 <h4>Humidity</h4>
-                <p>inside hive</p>
-                <var>{{ humidityInside }}<span>%</span></var>
+                <p>current humidity</p>
+                <var>{{ currentHumidity }}<span>%</span></var>
                 <a href="/"><i class="fas fa-bars"></i></a>
             </div>
         </div>
         <div class="footer">
             <div class="header">
-                <h2>TEMPRATURE/HUMIDITY CARVE</h2>
+                <h2>TEMPERATURE/HUMIDITY CURVE</h2>
                 <select>
                     <option>Monthly</option>
                     <option>Years</option>
@@ -39,14 +40,92 @@
                 </div>
             </div>
             <div class="footer">
-                <img src="/static/xy.png">
-                <canvas></canvas>
+                <canvas id="chart" style="position: relative; height: 20vh; width: 60vw"></canvas>
+                <script>
+					const data = {
+					  labels: [
+						  {% for item in labels %}
+							"{{ item }}",
+						  {% endfor %}
+						],
+					  datasets: [{
+						label: 'Temperature',
+						backgroundColor: '#bb7600',
+						borderColor: '#bb7600',
+						data: [
+							{% for temp in tempValues %}
+							  {{ temp }},
+							{% endfor %}],
+						yAxisId: 'temp',
+					  },
+					  {
+						label: 'Humidity',
+						backgroundColor: '#bb9c00',
+						borderColor: '#bb9c00',
+						data: [
+							{% for humidity in humidityValues %}
+							  {{ humidity }},
+							{% endfor %}],
+						yAxisId: 'humidity',
+						  }]
+					};
+					
+					const config = {
+					  type: 'line',
+					  data: data,
+					  options: {
+						maintainAspectRatio: false,
+						plugins: {
+						  legend: false,
+						  tooltips: { enabled: false}
+						},
+						scales: {
+						  xAxes: {
+							ticks: {
+							  minRotation: 90,
+							  autoSkip: true,
+							  maxTicksLimit: 24
+							}
+						  },
+						  temp: {
+							  title: {
+								  text: "Temperature (Celsius)",
+								  display: true,
+							  },
+							  type: 'linear',
+							  display: true,
+							  display: true,
+							  position: 'left',
+							  ticks: {
+								  max: 50,
+								  min: -50,
+							  },
+						  },
+						  humidity: {
+							  type: 'linear',
+							  display: true,
+							  position: 'right',
+							  grid: {
+								drawOnChartArea: false,
+							  },
+						  },
+						}
+					  }
+					};
+
+					const myChart = new Chart(
+					  document.getElementById('chart'),
+					  config
+					);
+					
+                </script>
             </div>
 
         </div>
 
     </div>
-
+<!-- colour for humidity: #bb9c00 -->
+<!-- colour for temperature: #bb7600 -->
 {% endblock %}
 
 {% block footer %}{% endblock %}

@@ -47,9 +47,9 @@ def processWeeklyAverages(cursor, dayOfWeek):
         avgTempBase = round(sumTempBase / 60, 2)
         avgTempInside = round(sumTempInside / 60, 2)
         avgTempOutside = round(sumTempOutside / 60, 2)
-        avgHumidBase = round(sumHumidBase / 60, 2)
-        avgHumidInside = round(sumHumidInside / 60, 2)
-        avgHumidOutside = round(sumHumidOutside / 60, 2)
+        avgHumidBase = round(sumHumidBase / 60)
+        avgHumidInside = round(sumHumidInside / 60)
+        avgHumidOutside = round(sumHumidOutside / 60)
         avgCo2 = round(sumCo2 / 60, 2)
         avgPressure = round(sumPressure / 60, 2)
 
