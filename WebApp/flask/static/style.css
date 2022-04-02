@@ -793,7 +793,7 @@ footer {
     top: 0;
     margin: 20px auto;
     width: 95%;
-    height: 280px;
+    height: 375px;
     border: 2px solid lightgrey;
     border-radius: 28px;
 }
@@ -844,6 +844,7 @@ footer {
     width: 55%;
     height: 30px;
     margin: 0 auto;
+    padding-bottom: 20px;
 }
 
 .data-box > .footer > .main > div {
@@ -889,8 +890,8 @@ footer {
 .data-box > .footer > .footer {
     position: relative;
     display: block;
-    width: 95%;
-    height: 160px;
+    width: 90%;
+    height: 250px;
     margin: 0 auto;
 }
 
@@ -904,10 +905,9 @@ footer {
 .data-box > .footer > .footer > canvas {
     position: absolute;
     display: block;
-    left: 32px;
     bottom: 25px;
-    width: 828px;
-    height: 130px;
+    width: 800px;
+    height: 160px;
 }
 
 /*.out {*/

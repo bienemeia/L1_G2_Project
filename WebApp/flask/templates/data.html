@@ -254,7 +254,7 @@
 						scales: {
 						  xAxes: {
 							ticks: {
-							  minRotation: 90,
+							  minRotation: 45,
 							  autoSkip: true,
 							  maxTicksLimit: 24
 							}
@@ -326,9 +326,10 @@
 						myChart.update();
 					});
 
-					const timelineSelect = document.getElementById('timelinePicker');
-					const locationSelect = document.getElementById('locationPicker');
 					const valueSelect = document.getElementById('measurementPicker');
+					const locationSelect = document.getElementById('locationPicker');
+					const timelineSelect = document.getElementById('timelinePicker');
+
 					valueSelect.addEventListener('change', measurementTracker);
 					locationSelect.addEventListener('change', measurementTracker);
 					timelineSelect.addEventListener('change', measurementTracker);
