@@ -29,7 +29,7 @@
                     <option value="month">Month</option>
                     <option value="year">Year</option>
                 </select>
-                <time>From Nov 2021 to Apr 2022</time>
+<!--                 <time>From Nov 2021 to Apr 2022</time> -->
             </div>
             <div class="main">
                 <div>
@@ -43,7 +43,6 @@
                 <canvas id="chart" style="position: center; height: 20vh; width: 60vw"></canvas>
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
-                	var temperature = [];
                 	var dailyLabels = [
 						  {% for item in dailyLabels %}
 							"{{ item }}",
@@ -95,7 +94,6 @@
 							  {{ humidity }},
 							{% endfor %}];
 
-
 					const data = {
 					  labels: [
 						  {% for item in dailyLabels %}
@@ -106,6 +104,8 @@
 						label: 'Temperature',
 						backgroundColor: '#bb7600',
 						borderColor: '#bb7600',
+						pointRadius: 1,
+						pointRadiusHive: 1.5,
 						data: [
                 		{% for temp in dailyTempValues %}
 							{{ temp }},
@@ -116,6 +116,8 @@
 						label: 'Humidity',
 						backgroundColor: '#bb9c00',
 						borderColor: '#bb9c00',
+						pointRadius: 1,
+						pointRadiusHive: 1.5,
 						data: [
 							{% for humidity in dailyHumidityValues %}
 							  {{ humidity }},
