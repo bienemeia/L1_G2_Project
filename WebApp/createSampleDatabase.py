@@ -46,8 +46,6 @@ def main():
     tempRnd = round(random.randint(-20, 20), 2)
     humidRnd = round(random.randint(10,90), 2)
 
-    print(tempRnd)
-    print(humidRnd)
     while True:
         db = sqlite3.connect("hiveDB.db")
         cursor = process.getDBCursor(db)
