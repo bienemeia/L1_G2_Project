@@ -4,8 +4,20 @@ from helper_functions import process, firebase
 from flask import Flask, Markup, render_template
 import time
 import sqlite3
+import pyrebase
 
 app = Flask(__name__)
+
+# Set up Firebase authentication
+meia_config = {
+  "apiKey": "AIzaSyBVpD3QAJ7NQsmobIABC95vOX8-e-aZQX0",
+  "authDomain": "testhive-2bca5.firebaseapp.com",
+  "databaseURL": "https://testhive-2bca5-default-rtdb.firebaseio.com/",
+  "storageBucket": "testhive-2bca5.appspot.com"
+}
+# Initialize Firebase DB
+hive_firebase = pyrebase.initialize_app(meia_config)
+hive_db = hive_firebase.database()
 
 # Open connection to database
 db = sqlite3.connect("../hiveDB.db")
@@ -19,6 +31,7 @@ currentValues = cursor.execute(''' SELECT tempBase, tempInside, tempOutside,
   humidityBase, humidityInside, humidityOutside,
   pressure, co2 from dailyDB WHERE time=? ''', (now,)).fetchone()
 
+# Get current values to display
 tempBase = currentValues[0]
 tempInside = currentValues[1]
 tempOutside = currentValues[2]
@@ -28,11 +41,13 @@ humidityOutside = currentValues[5]
 pressure = currentValues[6]
 co2 = currentValues[7]
 
+# Get arrays of timeline values for graphing
 dailyValues = process.getDailyArray(cursor)
 weeklyValues = process.getWeeklyArray(cursor)
 monthlyValues = process.getMonthlyArray(cursor)
 yearlyValues = process.getYearlyArray(cursor)
 
+# 
 
 @app.route("/")
 def index():
@@ -95,6 +110,11 @@ def data():
 @app.route("/tools")
 def tools():
   return render_template('tools.html')
+
+@app.route('/updateHeaterFirebase')
+def updateHeaterFirebase(system, state):
+  print(system, state)
+
 
 
 if __name__ == "__main__":
