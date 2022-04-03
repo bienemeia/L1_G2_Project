@@ -13,7 +13,7 @@
                 <h3>Heater</h3>
                 <p>Use this space to describe this benefit</p>
             </div>
-            <i class="out" onclick="change_status(this,'heat_prompt')"><div class="inside"></div></i>
+            <i href=# id=heater class="out" onclick="change_status(this,'heat_prompt')"><div class="inside"></div></i>
 
         </div>
         <div class="onoff">
@@ -22,7 +22,7 @@
                 <h3>Fan</h3>
                 <p>Use this space to describe this benefit</p>
             </div>
-            <i class="out" onclick="change_status(this,'Fan_prompt')"><div class="inside"></div></i>
+            <i class="out" onclick="change_status(this,'Fan_prompt'), {{ updateFirebase('heater', 'on') }}"><div class="inside"></div></i>
         </div>
         <div class="onoff">
             <i class="fas fa-door-closed"></i>
@@ -55,6 +55,19 @@
         <a class="tovideo" href='{{ url_for( 'video' ) }}'>GO TO VIDEO</a>
     </div>
 </div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+        $(function() {
+          $('a#heater').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/updateFirebase',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+</script>
 
 {% endblock %}
 {% block footer %}{% endblock %}
