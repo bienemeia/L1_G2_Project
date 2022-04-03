@@ -108,6 +108,9 @@ def pushTestLed1Status(db, hiveId, status):
 def pushTestLed2Status(db, hiveId, status):
     return db.child("hives").child(hiveId).child("testLed2").set(status)
 
+# Set the heater status
+def pushSystemStatus(db, hiveId, system, status):
+    return db.child("hives").child(hiveId).child(system).set(status)
 
 # Get the hive name
 def getHiveName(db, hiveId):
@@ -167,6 +170,10 @@ def getTestLed1Status(db, hiveId):
 # Get test LED status on Arduino 2
 def getTestLed2Status(db, hiveId):
     return db.child("hives").child(hiveId).child("testLed2").get().val()
+    
+# Get the heater status
+def getSystemStatus(db, hiveId, system):
+    return db.child("hives").child(hiveId).child(system).get().val()
 
 
 # Gets a day's worth of environmental data

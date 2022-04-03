@@ -111,10 +111,12 @@ def data():
 def tools():
   return render_template('tools.html')
 
-@app.route('/updateHeaterFirebase')
-def updateHeaterFirebase(system, state):
-  print(system, state)
-
+@app.route("/updateFirebase")
+def updateFirebase(system):
+	if firebase.getSystemStatus(hive_db, 1, system):
+		firebase.pushSystemStatus(hive_db, 1, system, False)
+	else:
+		firebase.pushSystemStatus(hive_db, 1, system, True)
 
 
 if __name__ == "__main__":
