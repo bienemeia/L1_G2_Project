@@ -7,18 +7,58 @@
 {% block content %}
     <div class="data-box">
         <div class="header">
-            <div>
-                <h4>Temperature</h4>
-                <p>current temperature</p>
-                <var>25.5<span>℃</span></var>
-                <a href="/"><i class="fas fa-bars"></i></a>
+            <div class="left">
+                <div class="header">
+                    <div class="title">
+                        <h4>Temperature</h4>
+                        <p>current temperature</p>
+                    </div>
+                    <div class="content">
+                        <div>
+                            <h4>hivebase</h4>
+                            <var>25.5</var><span>℃</span>
+                        </div>
+                        <div>
+                            <h4>inside-hive</h4>
+                            <var>25.5</var><span>℃</span>
+                        </div>
+                        <div>
+                            <h4>outside-hive</h4>
+                            <var>25.5</var><span>℃</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <div class="title">
+                        <h4>Humidity</h4>
+                        <p>current humidity</p>
+                    </div>
+                    <div class="content">
+                        <div>
+                            <var>30</var><span>%</span>
+                        </div>
+                        <div>
+                            <var>30</var><span>%</span>
+                        </div>
+                        <div>
+                            <var>30</var><span>%</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h4>Humidity</h4>
-                <p>current humidity</p>
-                <var>30<span>%</span></var>
-                <a href="/"><i class="fas fa-bars"></i></a>
+            <div class="right">
+                <div>
+                    <h4>Pressure</h4>
+                    <p>current pressure</p>
+                    <var>1000</var><span>Pa</span>
+                </div>
+                <div>
+                    <h4>CO2</h4>
+                    <p>current co2</p>
+                    <var>0.7</var><span>%</span>
+                </div>
             </div>
+
         </div>
         <div class="footer">
             <div class="header">
