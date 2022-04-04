@@ -41,12 +41,12 @@
 <!--                 <time>From Nov 2021 to Apr 2022</time> -->
             </div>
             <div class="main">
-                <div>
-                    <div></div><span>Temperature</span>
+<!--                 <div>
+                    <div></div><span id="legend1">Temperature</span>
                 </div>
                 <div>
                     <div></div><span>Humidity</span>
-                </div>
+                </div> -->
             </div>
             <div class="footer">
                 <canvas id="chart" style="position: center; height: 20vh; width: 60vw"></canvas>
@@ -198,15 +198,15 @@
 							  {{ co2 }},
 							{% endfor %}];
 					var co2Weekly = [
-							{% for co2 in weeklydailyCo2 %}
+							{% for co2 in weeklyCo2 %}
 							  {{ co2 }},
 							{% endfor %}];
 					var co2Monthly = [
-							{% for co2 in monthlydailyCo2 %}
+							{% for co2 in monthlyCo2 %}
 							  {{ co2 }},
 							{% endfor %}];
 					var co2Yearly = [
-							{% for co2 in yearlydailyCo2 %}
+							{% for co2 in yearlyCo2 %}
 							  {{ co2 }},
 							{% endfor %}];
 
@@ -218,8 +218,8 @@
 						],
 					  datasets: [{
 						label: 'Temperature',
-						backgroundColor: '#bb7600',
-						borderColor: '#bb7600',
+						backgroundColor: '#E89C34',
+						borderColor: '#E89C34',
 						pointRadius: 1,
 						pointRadiusHive: 1.5,
 						data: [
@@ -230,8 +230,8 @@
 					  },
 					  {
 						label: 'Humidity',
-						backgroundColor: '#bb9c00',
-						borderColor: '#bb9c00',
+						backgroundColor: '#E8CA32',
+						borderColor: '#E8CA32',
 						pointRadius: 1,
 						pointRadiusHive: 1.5,
 						data: [
@@ -248,7 +248,7 @@
 					  options: {
 						maintainAspectRatio: false,
 						plugins: {
-						  legend: false,
+						  legend: true,
 						  tooltips: { enabled: false}
 						},
 						scales: {
@@ -323,8 +323,6 @@
 						myChart.data.labels = dailyLabels;
 						myChart.data.datasets[0].data = tempBaseDaily;
 						myChart.data.datasets[1].data = humidityBaseDaily;
-						//myChart.data.datasets[0].data = pressureDaily;
-						//myChart.data.datasets[1].data = co2Daily;
 						myChart.update();
 					});
 
@@ -338,177 +336,152 @@
 
 					function measurementTracker()
 					{
-						if (timelineSelect.value == 'day')
+						switch(valueSelect.value)
 						{
-							if (valueSelect.value = 'tempHumidity')
-							{
+							case 'tempHumidity':
 								document.getElementById('locationPicker').style.visibility = "visible";
+
+								myChart.options.scales.pressure.display = false;
+								myChart.options.scales.pressure.title.display = false;
+								myChart.options.scales.co2.display = false;
+								myChart.options.scales.co2.title.display = false;
+
+								myChart.options.scales.temp.display = true;
+								myChart.options.scales.temp.title.display = true;
+								myChart.options.scales.humidity.display = true;
+								myChart.options.scales.humidity.title.display = true;
+
 								myChart.data.datasets[0].label = "Temperature";
 								myChart.data.datasets[0].yAxisID = 'temp';
 								myChart.data.datasets[1].label = "Humidity";
 								myChart.data.datasets[1].yAxisID = 'humidity';
 
-								if (locationSelect.value == 'base')
+								switch(timelineSelect.value)
 								{
-									myChart.data.datasets[0].data = tempBaseDaily;
-									myChart.data.datasets[1].data = humidityBaseDaily;
+									case 'day':
+										myChart.data.labels = dailyLabels;
+										switch(locationSelect.value)
+										{
+											case 'base':
+												myChart.data.datasets[0].data = tempBaseDaily;
+												myChart.data.datasets[1].data = humidityBaseDaily;
+												break;
+											case 'inside':
+												myChart.data.datasets[0].data = tempInsideDaily;
+												myChart.data.datasets[1].data = humidityInsideDaily;
+												break;
+											case 'outside':
+												myChart.data.datasets[0].data = tempOutsideDaily;
+												myChart.data.datasets[1].data = humidityOutsideDaily;
+												break;
+										}
+										break;
+									case 'week':
+										myChart.data.labels = weeklyLabels;
+										switch(locationSelect.value)
+										{
+											case 'base':
+												myChart.data.datasets[0].data = tempBaseWeekly;
+												myChart.data.datasets[1].data = humidityBaseWeekly;
+												break;
+											case 'inside':
+												myChart.data.datasets[0].data = tempInsideWeekly;
+												myChart.data.datasets[1].data = humidityInsideWeekly;
+												break;
+											case 'outside':
+												myChart.data.datasets[0].data = tempOutsideWeekly;
+												myChart.data.datasets[1].data = humidityOutsideWeekly;
+												break;
+										}
+										break;
+									case 'month':
+										myChart.data.labels = monthlyLabels;
+										switch(locationSelect.value)
+										{
+											case 'base':
+												myChart.data.datasets[0].data = tempBaseMonthly;
+												myChart.data.datasets[1].data = humidityBaseMonthly;
+												break;
+											case 'inside':
+												myChart.data.datasets[0].data = tempInsideMonthly;
+												myChart.data.datasets[1].data = humidityInsideMonthly;
+												break;
+											case 'outside':
+												myChart.data.datasets[0].data = tempOutsideMonthly;
+												myChart.data.datasets[1].data = humidityOutsideMonthly;
+												break;
+										}
+										break;
+									case 'year':
+										myChart.data.labels = yearlyLabels;
+										switch(locationSelect.value)
+										{
+											case 'base':
+												myChart.data.datasets[0].data = tempBaseYearly;
+												myChart.data.datasets[1].data = humidityBaseYearly;
+												break;
+											case 'inside':
+												myChart.data.datasets[0].data = tempInsideYearly;
+												myChart.data.datasets[1].data = humidityInsideYearly;
+												break;
+											case 'outside':
+												myChart.data.datasets[0].data = tempOutsideYearly;
+												myChart.data.datasets[1].data = humidityOutsideYearly;
+												break;
+										}
+										break;
 								}
-								if (locationSelect.value == 'inside')
-								{
-									myChart.data.datasets[0].data = tempInsideDaily;
-									myChart.data.datasets[1].data = humidityInsideDaily;
-								}
-								if (locationSelect.value == 'outside')
-								{
-									myChart.data.datasets[0].data = tempOutsideDaily;
-									myChart.data.datasets[1].data = humidityOutsideDaily;
-								}
-							}						
-							if (valueSelect.value == 'pressureCo2')
-							{
+								break;
+
+							case 'pressureCo2':
 								document.getElementById('locationPicker').style.visibility = "hidden";
 								myChart.data.datasets[0].label = "Pressure";
 								myChart.data.datasets[0].yAxisID = 'pressure';
 								myChart.data.datasets[1].label = "CO2";
 								myChart.data.datasets[1].yAxisID = 'co2';
 
-								myChart.data.datasets[0].data = pressureDaily;
-								myChart.data.datasets[1].data = co2Daily;
-							}
-							myChart.data.labels = dailyLabels;
-							myChart.update();
+								myChart.options.scales.pressure.display = true;
+								myChart.options.scales.pressure.title.display = true;
+								myChart.options.scales.co2.display = true;
+								myChart.options.scales.co2.title.display = true;
+
+								myChart.options.scales.temp.display = false;
+								myChart.options.scales.temp.title.display = false;
+								myChart.options.scales.humidity.display = false;
+								myChart.options.scales.humidity.title.display = false;
+
+								switch(timelineSelect.value)
+								{
+									case 'day':
+										myChart.data.labels = dailyLabels;
+										myChart.data.datasets[0].data = pressureDaily;
+										myChart.data.datasets[1].data = co2Daily;
+										break;
+									case 'week':
+										myChart.data.labels = weeklyLabels;
+										myChart.data.datasets[0].data = pressureWeekly;
+										myChart.data.datasets[1].data = co2Weekly;
+										break;
+									case 'month':
+										myChart.data.labels = monthlyLabels;
+										myChart.data.datasets[0].data = pressureMonthly;
+										myChart.data.datasets[1].data = co2Monthly;
+										break;
+									case 'year':
+										myChart.data.labels = yearlyLabels;
+										myChart.data.datasets[0].data = pressureYearly;
+										myChart.data.datasets[1].data = co2Yearly;
+										break;
+
+								}
+								break;
 						}
-
-						if (timelineSelect.value == 'week')
-						{
-							if (valueSelect.value = 'tempHumidity')
-							{
-								document.getElementById('locationPicker').style.visibility = "visible";
-								myChart.data.datasets[0].label = "Temperature";
-								myChart.data.datasets[0].yAxisID = 'temp';
-								myChart.data.datasets[1].label = "Humidity";
-								myChart.data.datasets[1].yAxisID = 'humidity';
-
-								if (locationSelect.value == 'base')
-								{
-									myChart.data.datasets[0].data = tempBaseWeekly;
-									myChart.data.datasets[1].data = humidityBaseWeekly;
-								}
-								if (locationSelect.value == 'inside')
-								{
-									myChart.data.datasets[0].data = tempInsideWeekly;
-									myChart.data.datasets[1].data = humidityInsideWeekly;
-								}
-								if (locationSelect.value == 'outside')
-								{
-									myChart.data.datasets[0].data = tempOutsideWeekly;
-									myChart.data.datasets[1].data = humidityOutsideWeekly;
-								}
-							}
-							if(valueSelect.value == 'pressureCo2')
-							{
-								document.getElementById('locationPicker').style.visibility = "hidden";
-								myChart.data.datasets[0].label = "Pressure";
-								myChart.data.datasets[0].yAxisID = 'pressure';
-								myChart.data.datasets[1].label = "CO2";
-								myChart.data.datasets[1].yAxisID = 'co2';
-
-								myChart.data.datasets[0].data = pressureWeekly;
-								myChart.data.datasets[1].data = co2Weekly;
-							}
-							myChart.data.labels = weeklyLabels;
-							myChart.update();
-						}
-						if (timelineSelect.value == 'month')
-						{
-							if (valueSelect.value = 'tempHumidity')
-							{
-								document.getElementById('locationPicker').style.visibility = "visible";
-								myChart.data.datasets[0].label = "Temperature";
-								myChart.data.datasets[0].yAxisID = 'temp';
-								myChart.data.datasets[1].label = "Humidity";
-								myChart.data.datasets[1].yAxisID = 'humidity';
-
-								if (locationSelect.value == 'base')
-								{
-									myChart.data.datasets[0].data = tempBaseMonthly;
-									myChart.data.datasets[1].data = humidityBaseMonthly;
-								}
-								if (locationSelect.value == 'inside')
-								{
-									myChart.data.datasets[0].data = tempInsideMonthly;
-									myChart.data.datasets[1].data = humidityInsideMonthly;
-								}
-								if (locationSelect.value == 'outside')
-								{
-									myChart.data.datasets[0].data = tempOutsideMonthly;
-									myChart.data.datasets[1].data = humidityOutsideMonthly;
-								}
-							}
-							if (valueSelect.value == 'pressureCo2')
-							{
-								document.getElementById('locationPicker').style.visibility = "hidden";
-								myChart.data.datasets[0].label = "Pressure";
-								myChart.data.datasets[0].yAxisID = 'pressure';
-								myChart.data.datasets[1].label = "CO2";
-								myChart.data.datasets[1].yAxisID = 'co2';
-
-								myChart.data.datasets[0].data = pressureMonthly;
-								myChart.data.datasets[1].data = co2Monthly;
-							}
-							myChart.data.labels = monthlyLabels;
-							myChart.update();
-						}
-						if (timelineSelect.value == 'year')
-						{
-							if (valueSelect.value = 'tempHumidity')
-							{
-								document.getElementById('locationPicker').style.visibility = "visible";
-								myChart.data.datasets[0].label = "Temperature";
-								myChart.data.datasets[0].yAxisID = 'temp';
-								myChart.data.datasets[1].label = "Humidity";
-								myChart.data.datasets[1].yAxisID = 'humidity';
-
-								if (locationSelect.value == 'base')
-								{
-									myChart.data.datasets[0].data = tempBaseYearly;
-									myChart.data.datasets[1].data = humidityBaseYearly;
-								}
-								if (locationSelect.value == 'inside')
-								{
-									myChart.data.datasets[0].data = tempInsideYearly;
-									myChart.data.datasets[1].data = humidityInsideYearly;
-								}
-								if (locationSelect.value == 'outside')
-								{
-									myChart.data.datasets[0].data = tempOutsideYearly;
-									myChart.data.datasets[1].data = humidityOutsideYearly;
-								}
-							}
-							if (valueSelect.value == 'pressureCo2')
-							{
-								document.getElementById('locationPicker').style.visibility = "hidden";
-								myChart.data.datasets[0].label = "Pressure";
-								myChart.data.datasets[0].yAxisID = 'pressure';
-								myChart.data.datasets[1].label = "CO2";
-								myChart.data.datasets[1].yAxisID = 'co2';
-
-								myChart.data.datasets[0].data = pressureYearly;
-								myChart.data.datasets[1].data = co2Yearly;
-							}
-							myChart.data.labels = yearlyLabels;
-							myChart.update();
-						}
+						myChart.update(); 
 					}
-					
                 </script>
             </div>
-
         </div>
-
     </div>
-<!-- colour for humidity: #bb9c00 -->
-<!-- colour for temperature: #bb7600 -->
 {% endblock %}
 
 {% block footer %}{% endblock %}

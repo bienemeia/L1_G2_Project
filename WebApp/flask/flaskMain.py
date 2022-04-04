@@ -4,7 +4,7 @@ from helper_functions import process, firebase
 from flask import Flask, Markup, render_template
 import time
 import sqlite3
-import pyrebase
+#import pyrebase
 
 HIVE_ID = 1
 
@@ -18,8 +18,8 @@ meia_config = {
   "storageBucket": "testhive-2bca5.appspot.com"
 }
 # Initialize Firebase DB
-hive_firebase = pyrebase.initialize_app(meia_config)
-hive_db = hive_firebase.database()
+# hive_firebase = pyrebase.initialize_app(meia_config)
+# hive_db = hive_firebase.database()
 
 # Open connection to database
 db = sqlite3.connect("../hiveDB.db")
@@ -33,10 +33,15 @@ currentValues = cursor.execute(''' SELECT tempBase, tempInside, tempOutside,
   humidityBase, humidityInside, humidityOutside,
   pressure, co2 from dailyDB WHERE time=? ''', (now,)).fetchone()
   
-heaterStatus = firebase.getHeaterStatus(hive_db, HIVE_ID)
-fanStatus = firebase.getFanStatus(hive_db, HIVE_ID)
-flapperStatus = firebase.getFlapperStatus(hive_db, HIVE_ID)
-testStatus = firebase.getTestLed1Status(hive_db, HIVE_ID)
+# heaterStatus = firebase.getHeaterStatus(hive_db, HIVE_ID)
+# fanStatus = firebase.getFanStatus(hive_db, HIVE_ID)
+# flapperStatus = firebase.getFlapperStatus(hive_db, HIVE_ID)
+# testStatus = firebase.getTestLed1Status(hive_db, HIVE_ID)
+
+heaterStatus = False
+fanStatus = False
+flapperStatus = False
+testStatus = False
 
 
 # Get current values to display
