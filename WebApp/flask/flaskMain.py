@@ -102,7 +102,7 @@ def data():
   return render_template('data.html', currentPressure=pressure, currentCo2=co2,
                           currentTempBase=tempBase, currentHumidityBase=humidityBase,
                           currentTempInside=tempInside, currentHumidityInside=humidityInside,
-                          currentTempOutside=tempOutside, currentHumidityOutside=humidityOutside, 
+                          currentTempOutside=tempOutside, currentHumidityOutside=humidityOutside,
                           dailyLabels=dailyValues["time"], weeklyLabels=weeklyValues["dayHour"],
                           monthlyLabels=monthlyValues["dayHour"], yearlyLabels=yearlyValues["date"],
                           dailyTempBaseValues=dailyValues["tempBase"], weeklyTempBaseValues=weeklyValues["tempBase"],
