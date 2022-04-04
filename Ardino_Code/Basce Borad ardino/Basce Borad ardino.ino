@@ -31,11 +31,13 @@ SoftWire sw(sdaPin, sclPin);
 Soft_DFRobot_SHT3x tempSensor( &sw,/*address=*/0x45,/*RST=*/4);
 
 
-//state vars
+//sensor vars
 int currTemp = 0;
 uint16_t currHumidty = 0;
-int iceStatus[4] = {0,0,0,0};
+int iceStatus[4] = { 0,0,0,0 };
 bool heatStatus = false;
+
+
 
 byte regRequest = 0;
 
@@ -73,10 +75,10 @@ void setup() {
   pinMode(LED4,OUTPUT);
   pinMode(DETECTOR4,INPUT);
 
-  digitalWrite(LED1,LOW);
-  digitalWrite(LED2,LOW);
-  digitalWrite(LED3,LOW);
-  digitalWrite(LED4,LOW);
+  digitalWrite(LED1,HIGH);
+  digitalWrite(LED2,HIGH);
+  digitalWrite(LED3,HIGH);
+  digitalWrite(LED4,HIGH);
 
   //relay
   pinMode(RELAY,OUTPUT);
@@ -88,11 +90,12 @@ void setup() {
   //tests
   testHeater();
 
+/*
   while(!testIceSensor()){
     Serial.println("Ice Sensor Error");
     blinkIceSensorError();
   }
-
+*/
    //TempSensor
   while (tempSensor.begin() != 0) {
     Serial.println("Failed to Initialize the chip, please confirm the wire connection");
