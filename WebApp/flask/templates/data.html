@@ -7,18 +7,58 @@
 {% block content %}
     <div class="data-box">
         <div class="header">
-            <div>
-                <h4>Temperature</h4>
-                <p>current temperature</p>
-                <var id="tempBase">{{ currentTemp }}<span>℃</span></var>
-                <a href="/"><i class="fas fa-bars"></i></a>
+            <div class="left">
+                <div class="header">
+                    <div class="title">
+                        <h4>Temperature</h4>
+                        <p>current temperature</p>
+                    </div>
+                    <div class="content">
+                        <div>
+                            <h4>Bottom Board</h4>
+                            <var>{{ currentTempBase }}</var><span>℃</span>
+                        </div>
+                        <div>
+                            <h4>Inside Hive</h4>
+                            <var>{{ currentTempInside }}</var><span>℃</span>
+                        </div>
+                        <div>
+                            <h4>Outside</h4>
+                            <var>{{ currentTempOutside }}</var><span>℃</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <div class="title">
+                        <h4>Humidity</h4>
+                        <p>current humidity</p>
+                    </div>
+                    <div class="content">
+                        <div>
+                            <var>{{ currentHumidityBase }}</var><span>%</span>
+                        </div>
+                        <div>
+                            <var>{{ currentHumidityInside }}</var><span>%</span>
+                        </div>
+                        <div>
+                            <var>{{ currentHumidityOutside }}</var><span>%</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h4>Humidity</h4>
-                <p>current humidity</p>
-                <var id="humidityBase">{{ currentHumidity }}<span>%</span></var>
-                <a href="/"><i class="fas fa-bars"></i></a>
+            <div class="right">
+                <div>
+                    <h4>Pressure</h4>
+                    <p>current pressure</p>
+                    <var>{{ currentPressure }}</var><span>kPa</span>
+                </div>
+                <div>
+                    <h4>CO2</h4>
+                    <p>current co2</p>
+                    <var>{{ currentCo2 }}</var><span></span>
+                </div>
             </div>
+
         </div>
         <div class="footer">
             <div class="header">

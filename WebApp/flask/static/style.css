@@ -722,70 +722,183 @@ footer {
 .data-box > .header {
     position: relative;
     display: block;
-    border-radius: 50px;
-    border: 8px solid orange;
-    width: 800px;
-    height: 200px;
-    margin: 20px auto;
+    width: 920px;
+    height: 260px;
 }
 
-.data-box > .header > div {
+.data-box > .header > .left {
+    position: relative;
+    display: inline-block;
+    border-radius: 50px;
+    border: 8px solid orange;
+    width: 650px;
+    height: 200px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.data-box > .header > .left > div {
+    display: block;
+    position: relative;
+    height: calc(50% - 1px);
+}
+
+
+.data-box > .header > .left > div > .title {
+    position: relative;
+    display: inline-block;
+    width: 180px;
+    height: 100%;
+    border-right: 1px solid lightgrey;
+}
+
+.data-box > .header > .left > div > .title > h4 {
+    display: block;
+    position: relative;
+    font-size: 23px;
+    font-weight: bold;
+    color: #383838;
+    text-align: center;
+    margin-top: 18px;
+}
+
+.data-box > .header > .left > div > .title > p {
+    display: block;
+    position: relative;
+    font-size: 15px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.data-box > .header > .left > div > .content {
+    display: inline-block;
+    position: absolute;
+    width: calc(100% - 181px);
+    top: 0;
+    height: 100%;
+}
+
+.data-box > .header > .left > div > .content > div {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 33%;
+    height: 100%;
+    text-align: center;
+}
+
+.data-box > .header > .left > div > .content > div:last-of-type {
+    position: absolute;
+    top: 0;
+    left: 66%;
+}
+
+.data-box > .header > .left > div > .content > div > h4 {
+    display: block;
+    position: relative;
+    font-size: 20px;
+    font-weight: bold;
+    color: #383838;
+    margin-top: 15px;
+}
+
+.data-box > .header > .left > div > .content > div > var {
+    display: inline-block;
+    position: relative;
+    font-size: 29px;
+    font-style: normal;
+    color: #383838;
+}
+
+.data-box > .header > .left > div > .content > div > span {
+    margin-left: 5px;
+    font-weight: bold;
+    font-size: 29px;
+}
+
+.data-box > .header > .left > .footer > .content > div > var {
+    line-height: 99px;
+}
+
+.data-box > .header > .right {
+    position: absolute;
+    display: inline-block;
+    border-radius: 50px;
+    border: 8px solid orange;
+    width: 200px;
+    height: 200px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+.data-box > .header > .right > div {
     position: relative;
     display: inline-block;
     top: 0;
     left: 0;
     width: 100%;
     height:49%;
-
+    text-align: center;
 }
 
-.data-box > .header > div:nth-of-type(1) {
+.data-box > .header > div > div {
+    position: relative;
+    display: inline-block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height:49%;
+}
+
+.data-box > .header > div > div:nth-of-type(1) {
     border-bottom: 1px solid lightgrey;
 }
 
-.data-box > .header > div > h4 {
+.data-box > .header > div > div > h4 {
     display: block;
     position: relative;
-    margin-top: 20px;
-    margin-left: 40px;
     font-size: 25px;
     font-weight: bold;
     color: #383838;
 }
 
-.data-box > .header > div > p {
-    display: inline-block;
+.data-box > .header > div > div > p {
+    display: block;
     position: relative;
-    margin-top: 5px;
-    margin-left: 40px;
     font-size: 15px;
 }
 
-.data-box > .header > div > var {
+.data-box > .header > div > div > var {
     display: inline-block;
     position: absolute;
-    top: 25px;
-    left: 330px;
-    font-size: 35px;
+    font-size: 27px;
     font-style: normal;
     color: #383838;
 }
 
-.data-box > .header > div > var > span {
+.data-box > .header > div > div > span {
     margin-left: 5px;
-    font-weight: bold;
+    font-weight: normal;
 }
 
-.data-box > .header > div > a {
-    position: absolute;
-    top: 33px;
-    right: 45px;
-    color: #FDAA39;
-}
 
-.data-box > .header > div > a > i {
-    display: block;
-    font-size: 35px;
+.data-box > .header > .right > div > h4 {
+    text-align: center;
+}
+.data-box > .header > .right > div > p {
+    position: relative;
+    margin: 0 auto;
+    text-align: center;
+}
+.data-box > .header > .right > div > var {
+    display: inline-block;
+    position: relative;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+.data-box > .header > .right > div > span {
+    font-size: 27px;
 }
 
 .data-box > .footer {
