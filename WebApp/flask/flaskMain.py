@@ -6,6 +6,8 @@ import time
 import sqlite3
 import pyrebase
 
+HIVE_ID = 1
+
 app = Flask(__name__)
 
 # Set up Firebase authentication
@@ -30,6 +32,12 @@ now = firebase.getTimeMinus1()
 currentValues = cursor.execute(''' SELECT tempBase, tempInside, tempOutside, 
   humidityBase, humidityInside, humidityOutside,
   pressure, co2 from dailyDB WHERE time=? ''', (now,)).fetchone()
+  
+heaterStatus = firebase.getHeaterStatus(hive_db, HIVE_ID)
+fanStatus = firebase.getFanStatus(hive_db, HIVE_ID)
+flapperStatus = firebase.getFlapperStatus(hive_db, HIVE_ID)
+testStatus = firebase.getTestLed1Status(hive_db, HIVE_ID)
+
 
 # Get current values to display
 tempBase = currentValues[0]
@@ -109,14 +117,23 @@ def data():
 
 @app.route("/tools")
 def tools():
-  return render_template('tools.html')
+  return render_template('tools.html', heaterStatus=heaterStatus, flapperStatus=flapperStatus, fanStatus=fanStatus, manualStatus=testStatus)
 
-@app.route("/updateFirebase")
-def updateFirebase(system):
-	if firebase.getSystemStatus(hive_db, 1, system):
-		firebase.pushSystemStatus(hive_db, 1, system, False)
-	else:
-		firebase.pushSystemStatus(hive_db, 1, system, True)
+# @app.route("/updateFirebase")
+# def updateFirebase(system):
+	# if firebase.getSystemStatus(hive_db, 1, system):
+		# firebase.pushSystemStatus(hive_db, 1, system, False)
+	# else:
+		# firebase.pushSystemStatus(hive_db, 1, system, True)
+		
+@app.route("/updateHeater")
+def updateHeater():
+	print("Hello")
+	return("nothing")
+	# if firebase.getHeaterStatus(hive_db, HIVE_ID):
+		# firebase.pushHeaterStatus(hive_db, HIVE_ID, False)
+	# else:
+		# firebase.pushHeaterStatus(hive_db, HIVE_ID, True)
 
 
 if __name__ == "__main__":

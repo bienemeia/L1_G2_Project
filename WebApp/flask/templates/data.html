@@ -23,7 +23,7 @@
         <div class="footer">
             <div class="header">
                 <h2>MEASUREMENTS</h2>
-                <select id="measurementPicker" selected="tempHumidity">
+                <select id="measurementPicker" selected="pressureCo2">
                     <option value="tempHumidity">Temperature/Humidity</option>
                     <option value="pressureCo2">Pressure/CO2</option>
                 </select>
@@ -323,6 +323,8 @@
 						myChart.data.labels = dailyLabels;
 						myChart.data.datasets[0].data = tempBaseDaily;
 						myChart.data.datasets[1].data = humidityBaseDaily;
+						//myChart.data.datasets[0].data = pressureDaily;
+						//myChart.data.datasets[1].data = co2Daily;
 						myChart.update();
 					});
 
