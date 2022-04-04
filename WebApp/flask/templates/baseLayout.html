@@ -7,29 +7,34 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-    <title>{% block title %}Hello World{% endblock %}</title>    
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <title>{% block title %}Hello World{% endblock %}</title>
     {% endblock %}
   </head>
   
   <header class="header">
     <a href="{{ url_for( 'index' ) }}" class="logo">
-      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAABmJLR0QA/wD/AP+gvaeTAAADQElEQVRoge2ay2sTURTGv3MnNGlARRDBNpOC1I0bH1DwLxAraHUjVNyI0taWBq2C7rquCEIeFOOyaqGCj0KtLly4UangVkTQaqbZiVoxTqJzjwspqDjJvG5M6/3tQs795vu4d3JOJgE0Gs1qhpp9wWrW7GfCJQAgxrl4pjTdzOs3LTAzyM6nxwk8/rsDzsY3W2N0BE4zfDQlME9sWldtb58Coe/vBbgfd4x+OrP4UbUX5YHtQqobku4C2N6g9BUJ0RcfeftCpR+hUtzOmnshaQGNwwLANpbyqZ1NH1DpSVlgO58eAGEOwEYfy9aD+HY1nz6vylfkR5qz3fEaVScZOB5KB5hOfOMTNGZ9jcobEHHgL5e7tsRi8hYDeyKSfC6Fcyg5Ui5FpBfdka4VzB4jJp81DstzMsYpydIEMN9AdreQxpNaweyJymckO/w1lzpGoKsAEo1qJUszmVmyAKBS6DCFNN55uITNzCfbM9b1sF5D7TDPwLDz6YsEmoKHsCFIENE1O5ee4BkYYYQC7zBf2bqhWvt+A+D9PpfOS5YDMJiEYxRB2OdvOd2Lt8WO0uDrTz6v+3N1kEU+hglVBB5SfB9pn8OEKgIPKb4CBxwmVBFoSPF0pKMaJlThZ0hpGFjBMKEKT0NK3cC1bNcuSfIOgHSk1tRRFsyH2zLWgluB6z1czZt9kuRjrJ6wANAhiR7ZOfOgW4FrYGZMQu0woYoEgILbm7Hw+jwnYxhMnrKWwmu5U8l2pgSJIoBeD+Wut2q9tjQEoNxIWTIPqQ4LAMnMkiWFM+ihtAwWrnWuO5wYLc0CmF15bedM9mexuSRGS55abOivh4JEsZLtTIXVaUSl0GEKxyiG1YngHkavIFGyc2YEUnWQiOTLrNKHeK2IDrzWWat92JXQO9yCfbgu/92R1n04ALoPtzI68FpH92G/6D7c4ug+HADdh1sZ74GJPiv0ERbPP516D8z8MJCVJsCMB15rvQd2nAsAPgQxpBIC3jPkWa/1ngMnTpdfSuHsAHATwHIQcxGzzIwZh+XOlf+MeCH0596fz6u9Ph/+V/r6U9o3hMVfXr0JradYP3xg5mEAFgALgodD6zVbX6PRaDQtxA8xoVl18mlHdwAAAABJRU5ErkJggg=="></a>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAABmJLR0QA/wD/AP+gvaeTAAADQElEQVRoge2ay2sTURTGv3MnNGlARRDBNpOC1I0bH1DwLxAraHUjVNyI0taWBq2C7rquCEIeFOOyaqGCj0KtLly4UangVkTQaqbZiVoxTqJzjwspqDjJvG5M6/3tQs795vu4d3JOJgE0Gs1qhpp9wWrW7GfCJQAgxrl4pjTdzOs3LTAzyM6nxwk8/rsDzsY3W2N0BE4zfDQlME9sWldtb58Coe/vBbgfd4x+OrP4UbUX5YHtQqobku4C2N6g9BUJ0RcfeftCpR+hUtzOmnshaQGNwwLANpbyqZ1NH1DpSVlgO58eAGEOwEYfy9aD+HY1nz6vylfkR5qz3fEaVScZOB5KB5hOfOMTNGZ9jcobEHHgL5e7tsRi8hYDeyKSfC6Fcyg5Ui5FpBfdka4VzB4jJp81DstzMsYpydIEMN9AdreQxpNaweyJymckO/w1lzpGoKsAEo1qJUszmVmyAKBS6DCFNN55uITNzCfbM9b1sF5D7TDPwLDz6YsEmoKHsCFIENE1O5ee4BkYYYQC7zBf2bqhWvt+A+D9PpfOS5YDMJiEYxRB2OdvOd2Lt8WO0uDrTz6v+3N1kEU+hglVBB5SfB9pn8OEKgIPKb4CBxwmVBFoSPF0pKMaJlThZ0hpGFjBMKEKT0NK3cC1bNcuSfIOgHSk1tRRFsyH2zLWgluB6z1czZt9kuRjrJ6wANAhiR7ZOfOgW4FrYGZMQu0woYoEgILbm7Hw+jwnYxhMnrKWwmu5U8l2pgSJIoBeD+Wut2q9tjQEoNxIWTIPqQ4LAMnMkiWFM+ihtAwWrnWuO5wYLc0CmF15bedM9mexuSRGS55abOivh4JEsZLtTIXVaUSl0GEKxyiG1YngHkavIFGyc2YEUnWQiOTLrNKHeK2IDrzWWat92JXQO9yCfbgu/92R1n04ALoPtzI68FpH92G/6D7c4ug+HADdh1sZ74GJPiv0ERbPP516D8z8MJCVJsCMB15rvQd2nAsAPgQxpBIC3jPkWa/1ngMnTpdfSuHsAHATwHIQcxGzzIwZh+XOlf+MeCH0596fz6u9Ph/+V/r6U9o3hMVfXr0JradYP3xg5mEAFgALgodD6zVbX6PRaDQtxA8xoVl18mlHdwAAAABJRU5ErkJggg==">
+        <span>Home of Beehive</span>
+    </a>
+
     <!-- These should be done in a grid fashion in order for them to spread out across the top -->
     <div class="header-right">
         <a class="active" href="{{ url_for( 'index' ) }}">Home</a>
-        <a href="#data">Data</a>
-        <a href="#tool">Tool</a>
+        <a href="{{ url_for( 'data' ) }}">Data</a>
+        <a href="{{ url_for( 'tools' ) }}">Tool</a>
         <a href="{{ url_for( 'video' ) }}">Video</a>
-        <a href="#more">More</a>  
+        <a href="{{ url_for( 'more' ) }}">More</a>
     </div>
     <div class="login">
-      <a class="login" href="{{ url_for( 'login' ) }}" style="color: white;">Log In</a>
+      <a href="{{ url_for( 'login' ) }}">LOGGING</a>
     </div>
   </header>
   
-  <body>
+  <main>
     <div id="content">{% block content %}{% endblock %}</div>
-  </body>
+  </main>
   <footer>
     <div id="footer">
       {% block footer %}

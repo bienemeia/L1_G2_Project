@@ -1,53 +1,73 @@
-# import sys
-# sys.path.append('../..')
-# from helper_functions import
+import sys
+sys.path.append('../..')
+from helper_functions import process, firebase
 from flask import Flask, Markup, render_template
 import time
+import sqlite3
 
 app = Flask(__name__)
 
-labels = [
-    'JAN', 'FEB', 'MAR', 'APR',
-    'MAY', 'JUN', 'JUL', 'AUG',
-    'SEP', 'OCT', 'NOV', 'DEC'
-]
+# Open connection to database
+db = sqlite3.connect("../hiveDB.db")
+cursor = process.getDBCursor(db)
 
-values = [
-    967.67, 1190.89, 1079.75, 1349.19,
-    2328.91, 2504.28, 2873.83, 4764.87,
-    4349.29, 6458.30, 9907, 16297
-]
+# Get current time - 1
+now = firebase.getTimeMinus1()
 
-colors = [
-    "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
-    "#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1",
-    "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
+# Get values from now
+currentValues = cursor.execute(''' SELECT tempBase, tempInside, tempOutside, 
+  humidityBase, humidityInside, humidityOutside,
+  pressure, co2 from dailyDB WHERE time=? ''', (now,)).fetchone()
+
+tempBase = currentValues[0]
+tempInside = currentValues[1]
+tempOutside = currentValues[2]
+humidityBase = currentValues[3]
+humidityInside = currentValues[4]
+humidityOutside = currentValues[5]
+pressure = currentValues[6]
+co2 = currentValues[7]
+
+dailyValues = process.getDailyArray(cursor)
+
 
 @app.route("/")
 def index():
-	names = "Meia, Graham and Boshen"
-	return render_template('index.html', names=names)
+  # We can grab the values from firebase using python, and insert them into the html pretty easily
+  # Still need to decide how to update regularly
+  names = "Meia, Graham and Boshen"
+  return render_template('index.html', names=names)
   
 @app.route("/bees")
 def bees():
-	line_labels=labels
-	line_values=values
-	return render_template('bees.html', max=17000, labels=line_labels, values=line_values)
+  return render_template('bees.html', labels=dailyValues["time"], values=dailyValues["tempBase"])
 
 @app.route("/login")
 def login():
-	# Login logic here
-	return render_template('login.html')
+  # Login logic here
+  return render_template('login.html')
 
 @app.route("/video")
 def video():
-	# video logic here
-	return render_template('video.html')
+  # video logic here
+  return render_template('video.html')
 
-# @app.route("/background_test")
-# def test():
-  # print("Hello")
-  
+@app.route("/more")
+def more():
+  return render_template('more.html')
+
+@app.route("/permission")
+def permission():
+  return render_template('permission.html')
+
+@app.route("/data")
+def data():
+  return render_template('data.html', tempInside=tempInside, humidityInside=humidityInside)
+
+@app.route("/tools")
+def tools():
+  return render_template('tools.html')
+
 if __name__ == "__main__":
-	initializing_network()
-	app.run(debug=True, host='0.0.0.0')
+  # initializing_network()
+  app.run(debug=True, host='0.0.0.0',port=8080)
