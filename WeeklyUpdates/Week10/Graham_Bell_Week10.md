@@ -1,7 +1,7 @@
 ## Weekly Individual Project Update Report
 ### Group number: L1_G2
 ### Student name: Graham C. Bell
-### Week: 21 Mar 28th - Mar 28th
+### Week: 10 Mar 21th - Mar 28th
 ___
 
 Sorry for posting this one late, I was communicating with the group about the lib and I think that turned out well. But I forgot to post this wiper.
