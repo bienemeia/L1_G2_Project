@@ -9,8 +9,8 @@ I spent about 10h on the project this week.
 
 2. **Give rough breakdown of hours spent on 1-3 of the following:***
    (meetings, information gathering, design, research, brainstorming, evaluating options, prototyping options, writing/documenting, refactoring, testing, software implementation, hardware implementation)
-	2. Top Item: hardware implementation, 9   
-	1. Second Item: software implementation, 1
+   1. Top Item: hardware implementation, 9   
+   2. Second Item: software implementation, 1
   
 3. ***What did you accomplish this week?*** _(Be specific)_
   - I put the system in a bee hive.
