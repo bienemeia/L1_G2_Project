@@ -7,7 +7,7 @@
 {% block content %}
 <style>
 	/* Styling for toggle switches */
-	
+
 	.switch {
 	  position: relative;
 	  display: inline-block;
@@ -76,7 +76,7 @@
                 <h3>Heater</h3>
                 <p>Turn on/off the heater</p>
             </div>
-     		<a class="out" href=# id=heater onclick="change_status(this,'heat_prompt')"></a>       
+     		<!-- <a class="out" href=# id=heater onclick="change_status(this,'heat_prompt')"></a>        -->
 <!--             <label class="switch">
             	<form action="/updateHeater" method="POST">
 					<input type="checkbox" href=# id=heater onclick="change_status(this,'heater_prompt')">
@@ -84,7 +84,7 @@
 				</form>
             </label>
         	</form> -->
-            <!-- <i href=# id=heater class="out" onclick="change_status(this,'heat_prompt'), updateFirebase({{'heaterStatus'}})"><div class="inside"></div></i> -->
+            <i href=# id=heater class="out" onclick="change_status(this,'heat_prompt')"><div class="inside"></div></i>
 
         </div>
         <div class="onoff">
@@ -93,11 +93,7 @@
                 <h3>Vent</h3>
                 <p>Open/close the flapper</p>
             </div>
-            <label class="switch">
-				<input type="checkbox" onclick="change_status(this,'ventilation_prompt')" href=# id=flapper>
-				<span class="slider round"></span>
-            </label>
-            <!-- <i class="out" onclick="change_status(this,'Ventilation_prompt'), updateFirebase({{'flapperStatus'}})"><div class="inside"></div></i> -->
+            <i class="out" onclick="change_status(this,'ventilation_prompt'), updateFirebase({{'flapperStatus'}})"><div class="inside"></div></i>
         </div>
         <div class="onoff">
             <i class="fas fa-fan"></i>
@@ -106,11 +102,7 @@
                 <p>Placeholder for future work</p>
                 <p>Currently unlinked</p>
             </div>
-            <label class="switch">
-				<input type="checkbox" onclick="change_status(this,'fan_prompt')" href=# id=fan>
-				<span class="slider round"></span>
-            </label>
-            <!-- <i class="out" onclick="change_status(this,'Fan_prompt'), updateFirebase({{'fanStatus'}})"><div class="inside"></div></i> -->
+            <i class="out" onclick="change_status(this,'fan_prompt'), updateFirebase({{'fanStatus'}})"><div class="inside"></div></i>
         </div>
         <div class="onoff">
             <i class="fas fa-fingerprint"></i>
@@ -119,11 +111,7 @@
                 <p>Placeholder for future work</p>
                 <p>Currently unlinked.</p>
             </div>
-            <label class="switch">
-				<input type="checkbox" onclick="change_status(this,'controlling_prompt')" href=# id=manual>
-				<span class="slider round"></span>
-            </label>
-            <!-- <i class="out" onclick="change_status(this,'Controlling_prompt'), updateFirebase({{'testLed1'}})"><div class="inside"></div></i> -->
+            <i class="out" onclick="change_status(this,'controlling_prompt'), updateFirebase({{'testLed1'}})"><div class="inside"></div></i>
         </div>
 
     </div>
@@ -131,10 +119,10 @@
         <i class="fas fa-user"></i>
         <div>
             <h3>BEE HIVE STATUS</h3>
-            <p>Heat Systems: <span id="heat_prompt">Off</span></p>
-            <p>Ventilation Systems: <span id="ventilation_prompt">Off</span></p>
-            <p>Fan Systems: <span id="fan_prompt">Off</span></p>
-            <p>Controlling Systems: <span id="controlling_prompt">Off</span></p>
+            <p>Heat Systems: <span id="heat_prompt">On</span></p>
+            <p>Ventilation Systems: <span id="ventilation_prompt">On</span></p>
+            <p>Fan Systems: <span id="fan_prompt">On</span></p>
+            <p>Controlling Systems: <span id="controlling_prompt">On</span></p>
             <p>Video Systems: <span id="video_prompt">On</span></p>
         </div>
         <a class="tovideo" href="{{ url_for( 'video' ) }}">GO TO VIDEO</a>
@@ -144,15 +132,9 @@
 <script type=text/javascript>
 	window.addEventListener('load', (event) => {
 						
-					});
-					
-	// const heaterToggle = document.getElementById('heater');
-	// heaterToggle.addEventListener('click', (event) => {
-	// 	change_status(this,'heater_prompt')
-	// });
-	
+					});	
     $(function() {
-      $('a#heater').on('click', function() {
+      $('i#heater').on('click', function() {
         $.getJSON('/updateHeater',
             function(data) {
 				// do nothing
