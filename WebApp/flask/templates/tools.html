@@ -6,6 +6,8 @@
 
 {% block content %}
 <style>
+	/* Styling for toggle switches */
+	
 	.switch {
 	  position: relative;
 	  display: inline-block;
@@ -74,10 +76,14 @@
                 <h3>Heater</h3>
                 <p>Turn on/off the heater</p>
             </div>
-            <label class="switch">
-				<input type="checkbox" onclick="change_status(this,'heat_prompt')" href=# id=heater>
-				<span class="slider round"></span>
+     		<a class="out" href=# id=heater onclick="change_status(this,'heat_prompt')"></a>       
+<!--             <label class="switch">
+            	<form action="/updateHeater" method="POST">
+					<input type="checkbox" href=# id=heater onclick="change_status(this,'heater_prompt')">
+					<span class="slider round"></span>
+				</form>
             </label>
+        	</form> -->
             <!-- <i href=# id=heater class="out" onclick="change_status(this,'heat_prompt'), updateFirebase({{'heaterStatus'}})"><div class="inside"></div></i> -->
 
         </div>
@@ -88,7 +94,7 @@
                 <p>Open/close the flapper</p>
             </div>
             <label class="switch">
-				<input type="checkbox" onclick="change_status(this,'ventilation_prompt')">
+				<input type="checkbox" onclick="change_status(this,'ventilation_prompt')" href=# id=flapper>
 				<span class="slider round"></span>
             </label>
             <!-- <i class="out" onclick="change_status(this,'Ventilation_prompt'), updateFirebase({{'flapperStatus'}})"><div class="inside"></div></i> -->
@@ -101,7 +107,7 @@
                 <p>Currently unlinked</p>
             </div>
             <label class="switch">
-				<input type="checkbox" onclick="change_status(this,'fan_prompt')">
+				<input type="checkbox" onclick="change_status(this,'fan_prompt')" href=# id=fan>
 				<span class="slider round"></span>
             </label>
             <!-- <i class="out" onclick="change_status(this,'Fan_prompt'), updateFirebase({{'fanStatus'}})"><div class="inside"></div></i> -->
@@ -114,7 +120,7 @@
                 <p>Currently unlinked.</p>
             </div>
             <label class="switch">
-				<input type="checkbox" onclick="change_status(this,'controlling_prompt')">
+				<input type="checkbox" onclick="change_status(this,'controlling_prompt')" href=# id=manual>
 				<span class="slider round"></span>
             </label>
             <!-- <i class="out" onclick="change_status(this,'Controlling_prompt'), updateFirebase({{'testLed1'}})"><div class="inside"></div></i> -->
@@ -140,22 +146,20 @@
 						
 					});
 					
-	const heaterToggle = document.getElementById('heater');
-	heaterToggle.addEventListener('click', (event) => {
-		change_status(this,'ventilation_prompt')
-	});
+	// const heaterToggle = document.getElementById('heater');
+	// heaterToggle.addEventListener('click', (event) => {
+	// 	change_status(this,'heater_prompt')
+	// });
 	
-        $(function() {
-          $('input#heater').on('click', function(e) {
-            e.preventDefault()
-            $.
-            $.getJSON('/updateHeater',
-                function(data) {
-					// do nothing
-            });
-            return false;
-          });
+    $(function() {
+      $('a#heater').on('click', function() {
+        $.getJSON('/updateHeater',
+            function(data) {
+				// do nothing
         });
+        return false;
+      });
+    });
 </script>
 
 {% endblock %}
