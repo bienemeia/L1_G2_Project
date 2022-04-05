@@ -47,9 +47,9 @@ def processWeeklyAverages(cursor, dayOfWeek):
         avgTempBase = round(sumTempBase / 60, 2)
         avgTempInside = round(sumTempInside / 60, 2)
         avgTempOutside = round(sumTempOutside / 60, 2)
-        avgHumidBase = round(sumHumidBase / 60, 2)
-        avgHumidInside = round(sumHumidInside / 60, 2)
-        avgHumidOutside = round(sumHumidOutside / 60, 2)
+        avgHumidBase = round(sumHumidBase / 60)
+        avgHumidInside = round(sumHumidInside / 60)
+        avgHumidOutside = round(sumHumidOutside / 60)
         avgCo2 = round(sumCo2 / 60, 2)
         avgPressure = round(sumPressure / 60, 2)
 
@@ -211,6 +211,87 @@ def getDailyArray(cursor):
         values["humidityOutside"].append(row[7])
         values["pressure"].append(row[8])
         values["co2"].append(row[9])
+
+    return values
+
+# Get array of weekly data
+def getWeeklyArray(cursor):
+    values = {'dayHour': [], 'hour': [], 'date': [], 'tempBase': [], 'tempInside': [], 'tempOutside': [],
+              'humidityBase': [], 'humidityInside': [], 'humidityOutside': [],
+              'pressure': [], 'co2': []}
+    try:
+        tempBase = cursor.execute('''SELECT dayHour, hour, date, tempBase, tempInside, tempOutside,
+                                    humidityBase, humidityInside, humidityOutside,
+                                    pressure, co2 FROM weeklyDB ORDER BY date, dayHour''').fetchall()
+    except sqlite3.Error as er:
+        print("SQLite error: " + er)
+
+    for row in tempBase:
+        values["dayHour"].append(row[0])
+        values["hour"].append(row[1])
+        values["date"].append(row[2])
+        values["tempBase"].append(row[3])
+        values["tempInside"].append(row[4])
+        values["tempOutside"].append(row[5])
+        values["humidityBase"].append(row[6])
+        values["humidityInside"].append(row[7])
+        values["humidityOutside"].append(row[8])
+        values["pressure"].append(row[9])
+        values["co2"].append(row[10])
+
+    return values
+
+
+# Get array of monthly data
+def getMonthlyArray(cursor):
+    values = {'dayHour': [], 'hour': [], 'date': [], 'tempBase': [], 'tempInside': [], 'tempOutside': [],
+              'humidityBase': [], 'humidityInside': [], 'humidityOutside': [],
+              'pressure': [], 'co2': []}
+    try:
+        tempBase = cursor.execute('''SELECT dayHour, hour, date, tempBase, tempInside, tempOutside,
+                                    humidityBase, humidityInside, humidityOutside,
+                                    pressure, co2 FROM monthlyDB ORDER BY date, dayHour''').fetchall()
+    except sqlite3.Error as er:
+        print("SQLite error: " + er)
+
+    for row in tempBase:
+        values["dayHour"].append(row[0])
+        values["hour"].append(row[1])
+        values["date"].append(row[2])
+        values["tempBase"].append(row[3])
+        values["tempInside"].append(row[4])
+        values["tempOutside"].append(row[5])
+        values["humidityBase"].append(row[6])
+        values["humidityInside"].append(row[7])
+        values["humidityOutside"].append(row[8])
+        values["pressure"].append(row[9])
+        values["co2"].append(row[10])
+
+    return values
+
+
+# Get array of yearly data
+def getYearlyArray(cursor):
+    values = {'date': [], 'tempBase': [], 'tempInside': [], 'tempOutside': [],
+              'humidityBase': [], 'humidityInside': [], 'humidityOutside': [],
+              'pressure': [], 'co2': []}
+    try:
+        tempBase = cursor.execute('''SELECT date, tempBase, tempInside, tempOutside,
+                                    humidityBase, humidityInside, humidityOutside,
+                                    pressure, co2 FROM yearlyDB ORDER BY date''').fetchall()
+    except sqlite3.Error as er:
+        print("SQLite error: " + er)
+
+    for row in tempBase:
+        values["date"].append(row[0])
+        values["tempBase"].append(row[1])
+        values["tempInside"].append(row[2])
+        values["tempOutside"].append(row[3])
+        values["humidityBase"].append(row[4])
+        values["humidityInside"].append(row[5])
+        values["humidityOutside"].append(row[6])
+        values["pressure"].append(row[7])
+        values["co2"].append(row[8])
 
     return values
 

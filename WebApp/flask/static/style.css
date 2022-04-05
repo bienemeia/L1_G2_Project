@@ -417,6 +417,12 @@ footer {
     background: #efefef;
     border-radius: 20px;
     text-align: center;
+    transition: background-color .1s linear;
+    cursor: pointer;
+}
+
+.video-box > .video-left:hover {
+    background-color: #eaeaea;
 }
 
 .video-box > .video-left > i {
@@ -444,6 +450,16 @@ footer {
     font-size: 25px;
 }
 
+.video-box > .video-left > video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+    border-radius: 20px;
+}
+
 .video-box > .video-right {
     position: absolute;
     top: 0;
@@ -459,6 +475,22 @@ footer {
     background: #efefef;
     border-radius: 20px;
     text-align: center;
+    cursor: pointer;
+}
+
+.video-box > .video-right > .top > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+    border-radius: 20px;
+}
+
+.video-box > .video-right > .top:hover {
+    background-color: #eaeaea;
+    transition: background-color .1s linear;
 }
 
 .video-box > .video-right > .top > i {
@@ -574,6 +606,21 @@ footer {
     margin-left: 15px;
 }
 
+.tool-box > .left > .onoff > a:nth-of-type(1) {
+    position: absolute;
+    display: inline-block;
+    font-size: 30px;
+    color: #FDAA39;
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    line-height: 80px;
+    text-align: center;
+    margin-top: 30px;
+    margin-left: 15px;
+}
+
 .tool-box > .left > .onoff > div {
     position: relative;
     display: inline-block;
@@ -604,12 +651,27 @@ footer {
     position: relative;
     display: inline-block;
     top: 15px;
-    right: -100px;
+    right: -160px;
     font-size: 40px;
-    color: #FDAA39;
-    width: 120px;
-    height: 80px;
+    background-color: #FDAA39;
+    width: 50px;
+    height: 30px;
     text-align: center;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.tool-box > .left > .onoff > i:nth-of-type(2) > div {
+    position: relative;
+    display: block;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    /*border: 1px solid white;*/
+    top: 5px;
+    left: 25px;
+    transition: left .1s linear;
 }
 
 .tool-box > .right {
@@ -675,70 +737,183 @@ footer {
 .data-box > .header {
     position: relative;
     display: block;
-    border-radius: 50px;
-    border: 8px solid orange;
-    width: 800px;
-    height: 200px;
-    margin: 20px auto;
+    width: 920px;
+    height: 260px;
 }
 
-.data-box > .header > div {
+.data-box > .header > .left {
+    position: relative;
+    display: inline-block;
+    border-radius: 50px;
+    border: 8px solid orange;
+    width: 650px;
+    height: 200px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.data-box > .header > .left > div {
+    display: block;
+    position: relative;
+    height: calc(50% - 1px);
+}
+
+
+.data-box > .header > .left > div > .title {
+    position: relative;
+    display: inline-block;
+    width: 180px;
+    height: 100%;
+    border-right: 1px solid lightgrey;
+}
+
+.data-box > .header > .left > div > .title > h4 {
+    display: block;
+    position: relative;
+    font-size: 23px;
+    font-weight: bold;
+    color: #383838;
+    text-align: center;
+    margin-top: 18px;
+}
+
+.data-box > .header > .left > div > .title > p {
+    display: block;
+    position: relative;
+    font-size: 15px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.data-box > .header > .left > div > .content {
+    display: inline-block;
+    position: absolute;
+    width: calc(100% - 181px);
+    top: 0;
+    height: 100%;
+}
+
+.data-box > .header > .left > div > .content > div {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 33%;
+    height: 100%;
+    text-align: center;
+}
+
+.data-box > .header > .left > div > .content > div:last-of-type {
+    position: absolute;
+    top: 0;
+    left: 66%;
+}
+
+.data-box > .header > .left > div > .content > div > h4 {
+    display: block;
+    position: relative;
+    font-size: 20px;
+    font-weight: bold;
+    color: #383838;
+    margin-top: 15px;
+}
+
+.data-box > .header > .left > div > .content > div > var {
+    display: inline-block;
+    position: relative;
+    font-size: 29px;
+    font-style: normal;
+    color: #383838;
+}
+
+.data-box > .header > .left > div > .content > div > span {
+    margin-left: 5px;
+    font-weight: bold;
+    font-size: 29px;
+}
+
+.data-box > .header > .left > .footer > .content > div > var {
+    line-height: 99px;
+}
+
+.data-box > .header > .right {
+    position: absolute;
+    display: inline-block;
+    border-radius: 50px;
+    border: 8px solid orange;
+    width: 200px;
+    height: 200px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+.data-box > .header > .right > div {
     position: relative;
     display: inline-block;
     top: 0;
     left: 0;
     width: 100%;
     height:49%;
-
+    text-align: center;
 }
 
-.data-box > .header > div:nth-of-type(1) {
+.data-box > .header > div > div {
+    position: relative;
+    display: inline-block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height:49%;
+}
+
+.data-box > .header > div > div:nth-of-type(1) {
     border-bottom: 1px solid lightgrey;
 }
 
-.data-box > .header > div > h4 {
+.data-box > .header > div > div > h4 {
     display: block;
     position: relative;
-    margin-top: 20px;
-    margin-left: 40px;
     font-size: 25px;
     font-weight: bold;
     color: #383838;
 }
 
-.data-box > .header > div > p {
-    display: inline-block;
+.data-box > .header > div > div > p {
+    display: block;
     position: relative;
-    margin-top: 5px;
-    margin-left: 40px;
     font-size: 15px;
 }
 
-.data-box > .header > div > var {
+.data-box > .header > div > div > var {
     display: inline-block;
     position: absolute;
-    top: 25px;
-    left: 330px;
-    font-size: 35px;
+    font-size: 27px;
     font-style: normal;
     color: #383838;
 }
 
-.data-box > .header > div > var > span {
+.data-box > .header > div > div > span {
     margin-left: 5px;
-    font-weight: bold;
+    font-weight: normal;
 }
 
-.data-box > .header > div > a {
-    position: absolute;
-    top: 33px;
-    right: 45px;
-    color: #FDAA39;
-}
 
-.data-box > .header > div > a > i {
-    display: block;
-    font-size: 35px;
+.data-box > .header > .right > div > h4 {
+    text-align: center;
+}
+.data-box > .header > .right > div > p {
+    position: relative;
+    margin: 0 auto;
+    text-align: center;
+}
+.data-box > .header > .right > div > var {
+    display: inline-block;
+    position: relative;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+.data-box > .header > .right > div > span {
+    font-size: 27px;
 }
 
 .data-box > .footer {
@@ -746,7 +921,7 @@ footer {
     top: 0;
     margin: 20px auto;
     width: 95%;
-    height: 280px;
+    height: 375px;
     border: 2px solid lightgrey;
     border-radius: 28px;
 }
@@ -797,6 +972,7 @@ footer {
     width: 55%;
     height: 30px;
     margin: 0 auto;
+    padding-bottom: 20px;
 }
 
 .data-box > .footer > .main > div {
@@ -842,8 +1018,8 @@ footer {
 .data-box > .footer > .footer {
     position: relative;
     display: block;
-    width: 95%;
-    height: 160px;
+    width: 90%;
+    height: 250px;
     margin: 0 auto;
 }
 
@@ -857,8 +1033,19 @@ footer {
 .data-box > .footer > .footer > canvas {
     position: absolute;
     display: block;
-    left: 32px;
     bottom: 25px;
-    width: 828px;
-    height: 130px;
+    width: 800px;
+    height: 160px;
 }
+
+/*.out {*/
+/*    position: absolute;*/
+/*    display: inline-block;*/
+/*    top: 15px;*/
+/*    right: -100px;*/
+/*    font-size: 40px;*/
+/*    background-color: #FDAA39;*/
+/*    width: 120px;*/
+/*    height: 80px;*/
+/*    text-align: center;*/
+/*}*/

@@ -7,46 +7,514 @@
 {% block content %}
     <div class="data-box">
         <div class="header">
-            <div>
-                <h4>Temperature</h4>
-                    <p>inside hive</p>
-                    <var>{{ tempInside }}<span>℃</span></var>
-                    <a href="/"><i class="fas fa-bars"></i></a>
+            <div class="left">
+                <div class="header">
+                    <div class="title">
+                        <h4>Temperature</h4>
+                        <p>current temperature</p>
+                    </div>
+                    <div class="content">
+                        <div>
+                            <h4>Bottom Board</h4>
+                            <var>{{ currentTempBase }}</var><span>℃</span>
+                        </div>
+                        <div>
+                            <h4>Inside Hive</h4>
+                            <var>{{ currentTempInside }}</var><span>℃</span>
+                        </div>
+                        <div>
+                            <h4>Outside</h4>
+                            <var>{{ currentTempOutside }}</var><span>℃</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <div class="title">
+                        <h4>Humidity</h4>
+                        <p>current humidity</p>
+                    </div>
+                    <div class="content">
+                        <div>
+                            <var>{{ currentHumidityBase }}</var><span>%</span>
+                        </div>
+                        <div>
+                            <var>{{ currentHumidityInside }}</var><span>%</span>
+                        </div>
+                        <div>
+                            <var>{{ currentHumidityOutside }}</var><span>%</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h4>Humidity</h4>
-                <p>inside hive</p>
-                <var>{{ humidityInside }}<span>%</span></var>
-                <a href="/"><i class="fas fa-bars"></i></a>
+            <div class="right">
+                <div>
+                    <h4>Pressure</h4>
+                    <p>current pressure</p>
+                    <var>{{ currentPressure }}</var><span>kPa</span>
+                </div>
+                <div>
+                    <h4>CO2</h4>
+                    <p>current co2</p>
+                    <var>{{ currentCo2 }}</var><span></span>
+                </div>
             </div>
+
         </div>
         <div class="footer">
             <div class="header">
-                <h2>TEMPRATURE/HUMIDITY CARVE</h2>
-                <select>
-                    <option>Monthly</option>
-                    <option>Years</option>
-                    <option>Day</option>
+                <h2>MEASUREMENTS</h2>
+                <select id="measurementPicker" selected="pressureCo2">
+                    <option value="tempHumidity">Temperature/Humidity</option>
+                    <option value="pressureCo2">Pressure/CO2</option>
                 </select>
-                <time>From Nov 2021 to Apr 2022</time>
+                <select id="timelinePicker" selected="day">
+                    <option value="day">Day</option>
+                    <option value="week">Week</option>
+                    <option value="month">Month</option>
+                    <option value="year">Year</option>
+                </select>
+                <select id="locationPicker" selected="base">
+                    <option value="base">Bottom board</option>
+                    <option value="inside">Inside hive</option>
+                    <option value="outside">Outside</option>
+                </select>
             </div>
             <div class="main">
-                <div>
-                    <div></div><span>Temperature</span>
-                </div>
-                <div>
-                    <div></div><span>Humidity</span>
-                </div>
             </div>
             <div class="footer">
-                <img src="/static/xy.png">
-                <canvas></canvas>
+                <canvas id="chart" style="position: center; height: 20vh; width: 60vw"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                	var dailyLabels = [
+						  {% for item in dailyLabels %}
+							"{{ item }}",
+						  {% endfor %}];
+					var weeklyLabels = [
+						  {% for item in weeklyLabels %}
+							"{{ item }}",
+						  {% endfor %}];
+					var monthlyLabels = [
+						  {% for item in monthlyLabels %}
+							"{{ item }}",
+						  {% endfor %}];
+					var yearlyLabels = [
+						  {% for item in yearlyLabels %}
+							"{{ item }}",
+						  {% endfor %}];
+
+					// Base
+                	var tempBaseDaily = [
+                		{% for temp in dailyTempBaseValues %}
+							{{ temp }},
+						{% endfor %}];
+					var tempBaseWeekly = [
+                		{% for temp in weeklyTempBaseValues %}
+							{{ temp }},
+						{% endfor %}];
+					var tempBaseMonthly = [
+                		{% for temp in monthlyTempBaseValues %}
+							{{ temp }},
+						{% endfor %}];
+					var tempBaseYearly = [
+                		{% for temp in yearlyTempBaseValues %}
+							{{ temp }},
+						{% endfor %}];
+
+					var humidityBaseDaily = [
+							{% for humidity in dailyHumidityBaseValues %}
+							  {{ humidity }},
+							{% endfor %}];
+					var humidityBaseWeekly = [
+							{% for humidity in weeklyHumidityBaseValues %}
+							  {{ humidity }},
+							{% endfor %}];
+					var humidityBaseMonthly = [
+							{% for humidity in monthlyHumidityBaseValues %}
+							  {{ humidity }},
+							{% endfor %}];
+					var humidityBaseYearly =[
+							{% for humidity in yearlyHumidityBaseValues %}
+							  {{ humidity }},
+							{% endfor %}];
+
+					// Inside
+					var tempInsideDaily = [
+                		{% for temp in dailyTempInsideValues %}
+							{{ temp }},
+						{% endfor %}];
+					var tempInsideWeekly = [
+                		{% for temp in weeklyTempInsideValues %}
+							{{ temp }},
+						{% endfor %}];
+					var tempInsideMonthly = [
+                		{% for temp in monthlyTempInsideValues %}
+							{{ temp }},
+						{% endfor %}];
+					var tempInsideYearly = [
+                		{% for temp in yearlyTempInsideValues %}
+							{{ temp }},
+						{% endfor %}];
+
+					var humidityInsideDaily = [
+							{% for humidity in dailyHumidityInsideValues %}
+							  {{ humidity }},
+							{% endfor %}];
+					var humidityInsideWeekly = [
+							{% for humidity in weeklyHumidityInsideValues %}
+							  {{ humidity }},
+							{% endfor %}];
+					var humidityInsideMonthly = [
+							{% for humidity in monthlyHumidityInsideValues %}
+							  {{ humidity }},
+							{% endfor %}];
+					var humidityInsideYearly =[
+							{% for humidity in yearlyHumidityInsideValues %}
+							  {{ humidity }},
+							{% endfor %}];
+
+					// Outside
+					var tempOutsideDaily = [
+                		{% for temp in dailyTempOutsideValues %}
+							{{ temp }},
+						{% endfor %}];
+					var tempOutsideWeekly = [
+                		{% for temp in weeklyTempOutsideValues %}
+							{{ temp }},
+						{% endfor %}];
+					var tempOutsideMonthly = [
+                		{% for temp in monthlyTempOutsideValues %}
+							{{ temp }},
+						{% endfor %}];
+					var tempOutsideYearly = [
+                		{% for temp in yearlyTempOutsideValues %}
+							{{ temp }},
+						{% endfor %}];
+
+					var humidityOutsideDaily = [
+							{% for humidity in dailyHumidityOutsideValues %}
+							  {{ humidity }},
+							{% endfor %}];
+					var humidityOutsideWeekly = [
+							{% for humidity in weeklyHumidityOutsideValues %}
+							  {{ humidity }},
+							{% endfor %}];
+					var humidityOutsideMonthly = [
+							{% for humidity in monthlyHumidityOutsideValues %}
+							  {{ humidity }},
+							{% endfor %}];
+					var humidityOutsideYearly =[
+							{% for humidity in yearlyHumidityOutsideValues %}
+							  {{ humidity }},
+							{% endfor %}];
+
+					// Pressure
+					var pressureDaily = [
+							{% for pressure in dailyPressure %}
+							  {{ pressure }},
+							{% endfor %}];
+					var pressureWeekly = [
+							{% for pressure in weeklyPressure %}
+							  {{ pressure }},
+							{% endfor %}];
+					var pressureMonthly = [
+							{% for pressure in monthlyPressure %}
+							  {{ pressure }},
+							{% endfor %}];
+					var pressureYearly = [
+							{% for pressure in yearlyPressure %}
+							  {{ pressure }},
+							{% endfor %}];
+
+					// CO2
+					var co2Daily = [
+							{% for co2 in dailyCo2 %}
+							  {{ co2 }},
+							{% endfor %}];
+					var co2Weekly = [
+							{% for co2 in weeklyCo2 %}
+							  {{ co2 }},
+							{% endfor %}];
+					var co2Monthly = [
+							{% for co2 in monthlyCo2 %}
+							  {{ co2 }},
+							{% endfor %}];
+					var co2Yearly = [
+							{% for co2 in yearlyCo2 %}
+							  {{ co2 }},
+							{% endfor %}];
+
+					const data = {
+					  labels: [
+						  {% for item in dailyLabels %}
+							"{{ item }}",
+						  {% endfor %}
+						],
+					  datasets: [{
+						label: 'Temperature',
+						backgroundColor: '#E89C34',
+						borderColor: '#E89C34',
+						pointRadius: 1,
+						pointRadiusHive: 1.5,
+						data: [
+                		{% for temp in dailyTempBaseValues %}
+							{{ temp }},
+						{% endfor %}],
+						yAxisID: 'temp',
+					  },
+					  {
+						label: 'Humidity',
+						backgroundColor: '#E8CA32',
+						borderColor: '#E8CA32',
+						pointRadius: 1,
+						pointRadiusHive: 1.5,
+						data: [
+							{% for humidity in dailyHumidityBaseValues %}
+							  {{ humidity }},
+							{% endfor %}],
+						yAxisID: 'humidity',
+						  }]
+					};
+					
+					const config = {
+					  type: 'line',
+					  data: data,
+					  options: {
+						maintainAspectRatio: false,
+						plugins: {
+						  legend: true,
+						  tooltips: { enabled: false}
+						},
+						scales: {
+						  xAxes: {
+							ticks: {
+							  minRotation: 45,
+							  autoSkip: true,
+							  maxTicksLimit: 24
+							}
+						  },
+						  temp: {
+							  title: {
+								  text: "Temperature (Celsius)",
+								  display: true,
+							  },
+							  type: 'linear',
+							  display: true,
+							  position: 'left',
+							  ticks: {
+								  max: 50,
+								  min: -50,
+							  },
+						  },
+						  humidity: {
+						  	  title: {
+								  text: "Humidity (%)",
+								  display: true,
+							  },
+							  type: 'linear',
+							  display: true,
+							  position: 'right',
+							  grid: {
+								drawOnChartArea: false,
+							  },
+						  },
+						  pressure: {
+						  	title: {
+								  text: "Pressure (kPa)",
+								  display: false,
+							  },
+							  type: 'linear',
+							  display: false,
+
+							  position: 'left',
+							  ticks: {
+								  max: 200,
+								  min: 50,
+							  },
+						  },
+						  co2: {
+						  	title: {
+								  text: "CO2",
+								  display: false,
+							  },
+							  type: 'linear',
+							  display: false,
+							  position: 'right',
+							  grid: {
+								drawOnChartArea: false,
+							  },
+						  },
+						}
+					  }
+					};
+
+					const myChart = new Chart(
+					  document.getElementById('chart'),
+					  config
+					);
+
+					window.addEventListener('load', (event) => {
+						myChart.data.labels = dailyLabels;
+						myChart.data.datasets[0].data = tempBaseDaily;
+						myChart.data.datasets[1].data = humidityBaseDaily;
+						myChart.update();
+					});
+
+					const valueSelect = document.getElementById('measurementPicker');
+					const locationSelect = document.getElementById('locationPicker');
+					const timelineSelect = document.getElementById('timelinePicker');
+
+					valueSelect.addEventListener('change', measurementTracker);
+					locationSelect.addEventListener('change', measurementTracker);
+					timelineSelect.addEventListener('change', measurementTracker);
+
+					function measurementTracker()
+					{
+						switch(valueSelect.value)
+						{
+							case 'tempHumidity':
+								document.getElementById('locationPicker').style.visibility = "visible";
+
+								myChart.options.scales.pressure.display = false;
+								myChart.options.scales.pressure.title.display = false;
+								myChart.options.scales.co2.display = false;
+								myChart.options.scales.co2.title.display = false;
+
+								myChart.options.scales.temp.display = true;
+								myChart.options.scales.temp.title.display = true;
+								myChart.options.scales.humidity.display = true;
+								myChart.options.scales.humidity.title.display = true;
+
+								myChart.data.datasets[0].label = "Temperature";
+								myChart.data.datasets[0].yAxisID = 'temp';
+								myChart.data.datasets[1].label = "Humidity";
+								myChart.data.datasets[1].yAxisID = 'humidity';
+
+								switch(timelineSelect.value)
+								{
+									case 'day':
+										myChart.data.labels = dailyLabels;
+										switch(locationSelect.value)
+										{
+											case 'base':
+												myChart.data.datasets[0].data = tempBaseDaily;
+												myChart.data.datasets[1].data = humidityBaseDaily;
+												break;
+											case 'inside':
+												myChart.data.datasets[0].data = tempInsideDaily;
+												myChart.data.datasets[1].data = humidityInsideDaily;
+												break;
+											case 'outside':
+												myChart.data.datasets[0].data = tempOutsideDaily;
+												myChart.data.datasets[1].data = humidityOutsideDaily;
+												break;
+										}
+										break;
+									case 'week':
+										myChart.data.labels = weeklyLabels;
+										switch(locationSelect.value)
+										{
+											case 'base':
+												myChart.data.datasets[0].data = tempBaseWeekly;
+												myChart.data.datasets[1].data = humidityBaseWeekly;
+												break;
+											case 'inside':
+												myChart.data.datasets[0].data = tempInsideWeekly;
+												myChart.data.datasets[1].data = humidityInsideWeekly;
+												break;
+											case 'outside':
+												myChart.data.datasets[0].data = tempOutsideWeekly;
+												myChart.data.datasets[1].data = humidityOutsideWeekly;
+												break;
+										}
+										break;
+									case 'month':
+										myChart.data.labels = monthlyLabels;
+										switch(locationSelect.value)
+										{
+											case 'base':
+												myChart.data.datasets[0].data = tempBaseMonthly;
+												myChart.data.datasets[1].data = humidityBaseMonthly;
+												break;
+											case 'inside':
+												myChart.data.datasets[0].data = tempInsideMonthly;
+												myChart.data.datasets[1].data = humidityInsideMonthly;
+												break;
+											case 'outside':
+												myChart.data.datasets[0].data = tempOutsideMonthly;
+												myChart.data.datasets[1].data = humidityOutsideMonthly;
+												break;
+										}
+										break;
+									case 'year':
+										myChart.data.labels = yearlyLabels;
+										switch(locationSelect.value)
+										{
+											case 'base':
+												myChart.data.datasets[0].data = tempBaseYearly;
+												myChart.data.datasets[1].data = humidityBaseYearly;
+												break;
+											case 'inside':
+												myChart.data.datasets[0].data = tempInsideYearly;
+												myChart.data.datasets[1].data = humidityInsideYearly;
+												break;
+											case 'outside':
+												myChart.data.datasets[0].data = tempOutsideYearly;
+												myChart.data.datasets[1].data = humidityOutsideYearly;
+												break;
+										}
+										break;
+								}
+								break;
+
+							case 'pressureCo2':
+								document.getElementById('locationPicker').style.visibility = "hidden";
+								myChart.data.datasets[0].label = "Pressure";
+								myChart.data.datasets[0].yAxisID = 'pressure';
+								myChart.data.datasets[1].label = "CO2";
+								myChart.data.datasets[1].yAxisID = 'co2';
+
+								myChart.options.scales.pressure.display = true;
+								myChart.options.scales.pressure.title.display = true;
+								myChart.options.scales.co2.display = true;
+								myChart.options.scales.co2.title.display = true;
+
+								myChart.options.scales.temp.display = false;
+								myChart.options.scales.temp.title.display = false;
+								myChart.options.scales.humidity.display = false;
+								myChart.options.scales.humidity.title.display = false;
+
+								switch(timelineSelect.value)
+								{
+									case 'day':
+										myChart.data.labels = dailyLabels;
+										myChart.data.datasets[0].data = pressureDaily;
+										myChart.data.datasets[1].data = co2Daily;
+										break;
+									case 'week':
+										myChart.data.labels = weeklyLabels;
+										myChart.data.datasets[0].data = pressureWeekly;
+										myChart.data.datasets[1].data = co2Weekly;
+										break;
+									case 'month':
+										myChart.data.labels = monthlyLabels;
+										myChart.data.datasets[0].data = pressureMonthly;
+										myChart.data.datasets[1].data = co2Monthly;
+										break;
+									case 'year':
+										myChart.data.labels = yearlyLabels;
+										myChart.data.datasets[0].data = pressureYearly;
+										myChart.data.datasets[1].data = co2Yearly;
+										break;
+
+								}
+								break;
+						}
+						myChart.update(); 
+					}
+                </script>
             </div>
-
         </div>
-
     </div>
-
 {% endblock %}
 
 {% block footer %}{% endblock %}
