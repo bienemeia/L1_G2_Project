@@ -38,10 +38,10 @@ currentValues = cursor.execute(''' SELECT tempBase, tempInside, tempOutside,
 # flapperStatus = firebase.getFlapperStatus(hive_db, HIVE_ID)
 # testStatus = firebase.getTestLed1Status(hive_db, HIVE_ID)
 
-heaterStatus = False
-fanStatus = False
-flapperStatus = False
-testStatus = False
+heaterStatus = 0
+fanStatus = 0
+flapperStatus = 0
+testStatus = 0
 
 
 # Get current values to display
@@ -138,7 +138,12 @@ def tools():
 
 @app.route("/updateHeater")
 def updateHeater():
-  print("hello")
+  print("heater status")
+  # print("Heater status: "+ str(heaterStatus))
+  # if heaterStatus == 1:
+  #   heaterStatus = 0
+  # else:
+  #   heaterStatus = 1
   return("nothing")
 
 

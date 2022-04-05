@@ -93,7 +93,7 @@
                 <h3>Vent</h3>
                 <p>Open/close the flapper</p>
             </div>
-            <i class="out" onclick="change_status(this,'ventilation_prompt'), updateFirebase({{'flapperStatus'}})"><div class="inside"></div></i>
+            <i class="out" onclick="change_status(this,'ventilation_prompt'), updateFirebase({{'flapperStatus'}})"><div class="inside" id="heaterButton"></div></i>
         </div>
         <div class="onoff">
             <i class="fas fa-fan"></i>
@@ -130,9 +130,19 @@
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type=text/javascript>
+	const heaterPrompt = document.getElementById('heat_prompt');
+	const heaterButton = document.getElementById('heaterButton');
 	window.addEventListener('load', (event) => {
-						
-					});	
+		if ({{ heaterStatus }} == 0)
+		{
+			console.log("heater status: false");
+			heaterButton.change_status(this, heat_prompt);
+		} else {
+			console.log("heater status: true");
+			//change_status(this,'heater_prompt');
+		}	
+	});	
+
     $(function() {
       $('i#heater').on('click', function() {
         $.getJSON('/updateHeater',
