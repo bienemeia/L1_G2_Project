@@ -8,6 +8,7 @@ from datetime import datetime
 import time
 import smtplib
 
+# Thresholds where values are too high, and a notification email will be sent
 TEMP_THRESHOLD = 30
 HUMIDITY_THRESHOLD = 80
 
