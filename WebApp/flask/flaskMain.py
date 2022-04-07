@@ -4,12 +4,11 @@ from helper_functions import process, firebase
 from flask import Flask, Markup, render_template
 import time
 import sqlite3
-#import pyrebase
+import pyrebase
 
 HIVE_ID = 1
 
 app = Flask(__name__)
-
 # Set up Firebase authentication
 meia_config = {
   "apiKey": "AIzaSyBVpD3QAJ7NQsmobIABC95vOX8-e-aZQX0",
@@ -18,49 +17,8 @@ meia_config = {
   "storageBucket": "testhive-2bca5.appspot.com"
 }
 # Initialize Firebase DB
-# hive_firebase = pyrebase.initialize_app(meia_config)
-# hive_db = hive_firebase.database()
-
-# Open connection to database
-db = sqlite3.connect("../hiveDB.db")
-cursor = process.getDBCursor(db)
-
-# Get current time - 1
-now = firebase.getTimeMinus1()
-
-# Get values from now
-currentValues = cursor.execute(''' SELECT tempBase, tempInside, tempOutside, 
-  humidityBase, humidityInside, humidityOutside,
-  pressure, co2 from dailyDB WHERE time=? ''', (now,)).fetchone()
-  
-# heaterStatus = firebase.getHeaterStatus(hive_db, HIVE_ID)
-# fanStatus = firebase.getFanStatus(hive_db, HIVE_ID)
-# flapperStatus = firebase.getFlapperStatus(hive_db, HIVE_ID)
-# testStatus = firebase.getTestLed1Status(hive_db, HIVE_ID)
-
-heaterStatus = 0
-fanStatus = 0
-flapperStatus = 0
-testStatus = 0
-
-
-# Get current values to display
-tempBase = currentValues[0]
-tempInside = currentValues[1]
-tempOutside = currentValues[2]
-humidityBase = currentValues[3]
-humidityInside = currentValues[4]
-humidityOutside = currentValues[5]
-pressure = currentValues[6]
-co2 = currentValues[7]
-
-# Get arrays of timeline values for graphing
-dailyValues = process.getDailyArray(cursor)
-weeklyValues = process.getWeeklyArray(cursor)
-monthlyValues = process.getMonthlyArray(cursor)
-yearlyValues = process.getYearlyArray(cursor)
-
-# 
+hive_firebase = pyrebase.initialize_app(meia_config)
+hive_db = hive_firebase.database()
 
 @app.route("/")
 def index():
@@ -99,6 +57,37 @@ def permission():
 
 @app.route("/data")
 def data():
+  # Open connection to database
+  db = sqlite3.connect("../hiveDB.db")
+  cursor = process.getDBCursor(db)
+
+  # Get current time - 1
+  now = firebase.getTimeMinus1()
+  
+  # Get values from now
+  currentValues = cursor.execute(''' SELECT tempBase, tempInside, tempOutside, 
+    humidityBase, humidityInside, humidityOutside,
+    pressure, co2 from dailyDB WHERE time=? ''', (now,)).fetchone()
+	
+  # Get current values to display
+  tempBase = currentValues[0]
+  tempInside = currentValues[1]
+  tempOutside = currentValues[2]
+  humidityBase = currentValues[3]
+  humidityInside = currentValues[4]
+  humidityOutside = currentValues[5]
+  pressure = currentValues[6]
+  co2 = currentValues[7]
+
+  # Get arrays of timeline values for graphing
+  dailyValues = process.getDailyArray(cursor)
+  weeklyValues = process.getWeeklyArray(cursor)
+  monthlyValues = process.getMonthlyArray(cursor)
+  yearlyValues = process.getYearlyArray(cursor)
+  
+  db.commit()
+  db.close()
+
   return render_template('data.html', currentPressure=pressure, currentCo2=co2,
                           currentTempBase=tempBase, currentHumidityBase=humidityBase,
                           currentTempInside=tempInside, currentHumidityInside=humidityInside,
@@ -125,6 +114,15 @@ def data():
 
 @app.route("/tools")
 def tools():
+  heaterStatus = firebase.getHeaterStatus(hive_db, HIVE_ID)
+  fanStatus = firebase.getFanStatus(hive_db, HIVE_ID)
+  flapperStatus = firebase.getFlapperStatus(hive_db, HIVE_ID)
+  testStatus = firebase.getTestLed1Status(hive_db, HIVE_ID)
+
+  heaterStatus = 0
+  fanStatus = 0
+  flapperStatus = 0
+  testStatus = 0
   return render_template('tools.html', heaterStatus=heaterStatus, flapperStatus=flapperStatus, fanStatus=fanStatus, manualStatus=testStatus)
 		
 # @app.route("/updateHeater")

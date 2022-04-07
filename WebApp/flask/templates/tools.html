@@ -84,7 +84,7 @@
 				</form>
             </label>
         	</form> -->
-            <i href=# id=heater class="out" onclick="change_status(this,'heat_prompt')"><div class="inside"></div></i>
+            <i href=# id=heater class="out" onclick="change_status(this,'heat_prompt')"><div class="inside" id=heaterButton></div></i>
 
         </div>
         <div class="onoff">
@@ -136,7 +136,7 @@
 		if ({{ heaterStatus }} == 0)
 		{
 			console.log("heater status: false");
-			heaterButton.change_status(this, heat_prompt);
+			heaterButton.style.left = 5px;
 		} else {
 			console.log("heater status: true");
 			//change_status(this,'heater_prompt');
