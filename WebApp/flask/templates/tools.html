@@ -6,67 +6,67 @@
 
 {% block content %}
 <style>
-	/* Styling for toggle switches */
+    /* Styling for toggle switches */
 
-	.switch {
-	  position: relative;
-	  display: inline-block;
-	  width: 60px;
-	  height: 34px;
-	}
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
 
-	.switch input { 
-	  opacity: 0;
-	  width: 0;
-	  height: 0;
-	}
+    .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
 
-	.slider {
-	  position: absolute;
-	  cursor: pointer;
-	  top: 0;
-	  left: 160px;
-	  right: -160px;
-	  bottom: 0;
-	  background-color: #ccc;
-	  -webkit-transition: .4s;
-	  transition: .4s;
-	}
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 160px;
+      right: -160px;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
 
-	.slider:before {
-	  position: absolute;
-	  content: "";
-	  height: 26px;
-	  width: 26px;
-	  left: 4px;
-	  bottom: 4px;
-	  background-color: white;
-	  -webkit-transition: .4s;
-	  transition: .4s;
-	}
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
 
-	input:checked + .slider {
-	  background-color: #FDAA39;
-	}
+    input:checked + .slider {
+      background-color: #FDAA39;
+    }
 
-	input:focus + .slider {
-	  box-shadow: 0 0 1px #2196F3;
-	}
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
 
-	input:checked + .slider:before {
-	  -webkit-transform: translateX(26px);
-	  -ms-transform: translateX(26px);
-	  transform: translateX(26px);
-	}
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
 
-	/* Rounded sliders */
-	.slider.round {
-	  border-radius: 34px;
-	}
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
 
-	.slider.round:before {
-	  border-radius: 50%;
-	}
+    .slider.round:before {
+      border-radius: 50%;
+    }
 </style>
 <div class="tool-box">
     <div class="left">
@@ -76,15 +76,7 @@
                 <h3>Heater</h3>
                 <p>Turn on/off the heater</p>
             </div>
-     		<!-- <a class="out" href=# id=heater onclick="change_status(this,'heat_prompt')"></a>        -->
-<!--             <label class="switch">
-            	<form action="/updateHeater" method="POST">
-					<input type="checkbox" href=# id=heater onclick="change_status(this,'heater_prompt')">
-					<span class="slider round"></span>
-				</form>
-            </label>
-        	</form> -->
-            <i href=# id=heater class="out" onclick="change_status(this,'heat_prompt')"><div class="inside" id=heaterButton></div></i>
+            <i href=# id=heater class="out"><div class="inside" id=heaterButton></div></i>
 
         </div>
         <div class="onoff">
@@ -93,7 +85,7 @@
                 <h3>Vent</h3>
                 <p>Open/close the flapper</p>
             </div>
-            <i class="out" onclick="change_status(this,'ventilation_prompt'), updateFirebase({{'flapperStatus'}})"><div class="inside" id="heaterButton"></div></i>
+            <i href=# id=flapper class="out"><div class="inside" id="flapperButton"></div></i>
         </div>
         <div class="onoff">
             <i class="fas fa-fan"></i>
@@ -102,7 +94,7 @@
                 <p>Placeholder for future work</p>
                 <p>Currently unlinked</p>
             </div>
-            <i class="out" onclick="change_status(this,'fan_prompt'), updateFirebase({{'fanStatus'}})"><div class="inside"></div></i>
+            <i href=# id=fan class="out"><div class="inside" id="fanButton"></div></i>
         </div>
         <div class="onoff">
             <i class="fas fa-fingerprint"></i>
@@ -111,7 +103,7 @@
                 <p>Placeholder for future work</p>
                 <p>Currently unlinked.</p>
             </div>
-            <i class="out" onclick="change_status(this,'controlling_prompt'), updateFirebase({{'testLed1'}})"><div class="inside"></div></i>
+            <i href=# ide=manual class="out"><div class="inside" id="manualButton"></div></i>
         </div>
 
     </div>
@@ -119,39 +111,85 @@
         <i class="fas fa-user"></i>
         <div>
             <h3>BEE HIVE STATUS</h3>
-            <p>Heat Systems: <span id="heat_prompt">On</span></p>
-            <p>Ventilation Systems: <span id="ventilation_prompt">On</span></p>
-            <p>Fan Systems: <span id="fan_prompt">On</span></p>
-            <p>Controlling Systems: <span id="controlling_prompt">On</span></p>
-            <p>Video Systems: <span id="video_prompt">On</span></p>
+            <p>Heat Systems: <span id="heaterStatus">On</span></p>
+            <p>Ventilation Systems: <span id="flapperStatus">On</span></p>
+            <p>Fan Systems: <span id="fanStatus">On</span></p>
+            <p>Controlling Systems: <span id="manualStatus">On</span></p>
+            <p>Video Systems: <span id="videoStatus">On</span></p>
         </div>
         <a class="tovideo" href="{{ url_for( 'video' ) }}">GO TO VIDEO</a>
     </div>
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type=text/javascript>
-	const heaterPrompt = document.getElementById('heat_prompt');
-	const heaterButton = document.getElementById('heaterButton');
-	window.addEventListener('load', (event) => {
-		if ({{ heaterStatus }} == 0)
-		{
-			console.log("heater status: false");
-			heaterButton.style.left = 5px;
-		} else {
-			console.log("heater status: true");
-			//change_status(this,'heater_prompt');
-		}	
-	});	
+    const heaterStatus = document.getElementById('heaterStatus');
+    const heaterButton = document.getElementById('heaterButton');
+    const flapperStatus = document.getElementById('flapperStatus');
+    const flapperButton = document.getElementById('flapperButton');
+    window.addEventListener('load', (event) => {
+        if ({{ heaterStatus }} == 0)
+        {
+            heaterStatus.innerHTML = "Off";
+            heaterButton.style.left = "5px";
+        } else {
+            heaterButton.style.left = "25px";
+            heaterStatus.innerHTML = "On";
+        }  
+
+        if ({{ flapperStatus }} == 0)
+        {
+            flapperStatus.innerHTML = "Off";
+            flapperButton.style.left = "5px";
+        } else {
+            flapperButton.style.left = "25px";
+            flapperStatus.innerHTML = "On";
+        }  
+    }); 
+
+    heater.addEventListener('click', (event) =>{
+        if (heaterStatus.innerHTML == "Off")
+        {
+            heaterStatus.innerHTML = "On";
+            heaterButton.style.left = "25px";
+
+        } else {
+            heaterStatus.innerHTML = "Off";
+            heaterButton.style.left = "5px";
+        }
+    });
+
+    flapper.addEventListener('click', (event) =>{
+        if (flapperStatus.innerHTML == "Off")
+        {
+            flapperStatus.innerHTML = "On";
+            flapperButton.style.left = "25px";
+
+        } else {
+            flapperStatus.innerHTML = "Off";
+            flapperButton.style.left = "5px";
+        }
+    });
 
     $(function() {
       $('i#heater').on('click', function() {
         $.getJSON('/updateHeater',
             function(data) {
-				// do nothing
+                // do nothing
         });
         return false;
       });
     });
+
+    $(function() {
+      $('i#flapper').on('click', function() {
+        $.getJSON('/updateFlapper',
+            function(data) {
+                // do nothing
+        });
+        return false;
+      });
+    });
+
 </script>
 
 {% endblock %}
