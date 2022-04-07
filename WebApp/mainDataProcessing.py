@@ -25,7 +25,7 @@ def main():
     # Setup email data
     gmail_user = "grahamhive@gmail.com"
     gmail_password = "bellFarm"
-    destination_email = "makenziestern@gmail.com"
+    destination_email = "meiacopeland@cmail.carleton.ca"
     subjectTemperature = "Hive temperature is high!"
     subjectHumidity = "Hive humidity is high!"
     bodyText =  "Please check the website for more information"
