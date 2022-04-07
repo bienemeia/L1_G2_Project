@@ -4,7 +4,7 @@ from helper_functions import process, firebase
 from flask import Flask, Markup, render_template
 import time
 import sqlite3
-# import pyrebase
+import pyrebase
 
 HIVE_ID = 1
 
@@ -17,8 +17,8 @@ meia_config = {
     "storageBucket": "testhive-2bca5.appspot.com"
 }
 # # Initialize Firebase DB
-# hive_firebase = pyrebase.initialize_app(meia_config)
-# hive_db = hive_firebase.database()
+hive_firebase = pyrebase.initialize_app(meia_config)
+hive_db = hive_firebase.database()
 
 @app.route("/")
 def index():
@@ -114,47 +114,33 @@ def data():
 
 @app.route("/tools")
 def tools():
-    # heaterStatus = firebase.getHeaterStatus(hive_db, HIVE_ID)
-    # fanStatus = firebase.getFanStatus(hive_db, HIVE_ID)
-    # flapperStatus = firebase.getFlapperStatus(hive_db, HIVE_ID)
-    # testStatus = firebase.getTestLed1Status(hive_db, HIVE_ID)
+    heaterStatus = 0
+    flapperStatus = 0
+    
+    if firebase.getHeaterStatus(hive_db, HIVE_ID):
+	    heaterStatus = 1
+		
+    if firebase.getFlapperStatus(hive_db, HIVE_ID):
+	    flapperStatus = 1
 
-    heaterStatus = 1
-    fanStatus = 1
-    flapperStatus = 1
-    testStatus = 0
-    return render_template('tools.html', heaterStatus=heaterStatus, flapperStatus=flapperStatus, fanStatus=fanStatus, manualStatus=testStatus)
-        
-# @app.route("/updateHeater")
-# def updateHeater():
-#     heaterStatus = firebase.getHeaterStatus(hive_db, HIVE_ID)
-#     print("Hello")
-#     if firebase.getHeaterStatus(hive_db, HIVE_ID):
-#         firebase.pushHeaterStatus(hive_db, HIVE_ID, False)
-#     else:
-#         firebase.pushHeaterStatus(hive_db, HIVE_ID, True)
-#     return("nothing")
+    return render_template('tools.html', heaterStatus=heaterStatus, flapperStatus=flapperStatus)
+
 
 @app.route("/updateHeater")
 def updateHeater():
-    print("heater status")
-
-    # print("Heater status: "+ str(heaterStatus))
-    # if heaterStatus == 1:
-    #   heaterStatus = 0
-    # else:
-    #   heaterStatus = 1
+    if firebase.getHeaterStatus(hive_db, HIVE_ID):
+        firebase.pushHeaterStatus(hive_db, HIVE_ID, False)
+    else:
+        firebase.pushHeaterStatus(hive_db, HIVE_ID, True)
     return("nothing")
+
 
 @app.route("/updateFlapper")
 def updateFlapper():
-    print("flapper status")
-
-    # print("Heater status: "+ str(heaterStatus))
-    # if heaterStatus == 1:
-    #   heaterStatus = 0
-    # else:
-    #   heaterStatus = 1
+    if firebase.getFlapperStatus(hive_db, HIVE_ID):
+        firebase.pushFlapperStatus(hive_db, HIVE_ID, False)
+    else:
+        firebase.pushFlapperStatus(hive_db, HIVE_ID, True)
     return("nothing")
 
 
