@@ -99,6 +99,11 @@ def pushFanStatus(db, hiveId, status):
     db.child("hives").child(hiveId).child("fanStatus").set(status)
 
 
+# Set manual status
+def pushManualStatus(db, hiveId, status):
+    db.child("hives").child(hiveId).child("manualStatus").set(status)
+
+
 # Set test LED status on Arduino 1
 def pushTestLed1Status(db, hiveId, status):
     return db.child("hives").child(hiveId).child("testLed1").set(status)
@@ -107,10 +112,7 @@ def pushTestLed1Status(db, hiveId, status):
 # Set test LED status on Arduino 2
 def pushTestLed2Status(db, hiveId, status):
     return db.child("hives").child(hiveId).child("testLed2").set(status)
-
-# Set the heater status
-def pushSystemStatus(db, hiveId, system, status):
-    return db.child("hives").child(hiveId).child(system).set(status)
+    
 
 # Get the hive name
 def getHiveName(db, hiveId):
@@ -160,6 +162,11 @@ def getFlapperStatus(db, hiveId):
 # Get fan status
 def getFanStatus(db, hiveId):
     return db.child("hives").child(hiveId).child("fanStatus").get().val()
+
+
+# Get manual status
+def getManualStatus(db, hiveId):
+    return db.child("hives").child(hiveId).child("manualStatus").get().val()
 
 
 # Get test LED status on Arduino 1

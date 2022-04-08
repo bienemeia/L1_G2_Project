@@ -371,19 +371,3 @@ def getFormattedTime(num):
         time[1] = "0" + str(mn)
     return(str(time[0]) + ":" + str(time[1]))
 
-
-# Method for creating test values in DB
-def testValues(cursor):
-    for i in range(1440):
-        now = getFormattedTime(i)
-        date = datetime.date.today()
-        temperature = [round(random.uniform(-20, 20), 2), round(random.uniform(-20, 20), 2), round(random.uniform(-20, 20), 2)]
-        humidity = [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)]
-        pressure = round(random.uniform(100, 150), 2)
-        co2 = random.randint(330, 600)
-        try:
-            cursor.execute('''INSERT OR REPLACE INTO dailyDB values (?,?,?,?,?,?,?,?,?,?)''',
-                           (now, date, temperature[0], temperature[1], temperature[2],
-                            humidity[0], humidity[1], humidity[2], pressure, co2))
-        except sqlite3.Error as er:
-            print("SQLite error: " + er)

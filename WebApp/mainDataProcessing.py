@@ -43,6 +43,7 @@ def main():
                 "",
                 bodyText
                 ))
+                
     # Initialize Firebase DB
     hive_firebase = pyrebase.initialize_app(meia_config)
     hive_db = hive_firebase.database()
@@ -63,6 +64,7 @@ def main():
         pressure = firebase.getPressure(hive_db, 1, now)
         co2 = firebase.getCo2(hive_db, 1, now)
         
+        # Send emails if temperature or humidity is too high
         if temperature[0] > TEMP_THRESHOLD or temperature[1] > TEMP_THRESHOLD:
             try:
                 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
@@ -81,6 +83,7 @@ def main():
             except:
                 print("Something went wrong")       
 
+        # Add values from firebase into local DB
         cursor.execute('''INSERT OR REPLACE INTO dailyDB values (?,?,?,?,?,?,?,?,?,?)''',
                        (now, date, temperature[0], temperature[1], temperature[2], humidity[0], humidity[1], humidity[2], pressure, co2))
 
@@ -103,6 +106,8 @@ def main():
         db.commit()
         db.close()
 
+        # Loop waits 30 seconds to guarantee that every minute there is an update.
+        # 30 seconds handles any delays
         time.sleep(30)
 
 

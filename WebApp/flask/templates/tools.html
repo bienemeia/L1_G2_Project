@@ -70,6 +70,14 @@
 </style>
 <div class="tool-box">
     <div class="left">
+		<div class="onoff">
+            <i class="fas fa-fingerprint"></i>
+            <div>
+                <h3>Manual</h3>
+                <p>Turn on to manually control hive</p>
+            </div>
+            <i href=# id=manual class="out"><div class="inside" id=manualButton></div></i>
+        </div>
         <div class="onoff">
             <i class="fas fa-fire"></i>
             <div>
@@ -85,7 +93,7 @@
                 <h3>Vent</h3>
                 <p>Open/close the flapper</p>
             </div>
-            <i href=# id=flapper class="out"><div class="inside" id="flapperButton"></div></i>
+            <i href=# id=flapper class="out"><div class="inside" id=flapperButton></div></i>
         </div>
         <!-- Toggles are being left in comments in case they can be used in the future-->
         <!-- <div class="onoff">
@@ -96,26 +104,16 @@
                 <p>Currently unlinked</p>
             </div>
             <i href=# id=fan class="out"><div class="inside" id="fanButton"></div></i>
-        </div>
-        <div class="onoff">
-            <i class="fas fa-fingerprint"></i>
-            <div>
-                <h3>Manual</h3>
-                <p>Placeholder for future work</p>
-                <p>Currently unlinked.</p>
-            </div>
-            <i href=# ide=manual class="out"><div class="inside" id="manualButton"></div></i>
         </div> -->
-
     </div>
     <div class="right">
         <i class="fas fa-user"></i>
         <div>
             <h3>BEE HIVE STATUS</h3>
+            <p>Manual Control: <span id="manualStatus">On</span></p>
             <p>Heat Systems: <span id="heaterStatus">On</span></p>
             <p>Ventilation Systems: <span id="flapperStatus">On</span></p>
-            <!--<p>Fan Systems: <span id="fanStatus">On</span></p>
-            <p>Controlling Systems: <span id="manualStatus">On</span></p> -->
+            <!--<p>Fan Systems: <span id="fanStatus">On</span></p> -->
             <p>Video Systems: <span id="videoStatus">On</span></p>
         </div>
         <a class="tovideo" href="{{ url_for( 'video' ) }}">GO TO VIDEO</a>
@@ -123,16 +121,26 @@
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type=text/javascript>
+	const manualStatus = document.getElementById('manualStatus');
+	const manualButton = document.getElementById('manualButton');
     const heaterStatus = document.getElementById('heaterStatus');
     const heaterButton = document.getElementById('heaterButton');
     const flapperStatus = document.getElementById('flapperStatus');
     const flapperButton = document.getElementById('flapperButton');
     window.addEventListener('load', (event) => {
+        if ({{ manualStatus }} == 0)
+        {
+            manualStatus.innerHTML = "Off";
+            manualButton.style.left = "5px";
+        } else {
+            heaterButton.style.left = "25px";
+            heaterStatus.innerHTML = "On";
+        } 
+        
         if ({{ heaterStatus }} == 0)
         {
             heaterStatus.innerHTML = "Off";
             heaterButton.style.left = "5px";
-            heater
         } else {
             heaterButton.style.left = "25px";
             heaterStatus.innerHTML = "On";
@@ -148,30 +156,57 @@
         }  
     }); 
 
-    heater.addEventListener('click', (event) =>{
-        if (heaterStatus.innerHTML == "Off")
+	manual.addEventListener('click', (event) => {
+		if (manualStatus.innerHTML == "Off")
         {
-            heaterStatus.innerHTML = "On";
-            heaterButton.style.left = "25px";
+            manualStatus.innerHTML = "On";
+            manualButton.style.left = "25px";
 
         } else {
-            heaterStatus.innerHTML = "Off";
-            heaterButton.style.left = "5px";
+            manualStatus.innerHTML = "Off";
+            manualButton.style.left = "5px";
         }
+	});
+    heater.addEventListener('click', (event) =>{
+		if (manualStatus.innerHTML == "On")
+		{
+			if (heaterStatus.innerHTML == "Off")
+			{
+				heaterStatus.innerHTML = "On";
+				heaterButton.style.left = "25px";
+
+			} else {
+				heaterStatus.innerHTML = "Off";
+				heaterButton.style.left = "5px";
+			}
+		}
     });
 
     flapper.addEventListener('click', (event) =>{
-        if (flapperStatus.innerHTML == "Off")
-        {
-            flapperStatus.innerHTML = "On";
-            flapperButton.style.left = "25px";
+		if (manualStatus.innerHTML == "On")
+		{
+			if (flapperStatus.innerHTML == "Off")
+			{
+				flapperStatus.innerHTML = "On";
+				flapperButton.style.left = "25px";
 
-        } else {
-            flapperStatus.innerHTML = "Off";
-            flapperButton.style.left = "5px";
-        }
+			} else {
+				flapperStatus.innerHTML = "Off";
+				flapperButton.style.left = "5px";
+			}
+		}
     });
 
+	$(function() {
+      $('i#manual').on('click', function() {
+        $.getJSON('/updateManual',
+            function(data) {
+                // do nothing
+        });
+        return false;
+      });
+    });
+    
     $(function() {
       $('i#heater').on('click', function() {
         $.getJSON('/updateHeater',

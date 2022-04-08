@@ -116,31 +116,46 @@ def data():
 def tools():
     heaterStatus = 0
     flapperStatus = 0
+    manualStatus = 0
     
+    if firebase.getManualStatus(hive_db, HIVE_ID):
+        manualStatus = 1
+        
     if firebase.getHeaterStatus(hive_db, HIVE_ID):
-	    heaterStatus = 1
-		
+        heaterStatus = 1
+        
     if firebase.getFlapperStatus(hive_db, HIVE_ID):
-	    flapperStatus = 1
+        flapperStatus = 1
 
-    return render_template('tools.html', heaterStatus=heaterStatus, flapperStatus=flapperStatus)
+    return render_template('tools.html', manualStatus=manualStatus, heaterStatus=heaterStatus, flapperStatus=flapperStatus)
+
+
+@app.route("/updateManual")
+def updateManual():
+    if firebase.getManualStatus(hive_db, HIVE_ID):
+        firebase.pushManualStatus(hive_db, HIVE_ID, False)
+    else:
+        firebase.pushManualStatus(hive_db, HIVE_ID, True)
+    return("nothing")
 
 
 @app.route("/updateHeater")
 def updateHeater():
-    if firebase.getHeaterStatus(hive_db, HIVE_ID):
-        firebase.pushHeaterStatus(hive_db, HIVE_ID, False)
-    else:
-        firebase.pushHeaterStatus(hive_db, HIVE_ID, True)
+    if firebase.getManualStatus(hive_db, HIVE_ID):
+        if firebase.getHeaterStatus(hive_db, HIVE_ID):
+            firebase.pushHeaterStatus(hive_db, HIVE_ID, False)
+        else:
+            firebase.pushHeaterStatus(hive_db, HIVE_ID, True)
     return("nothing")
 
 
 @app.route("/updateFlapper")
 def updateFlapper():
-    if firebase.getFlapperStatus(hive_db, HIVE_ID):
-        firebase.pushFlapperStatus(hive_db, HIVE_ID, False)
-    else:
-        firebase.pushFlapperStatus(hive_db, HIVE_ID, True)
+    if firebase.getManualStatus(hive_db, HIVE_ID):
+        if firebase.getFlapperStatus(hive_db, HIVE_ID):
+            firebase.pushFlapperStatus(hive_db, HIVE_ID, False)
+        else:
+            firebase.pushFlapperStatus(hive_db, HIVE_ID, True)
     return("nothing")
 
 
