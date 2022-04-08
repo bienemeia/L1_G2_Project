@@ -25,19 +25,28 @@ int currHumidtyClimate = 0;
 int currPressureClimate = 0;
 uint32_t currCO2Climate = 0;
 bool sensorWarm = 0;
-
 int currTempTemp = 0;
 int currHumidtyTemp = 0;
-
 bool flapperState = false;
-
 int regRequest = 0;
-
 const byte systemNumber = 0x01;
 
 //time info
-unsigned int sensorWarmUpTime = 0;  //36001 minumum
+unsigned int sensorWarmUpTime = 0;  //36001 minumum time to read co2
 unsigned int mesurmentTime = 0;
+
+//Commands
+const byte getID = 0;
+const byte getTempatureInside = 1;
+const byte getHumidityInside = 2;
+const byte getPressureInside = 3;
+const byte getCO2Inside = 4;
+const byte getTempatureOutside = 5;
+const byte getHumidityOutside = 6;
+const byte openFlapper = 7;
+const byte closeFlapper = 8;
+const byte getFlapperStatus = 9;
+const byte getCO2Status = 10;
 
 void setup() {
   //Soft I2C
@@ -90,6 +99,10 @@ void setup() {
 }
 
 
+
+/**
+This is the main for this Arduino. It operates on a system time skeem so that the flapper does not interrupt the co2 measurement status.
+*/
 void loop() {
   //update Flapper
   static int flapperOpening = 0;
@@ -100,9 +113,7 @@ void loop() {
     flapper.step(-1);
     flapperOpening--;
 
-  } else {
   }
-
 
   //update values
   if (40 == mesurmentTime) {
@@ -150,6 +161,9 @@ void loop() {
   delay(50);
 }
 
+/**
+This function takes all mesurments and updates there values.
+*/
 void takeMesurments() {
   ClosedCube_BME680_Status status = readBME680Status();
 
@@ -213,14 +227,14 @@ void receiveEvent(int howMany) {
   Serial.print("Reg Request: ");
   Serial.println(regRequest);
 
-  if (regRequest == 7) {
+  if (regRequest == openFlapper) {
     flapperState = true;
-
     Serial.println("Opened flapper");
 
-  } else if (regRequest == 8) {
+  } else if (regRequest == closeFlapper) {
     flapperState = false;
     Serial.println("Closed flapper");
+
   }
 }
 
@@ -228,46 +242,50 @@ void receiveEvent(int howMany) {
 An interrupt handler for i2c requestEvent
 */
 void requestEvent() {
-  if (regRequest == 0) {
+  if (regRequest == getID) {
     Wire.write((uint8_t)systemNumber & 0xFF);
     Serial.println("Sent System Number");
 
-  } else if (regRequest == 1) {
+  } else if (regRequest == getTempatureInside) {
     send16BitNumber(currTempClimate);
     Serial.println("Sent Tempature inturnal");
 
-  } else if (regRequest == 2) {
+  } else if (regRequest == getHumidityInside) {
     send16BitNumber(currHumidtyClimate);
     Serial.println("Sent Humidty inturnal");
 
-  } else if (regRequest == 3) {
+  } else if (regRequest == getPressureInside) {
     send16BitNumber(currPressureClimate);
     Serial.println("Sent Humidty inturnal");
 
-  } else if (regRequest == 4) {
+  } else if (regRequest == getCO2Inside) {
     send16BitNumber(currCO2Climate);
     Serial.println("Sent Pressure inturnal");
 
-  } else if (regRequest == 5) {
+  } else if (regRequest == getTempatureOutside) {
     send16BitNumber(currTempTemp);
     Serial.println("Sent Tempature external");
 
-  } else if (regRequest == 6) {
+  } else if (regRequest == getHumidityOutside) {
     send16BitNumber(currHumidtyTemp);
     Serial.println("Sent Humidty external;");
 
-  } else if (regRequest == 7) {
+  } else if (regRequest == openFlapper) {
     Wire.write(0xF);
-    regRequest = 9;
-  } else if (regRequest == 8) {
+    regRequest = getFlapperStatus;
+
+  } else if (regRequest == closeFlapper) {
     Wire.write(0xF);
-    regRequest = 9;
-  } else if (regRequest == 9) {
+    regRequest = getFlapperStatus;
+
+  } else if (regRequest == getFlapperStatus) {
     Wire.write(flapperState & 0xF);
     Serial.println("Sent flapper Status");
-  } else if (regRequest == 10) {
+
+  } else if (regRequest == getCO2Status) {
     Wire.write(sensorWarm & 0xF);
     Serial.println("Sent sensorWarm Status");
+
   }
 }
 
@@ -298,14 +316,10 @@ void testFlapper() {
   Serial.println("Flapper sould now be closed");
 }
 
-/*
-  blink codes
-  climate sensor 2
-  temp sensor 3
-*/
+
 
 /**
-A function that blink a climate sensor error.
+A function that blinks the error led 2 time to show a climate sensor error.
 */
 void blinkClimateSensorFailure() {
   for (int i = 0; i < 3; i++) {
@@ -318,7 +332,7 @@ void blinkClimateSensorFailure() {
 }
 
 /**
-A function that blink a Temp sensor error.
+A function that blinks the error led 3 time to show a Temp sensor error.
 */
 void blinkTempSensorError() {
   for (int i = 0; i < 4; i++) {
