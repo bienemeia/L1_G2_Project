@@ -113,7 +113,7 @@ def main():
         # Waits 30 seconds to guarantee having values every minute of the day.
         # 30 seconds allows for some overlap in case of delay in execution.
         # If data is already present, it is overwritten rather than duplicated.
-        time.sleep(5)
+        time.sleep(30)
 
 
 # Checks ice sensors for presence of ice, and activates heater if ice is present.
@@ -129,7 +129,6 @@ def iceControl(temp, db, hive_id):
     print(ice2)
     print(ice3)
     print(ice4)
-    temp[0] = -6
     if ice1 != None and ice2 != None and ice3 != None and ice4 != None:
         # Ice buildup will cause issues for humidity
         # Ice exists if sum of values is over 2000
@@ -156,8 +155,6 @@ def iceControl(temp, db, hive_id):
 # the hive may not be effective.
 def humidityControl(humidity, db, hive_id):
     # Only open flap if outside humidity is lower than inside
-    #humidity[0] = 72
-    #humidity[2] = 65
     if humidity[0] != None and humidity[2] != None and not firebase.getManualStatus(db, hive_id):
         if humidity[0] > HUMIDITY_THRESHOLD:
             if humidity[2] < humidity[0]:
