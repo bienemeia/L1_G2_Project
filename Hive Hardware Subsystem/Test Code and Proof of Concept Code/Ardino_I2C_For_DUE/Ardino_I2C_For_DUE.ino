@@ -1,4 +1,11 @@
 #include <Wire.h>
+/**
+This is a test program to test if hard I2C is working.
+This code implements a I2C responder. It is designed to demonstrate a unit test where a RPI is able to communicate with an arduino.
+This code is designed specifically to work with an arduino due.
+ 
+By Graham C. Bell 101150239
+*/
 
 int outPut = 0;
 
@@ -15,6 +22,9 @@ void setup() {
 
 }
 
+/**
+ISR for a i2C receive event.
+*/
 void receiveEvent(int howMany) {
   while (Wire.available()) { // loop through all but the last
     char c = Wire.read(); // receive byte as a character
@@ -35,6 +45,9 @@ void loop() {
  
 }
 
+/**
+ISR for a i2C receive event.
+*/
 void requestEvent() {
   
   Wire.write((byte)outPut);

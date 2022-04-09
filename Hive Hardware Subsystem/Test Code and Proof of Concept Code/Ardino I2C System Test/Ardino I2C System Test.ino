@@ -1,3 +1,11 @@
+/**
+This is a test program to test if hard I2C is working.
+This code implements a I2C responder. It can be installed on most Arduinos.
+ 
+By Graham C. Bell 101150239
+*/
+
+
 #include <Wire.h>
 
 void setup() {
@@ -13,6 +21,9 @@ void setup() {
 
 }
 
+/**
+ISR for a i2C receive event.
+*/
 void receiveEvent(int y) {
 
   byte x;
@@ -31,6 +42,10 @@ void receiveEvent(int y) {
   Serial.println("Receive event");
 }
 
+
+/**
+ISR for a i2C request event.
+*/
 void requestEvent() {
   
   Wire.write((byte)1);

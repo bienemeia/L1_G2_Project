@@ -1,3 +1,12 @@
+/**
+This code implements the temperature monitoring, flapper control, soft I2C setup and I2C setup for the seasonal inner cover arduino.
+This code has been made for an arduino nano every. This code requres https://www.arduino.cc/reference/en/libraries/softwire/ libary installed.
+This code features code from ClosedCube and DFRobot in the form of I2C converted libraries. These libraries are included as separate files in this ino.
+ 
+By Graham C. Bell 101150239
+*/
+
+
 #include <Wire.h>
 #include <SoftWire.h>
 #include "Soft_DFRobot_SHT3x.h"
@@ -32,8 +41,9 @@ int regRequest = 0;
 const byte systemNumber = 0x01;
 
 //time info
-unsigned int sensorWarmUpTime = 0;  //36001 minumum time to read co2
+unsigned int sensorWarmUpTime = 0;
 unsigned int mesurmentTime = 0;
+unsigned const int timeTillUpToTemp = 36001;//30 minutes in 50ms intervals
 
 //Commands
 const byte getID = 0;
@@ -124,10 +134,10 @@ void loop() {
   }
 
   //update sensorWarmUpTime
-  if (sensorWarmUpTime <= 36001 && !sensorWarm) {
+  if (sensorWarmUpTime <= timeTillUpToTemp && !sensorWarm) {
     sensorWarmUpTime++;
   }
-  if (sensorWarmUpTime >= 36000) {
+  if (sensorWarmUpTime >= timeTillUpToTemp) {
     sensorWarm = true;
   }
 
