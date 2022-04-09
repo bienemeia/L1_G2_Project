@@ -1,16 +1,13 @@
-#include <SoftWire.h>
+/**
+This code is a testing ground and proof of concept for softI2C. Specifically for the BME680.
+Section of this code is based on an example program from the ClosedCube library Written by AA. 
+This code requres the https://www.arduino.cc/reference/en/libraries/softwire/ libary.
+ 
+By Graham C. Bell 101150239
+*/
 
-/**************************************************************************************
-This is an example for ClosedCube BME680 Humidity,Temperature,Pressure and Gas Sensor Breakout Board
-Initial Date: 15-Sep-2017
-Hardware connections for Arduino Uno:
-VDD to 3.3V DC
-SCL to A5
-SDA to A4
-GND to common ground
-Written by AA for ClosedCube
-MIT License
-**************************************************************************************/
+
+#include <SoftWire.h>
 
 #include <Wire.h>
 #include "ClosedCube_BME680.h"

@@ -1,3 +1,11 @@
+/**
+This code is a testing ground and proof of concept for softI2C.
+This code tests multiple libraries converted to softI2C.
+This code requres the https://www.arduino.cc/reference/en/libraries/softwire/ libary.
+ 
+By Graham C. Bell 101150239
+*/
+
 #include <SoftWire.h>
 
 #include <Wire.h>
@@ -17,8 +25,6 @@ Soft_DFRobot_SHT3x tempSensor( &sw,/*address=*/0x45,/*RST=*/4);
 BME680_Class climateSensor(&sw);
  
 void setup() {
-
-  
 
   sw.setTxBuffer(swTxBuffer, sizeof(swTxBuffer));
   sw.setRxBuffer(swRxBuffer, sizeof(swRxBuffer));
