@@ -13,13 +13,42 @@ The Honey, I'm a Smart Home! is a modular smart beehive system that allows beeke
 
 # Installation instructions
 
-# Run instructions
+# Run instructions (really, should set up so the right code runs on boot)
 To run the Honey, I'm a Smart Home! system, the beekeeper simply needs to run some programs:
 
+## Run Hive RPi code
+
 - on the Hive RPi, navigate to the HivePi folder and run 
-	<c>python3 hiveMain.py</c>
+	<p><code>python3 hiveMain.py</code></p>
+	The Hive RPi will begin reading sensor data and sending it to Firebase.
+
+## Create DB and run data processing code
+
+- on the Webserver RPi, navigate to the WebApp folder and run
+	<p><code>python3 createDatabaseTables.py</code></p>
+	The RPi will create the SQLite database needed. If the DB already exists, "Already exists" will print to the console.
+
+- on the Webserver RPi, in the same WebApp folder, run
+	<p><code>python3 mainDataProcessing.py</code></p>
+	The RPi will begin pulling data from Firebase, and processing it into the local database.
+
+## Start server
+
+<p><em>If running on local network</em></p>
+
+- on Webserver RPi, open a new terminal. Navigate to the WebApp/flask folder. Enter
+	<p><code>export FLASK_APP=flaskMain.py</code></p>
+	Then enter
+	<p><code>flask run</code></p>
+	A URL will appear in the terminal that can be used on any computer in the local area network to access the website.
+
+<p><em>If running a Webserver</em></p>
+- Access the website through a URL set up during the web server set up.
+
+	
 
 # Repository Structure
+```
 L1_G2_Project/
 ├── 3010 GUI Design //contains wireframe images for website
 ├── helper_functions/ #contains 
@@ -33,3 +62,4 @@ L1_G2_Project/
 ├── .gitignore
 ├── package-lock.json
 └── README.md
+```
