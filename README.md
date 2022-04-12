@@ -59,6 +59,12 @@ This subsystem is the hive top temperature measurement, outside temperature meas
 The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%201%20System_schem.png) and the 
 [setup diagram is available here](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%201%20System.png)
 
+### BackBone Communication and Hive Top RPI 
+This subsystem is the main communication system for the hive top pi and the Arduino subsystem. 
+The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Seasonal%20Innercove%20and%20BaseBoard%20Communication%20system_schem.png) and the [setup diagram is available here](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Seasonal%20Innercove%20and%20BaseBoard%20Communication%20system..png)
+
+### Web Server Pi
+This Subsystem is responsible for hosting the website. The [setup diagram is available here](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Raspberry%20Pi%201.png)
 
 	
 
