@@ -1,3 +1,9 @@
+# DESCRIPTION
+# Contains functions useful for pulling/pushing data to Firebase
+#
+# AUTHOR
+# Meia Copeland
+
 from datetime import date, datetime
 
 

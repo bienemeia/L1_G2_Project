@@ -1,3 +1,10 @@
+# DESCRIPTION
+# Contains code to test the hive pi's functions, using randomly
+# generated values instead of values read from Arduinos.
+#
+# AUTHOR
+# Meia Copeland
+
 import sys
 sys.path.append('..')
 from helper_functions import firebase

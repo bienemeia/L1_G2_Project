@@ -1,3 +1,9 @@
+# DESCRIPTION
+# Unit tests for firebase.py
+#
+# AUTHOR
+# Meia Copeland
+
 import firebase
 import pyrebase
 from datetime import date, datetime

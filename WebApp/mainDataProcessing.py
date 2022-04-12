@@ -1,3 +1,18 @@
+# DESCRIPTION
+# This code pulls data from the Firebase DB and processes
+# it into the dailyDB every minute. At the end of every day,
+# it processes the dailyDB data into Weekly, Monthly, and Yearly 
+# averages where:
+#   Weekly - Average values over every hour of 1 week (7 days)
+#   Monthly - Average values over every 3 hours of ~1 month (31 days)
+#   Yearly - Average values every day of the year, for as many years 
+#   as hive has been running.
+#
+# An email alert is sent whenever the temperature or humidity is too high (over threshold).
+#
+# AUTHOR
+# Meia Copeland
+
 import sys
 sys.path.append('..')
 from helper_functions import firebase, process

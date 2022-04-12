@@ -1,3 +1,16 @@
+# DESCRIPTION
+# This code sets up and runs the website on a Flask server.
+# When needed, it pulls values from Firebase to display current 
+# conditions. It also pulls the data from the local SQLite DB
+# to display in a graph.
+#
+# When buttons are clicked on the tools page, the updateHeater,
+# updateFlapper, and updateManual methods push updates to Firebase
+# to indicate those mechanisms turning on/off.
+#
+# AUTHOR
+# Meia Copeland
+
 import sys
 sys.path.append('../..')
 from helper_functions import process, firebase

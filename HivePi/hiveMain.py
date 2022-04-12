@@ -1,31 +1,12 @@
-# FLAKE8 output.
-# $ flake8 hiveMain.py
-# hiveMain.py:9:1: E402 module level import not at top of file
-# hiveMain.py:10:1: E402 module level import not at top of file
-# hiveMain.py:11:1: E402 module level import not at top of file
-# hiveMain.py:12:1: E402 module level import not at top of file
-# hiveMain.py:42:80: E501 line too long (106 > 79 characters)
-# hiveMain.py:43:80: E501 line too long (120 > 79 characters)
-# hiveMain.py:45:80: E501 line too long (85 > 79 characters)
-# hiveMain.py:55:80: E501 line too long (82 > 79 characters)
-# hiveMain.py:56:80: E501 line too long (91 > 79 characters)
-# hiveMain.py:89:80: E501 line too long (81 > 79 characters)
-# hiveMain.py:90:80: E501 line too long (81 > 79 characters)
-# hiveMain.py:117:80: E501 line too long (85 > 79 characters)
-# hiveMain.py:118:80: E501 line too long (88 > 79 characters)
-# hiveMain.py:126:80: E501 line too long (89 > 79 characters)
-
-# FLAKE8 did not like that sys.path.append('..') was used before other imports, 
-# but this is required for helper_functions imports to work.
-# Further, the rest of the issues are regarding lines being too long. This happens
-# when pushing values to Firebase, as multiple variables are involved.
-
 # DESCRIPTION
 # This code gets sensor values from 2 Arduinos using a custom library,
 # I2CLib, written by another teammate.
 # The values are then posted to Firebase.
 # In some cases, values are pulled from Firebase to compare,
 # and mechanisms on the Arduino are activated.
+#
+# AUTHOR
+# Meia Copeland
 
 import sys
 sys.path.append('..')

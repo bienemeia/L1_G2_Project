@@ -1,3 +1,10 @@
+# DESCRIPTION
+# Contains functions useful for processing data in the local SQLite DB
+# as well as pushing/pulling data from teh SQLite DB.
+#
+# AUTHOR
+# Meia Copeland
+
 import sqlite3
 import datetime
 import random

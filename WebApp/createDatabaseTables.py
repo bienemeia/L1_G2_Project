@@ -1,3 +1,18 @@
+# DESCRIPTION
+# This code creates a SQLite DB (if not already created)
+# and adds the following tables:
+# dailyDB
+# weeklyDB
+# monthlyDB
+# yearlyDB
+#
+# Each table is initialized with the proper columns to be used
+# in later code
+#
+# AUTHOR
+# Meia Copeland
+
+
 import sys
 sys.path.append('..')
 from helper_functions import process, firebase
