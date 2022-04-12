@@ -51,20 +51,20 @@ To run the Honey, I'm a Smart Home! system, the beekeeper simply needs to run so
 
 This subsystem is the bottom board temperature measurement, Ice Sensor and Heater. The wiring diagram and setup diagram is available for this subsystem. 
 The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%202%20System_Skeam.png) and the 
-[setup diagram is available here](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%202%20System.png)
+[setup diagram is available here.](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%202%20System.png)
  
 ### Hive Top Arduino Subsystem
 
 This subsystem is the hive top temperature measurement, outside temperature measurement and flapper. The wiring diagram and setup diagram is available for this subsystem. 
 The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%201%20System_schem.png) and the 
-[setup diagram is available here](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%201%20System.png)
+[setup diagram is available here.](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%201%20System.png)
 
 ### BackBone Communication and Hive Top RPI 
 This subsystem is the main communication system for the hive top pi and the Arduino subsystem. 
-The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Seasonal%20Innercove%20and%20BaseBoard%20Communication%20system_schem.png) and the [setup diagram is available here](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Seasonal%20Innercove%20and%20BaseBoard%20Communication%20system..png)
+The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Seasonal%20Innercove%20and%20BaseBoard%20Communication%20system_schem.png) and the [setup diagram is available here.](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Seasonal%20Innercove%20and%20BaseBoard%20Communication%20system..png)
 
 ### Web Server Pi
-This Subsystem is responsible for hosting the website. The [setup diagram is available here](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Raspberry%20Pi%201.png)
+This Subsystem is responsible for hosting the website. The [setup diagram is available here.](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Raspberry%20Pi%201.png)
 
 	
 
