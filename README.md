@@ -13,52 +13,85 @@ The Honey, I'm a Smart Home! is a modular smart beehive system that allows beeke
 
 # Installation instructions
 
-# Run instructions (really, should set up so the right code runs on boot)
-To run the Honey, I'm a Smart Home! system, the beekeeper simply needs to run some programs:
+## Assembling Hardware
 
-## Run Hive RPi code
+## Installing software
 
-- on the Hive RPi, navigate to the HivePi folder and run 
-	<p><code>python3 hiveMain.py</code></p>
-	The Hive RPi will begin reading sensor data and sending it to Firebase.
+### Arduinos
 
-## Create DB and run data processing code
+- Before installing data on the Arduinos, you will need to install the Arduino IDE. Instructions can be found here: https://www.arduino.cc/en/main/howto
+- Clone the Git repository locally.
 
-- on the Webserver RPi, navigate to the WebApp folder and run
+#### Base Board Arduino
+- Open the IDE and import the C++ and Header files from the [Base_Board_Arduino folder](/Hive_Hardware_Subsystem/Final_Product_Code/Base_Board_Arduino)
+- Connect the Base Board Arduino to your computer.
+- Use the Arduino IDE to install the code to the Arduino.
+- Unplug the Arduino and fix to Base Board of hive.
+
+#### Inner Seasonal Cover Arduino
+- Open the IDE and import the C++ and Header files, Soft_DFRobot_SHT3x.cpp and Soft_DFRobot_SHT3x.h, from the [Seasonal_Cover_Arduino folder](/Hive_Hardware_Subsystem/Final_Product_Code/Seasonal_Cover_Arduino)
+- Connect the Inner Seasonal Cover Arduino to your computer.
+- Use the Arduino IDE to install the code to the Arduino.
+- Unplug the Arduino and fix to Inner Seasonal Cover of hive.
+
+### Raspberry Pis
+#### Create Firebase account
+- Go to https://firebase.google.com/
+- Log in/Create account
+- Add project
+- Beside the 'Project Overview' heading on the left side of the page, click the gear icon, then 'Project Settings'
+- Scroll down to 'Your apps' section.
+- Copy the <code>const firebaseConfig</code> dictionary to a safe place. You will need this later.
+
+#### Hive RPi
+- Connect RPi to a monitor, keyboard, and mouse OR connect to RPI in headless mode ([instructions](https://pimylifeup.com/headless-raspberry-pi-setup/))
+- Clone Git repository locally.
+- Navigate to [HivePi folder](/HivePi/).
+- Open the [hiveMain.py](/HivePi/hiveMain.py) file in a text editor.
+- Replace <code>firebaseConfig</code> contents with the contents you copied earlier. This connects the code to your Firebase DB.
+
+#### Webserver RPi
+- Connect RPi to a monitor, keyboard, and mouse OR connect to RPI in headless mode ([instructions](https://pimylifeup.com/headless-raspberry-pi-setup/))
+- Clone Git repository locally.
+- Navigate to [WebApp folder](/WebApp/).
+
+##### Connect to Firebase
+- Open the [mainDataProcessing.py](/WebApp/mainDataProcessing.py) file in a text editor.
+- Replace <code>firebaseConfig</code> contents with the contents you copied earlier. This connects the code to your Firebase DB.
+
+##### Set up local SQLite DB
+- Run [createDatabaseTables.py](/WebApp/createDatabaseTables.py)
 	<p><code>python3 createDatabaseTables.py</code></p>
-	The RPi will create the SQLite database needed. If the DB already exists, "Already exists" will print to the console.
+- This initializes the SQLite DB for use later.
 
-- on the Webserver RPi, in the same WebApp folder, run
-	<p><code>python3 mainDataProcessing.py</code></p>
-	The RPi will begin pulling data from Firebase, and processing it into the local database.
+#### Set up Webserver
+- Set up NGINX webserver that creates a reverse proxy server with Flask ([instructions](https://www.raspberrypi-spy.co.uk/2018/12/running-flask-under-nginx-raspberry-pi/))
+	- Ensure that the [flaskMain.py](/WebApp/flask/flaskMain.py) file is used for serving the website.
 
-## Start server
+# Run instructions
 
-<p><em>If running on local network</em></p>
+If all instructions have been done to set up scripts to run on boot of RPis, all that is needed is to turn on the RPis and Arduinos.
 
-- on Webserver RPi, open a new terminal. Navigate to the WebApp/flask folder. Enter
-	<p><code>export FLASK_APP=flaskMain.py</code></p>
-	Then enter
-	<p><code>flask run</code></p>
-	A URL will appear in the terminal that can be used on any computer in the local area network to access the website.
-
-<p><em>If running a Webserver</em></p>
-- Access the website through a URL set up during the web server set up.
+## Start Python script on startup
+- Follow this [tutorial](https://www.instructables.com/Raspberry-Pi-Launch-Python-script-on-startup/) to set up scripts on startup of the RPi. The files that should execute on startup are
+	- Webserver RPi - [mainDataProcessing.py](/WebApp/mainDataProcessing.py)
+	- Hive RPi - [hiveMain.py](/HivePi/hiveMain.py)
+- NGINX webserver starts automatically on boot.
 
 	
 
 # Repository Structure
 ```
 L1_G2_Project/
-├── 3010 GUI Design //contains wireframe images for website
-├── helper_functions/ #contains 
-├── Hive Hardware Subsystem/
-├── HivePi/
-├── Lab4/ contains work for Lab 4 of SYSC 3010
-├── Resources/
-├── WebApp // all files to run on webserver RPi are here/
-│   └── flask/
-├── WeeklyUpdates // Contains weekly updates for all members
+├── 3010 GUI Design ##contains wireframe images for website
+├── helper_functions/ ##contains functions used by multiple files
+├── Hive Hardware Subsystem/ ## contains Arduino code to install on Arduinos
+├── HivePi/ ## contains code to run on the HivePi
+├── Lab4/ ## contains work for Lab 4 of SYSC 3010
+├── Resources/ ## contains resources that helped during the project
+├── WebApp/ ## all files to run on webserver RPi are here
+│   └── flask/ ## flask server run file, and all HTML templates are here
+├── WeeklyUpdates/ ## contains WIPURs for all members
 ├── .gitignore
 ├── package-lock.json
 └── README.md

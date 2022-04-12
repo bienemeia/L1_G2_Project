@@ -42,7 +42,7 @@ ICE_THRESHOLD= 3800
 
 def main():
     # Set up Firebase authentication
-    meia_config = {
+    firebaseConfig = {
         "apiKey": "AIzaSyBVpD3QAJ7NQsmobIABC95vOX8-e-aZQX0",
         "authDomain": "testhive-2bca5.firebaseapp.com",
         "databaseURL": "https://testhive-2bca5-default-rtdb.firebaseio.com/",
@@ -50,7 +50,7 @@ def main():
     }
 
     # Initialize Firebase DB
-    hive_firebase = pyrebase.initialize_app(meia_config)
+    hive_firebase = pyrebase.initialize_app(firebaseConfig)
     hive_db = hive_firebase.database()
     hive_id = 1
 
