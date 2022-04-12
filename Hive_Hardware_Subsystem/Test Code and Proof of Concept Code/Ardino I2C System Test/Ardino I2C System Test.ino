@@ -1,6 +1,6 @@
 /**
 This is a test program to test if hard I2C is working.
-This code implements a I2C responder. It can be installed on most Arduinos.
+This code implements an I2C responder. It can be installed on most Arduinos.
  
 By Graham C. Bell 101150239
 */

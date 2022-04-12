@@ -1,7 +1,7 @@
 /**
 This code implements the temperature monitoring, flapper control, soft I2C setup and I2C setup for the seasonal inner cover arduino.
 This code has been made for an arduino nano every. This code requres https://www.arduino.cc/reference/en/libraries/softwire/ libary installed.
-This code features code from ClosedCube and DFRobot in the form of I2C converted libraries. These libraries are included as separate files in this ino.
+This code features code from ClosedCube and DFRobot in the form of soft I2C converted libraries. These libraries are included as separate files in this ino.
  
 By Graham C. Bell 101150239
 */

@@ -1,6 +1,6 @@
 /**
 This code is a testing ground and proof of concept for softI2C. Specifically for the BME680.
-Section of this code is based on an example program from the ClosedCube library Written by AA. 
+Sections of this code are based on an example program from the ClosedCube library written by AA. 
 This code requres the https://www.arduino.cc/reference/en/libraries/softwire/ libary.
  
 By Graham C. Bell 101150239

@@ -1,7 +1,7 @@
 #include <Wire.h>
 /**
 This is a test program to test if hard I2C is working.
-This code implements a I2C responder. It is designed to demonstrate a unit test where a RPI is able to communicate with an arduino.
+This code implements an I2C responder. It is designed to demonstrate a unit test where a RPI is able to communicate with an arduino.
 This code is designed specifically to work with an arduino due.
  
 By Graham C. Bell 101150239
