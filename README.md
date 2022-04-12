@@ -24,12 +24,16 @@ The Honey, I'm a Smart Home! is a modular smart beehive system that allows beeke
 
 #### Base Board Arduino
 - Open the IDE and import the C++ and Header files from the [Base_Board_Arduino folder](/Hive_Hardware_Subsystem/Final_Product_Code/Base_Board_Arduino)
+- Install the [softI2C libary](https://www.arduino.cc/reference/en/libraries/softwire/)
+- Install the necessary board drivers.
 - Connect the Base Board Arduino to your computer.
 - Use the Arduino IDE to install the code to the Arduino.
 - Unplug the Arduino and fix to Base Board of hive.
 
 #### Inner Seasonal Cover Arduino
 - Open the IDE and import the C++ and Header files, Soft_DFRobot_SHT3x.cpp and Soft_DFRobot_SHT3x.h, from the [Seasonal_Cover_Arduino folder](/Hive_Hardware_Subsystem/Final_Product_Code/Seasonal_Cover_Arduino)
+- Install the [softI2C libary](https://www.arduino.cc/reference/en/libraries/softwire/)
+- Install the necessary board drivers.
 - Connect the Inner Seasonal Cover Arduino to your computer.
 - Use the Arduino IDE to install the code to the Arduino.
 - Unplug the Arduino and fix to Inner Seasonal Cover of hive.
