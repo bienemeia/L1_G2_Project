@@ -45,6 +45,15 @@ To run the Honey, I'm a Smart Home! system, the beekeeper simply needs to run so
 <p><em>If running a Webserver</em></p>
 - Access the website through a URL set up during the web server set up.
 
+## Wiring
+
+### BaseBoard Arduino Subsystem
+
+This subsystem is the bottom board temperature measurement, Ice Sensor and Heater. The wiring diagram and setup diagram is available for this subsystem. 
+The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%202%20System_Skeam.png) and the 
+[setup diagram is available here](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%202%20System.png)
+ 
+
 	
 
 # Repository Structure
