@@ -1,3 +1,7 @@
+#This file acts as a library hiding the specific commands used to interface with the ardinos from a raspberry pi.
+
+#By: Graham C. Bell
+
 import smbus
 import time
 from gpiozero import LED
