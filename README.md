@@ -15,6 +15,27 @@ The Honey, I'm a Smart Home! is a modular smart beehive system that allows beeke
 
 ## Assembling Hardware
 
+### Wiring
+
+#### BaseBoard Arduino Subsystem
+
+This subsystem is the bottom board temperature measurement, Ice Sensor and Heater. The wiring diagram and setup diagram is available for this subsystem. 
+The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%202%20System_Skeam.png) and the 
+[setup diagram is available here.](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%202%20System.png)
+ 
+#### Hive Top Arduino Subsystem
+
+This subsystem is the hive top temperature measurement, outside temperature measurement and flapper. The wiring diagram and setup diagram is available for this subsystem. 
+The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%201%20System_schem.png) and the 
+[setup diagram is available here.](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%201%20System.png)
+
+#### BackBone Communication and Hive Top RPI 
+This subsystem is the main communication system for the hive top pi and the Arduino subsystem. 
+The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Seasonal%20Innercove%20and%20BaseBoard%20Communication%20system_schem.png) and the [setup diagram is available here.](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Seasonal%20Innercove%20and%20BaseBoard%20Communication%20system..png)
+
+#### Web Server Pi
+This Subsystem is responsible for hosting the website. The [setup diagram is available here.](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Raspberry%20Pi%201.png)
+
 ## Installing software
 
 ### Arduinos
@@ -74,36 +95,11 @@ The Honey, I'm a Smart Home! is a modular smart beehive system that allows beeke
 
 # Run instructions
 
-If all instructions have been done to set up scripts to run on boot of RPis, all that is needed is to turn on the RPis and Arduinos.
-
 ## Start Python script on startup
 - Follow this [tutorial](https://www.instructables.com/Raspberry-Pi-Launch-Python-script-on-startup/) to set up scripts on startup of the RPi. The files that should execute on startup are
 	- Webserver RPi - [mainDataProcessing.py](/WebApp/mainDataProcessing.py)
 	- Hive RPi - [hiveMain.py](/HivePi/hiveMain.py)
 - NGINX webserver starts automatically on boot.
-
-## Wiring
-
-### BaseBoard Arduino Subsystem
-
-This subsystem is the bottom board temperature measurement, Ice Sensor and Heater. The wiring diagram and setup diagram is available for this subsystem. 
-The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%202%20System_Skeam.png) and the 
-[setup diagram is available here.](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%202%20System.png)
- 
-### Hive Top Arduino Subsystem
-
-This subsystem is the hive top temperature measurement, outside temperature measurement and flapper. The wiring diagram and setup diagram is available for this subsystem. 
-The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%201%20System_schem.png) and the 
-[setup diagram is available here.](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Arduino%201%20System.png)
-
-### BackBone Communication and Hive Top RPI 
-This subsystem is the main communication system for the hive top pi and the Arduino subsystem. 
-The [wiring diagram is available here ](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Seasonal%20Innercove%20and%20BaseBoard%20Communication%20system_schem.png) and the [setup diagram is available here.](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Seasonal%20Innercove%20and%20BaseBoard%20Communication%20system..png)
-
-### Web Server Pi
-This Subsystem is responsible for hosting the website. The [setup diagram is available here.](https://github.com/bienemeia/L1_G2_Project/blob/main/Wiring%20Diagrams/Raspberry%20Pi%201.png)
-
-	
 
 # Repository Structure
 ```
